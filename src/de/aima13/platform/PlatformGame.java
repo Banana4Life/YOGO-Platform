@@ -1,48 +1,38 @@
 package de.aima13.platform;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 
-import de.aima13.platform.gui.Platform;
+import de.aima13.platform.states.Game;
+import de.aima13.platform.states.Menu;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-public class PlatformGame extends BasicGame {
+public class PlatformGame extends StateBasedGame {
 
 	private AppGameContainer app;
-	private GameLevel level;
-	private Platform platform;
 
 	public PlatformGame() {
 		super("One Platform");
 	}
 
-	public void init(GameContainer container) throws SlickException {
-		if (container instanceof AppGameContainer) {
-			app = (AppGameContainer) container;
-		}
-		this.level = new GameLevel(container, app.getInput());
-		platform = new Platform();
-		this.level.addEntity(platform);
-	}
+	
 
-	public void update(GameContainer container, int delta) {
-		this.level.update(container, delta);
-	}
-
-	public void render(GameContainer container, Graphics g) {
-		this.level.render(container, g);
+	public void initStatesList(GameContainer container) throws SlickException {
+		addState(new Menu());
+		addState(new Game());
 	}
 
 	public void keyPressed(int key, char c) {
 		if (key == Input.KEY_ESCAPE) {
-			System.exit(0);
+			//System.exit(0);
 		}
 		if (key == Input.KEY_F1) {
 			if (app != null) {
@@ -55,6 +45,10 @@ public class PlatformGame extends BasicGame {
 				}
 			}
 		}
+	}
+	
+	public AppGameContainer getApp() {
+		return app;
 	}
 
 	public static void main(String[] args) {
