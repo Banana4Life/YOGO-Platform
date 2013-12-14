@@ -11,12 +11,14 @@ public abstract class Entity {
 	protected Vector position;
 	protected Vector size;
 	protected Vector velocity;
+	protected Vector acceleration;
 	protected GameLevel level;
 
 	protected Entity() {
 		this.position = new Vector(0, 0);
 		this.size = new Vector(0, 0);
 		this.velocity = new Vector(0, 0);
+		this.acceleration = new Vector(0, 0);
 	}
 
 	public Vector getPosition() {
@@ -25,6 +27,10 @@ public abstract class Entity {
 
 	public Vector getVelocity() {
 		return velocity;
+	}
+
+	public Vector getAcceleration() {
+		return acceleration;
 	}
 
 	public final void init(GameLevel level) {

@@ -1,5 +1,6 @@
 package de.aima13.platform.gui;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
@@ -8,7 +9,8 @@ import de.aima13.platform.util.Vector;
 
 public class Platform extends Entity {
 
-	private static final Vector DEFAULT_VELOCITY = new Vector(5f, 0f);
+	private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
+	private static final float DECELERATE_FACTOR = 1.5f;
 
 	public Platform() {
 		this(null, null, null);
@@ -22,10 +24,11 @@ public class Platform extends Entity {
 		this(size, position, null);
 	}
 
-	public Platform(Vector size, Vector position, Vector velocity) {
+	public Platform(Vector size, Vector position, Vector acceleration) {
+		super();
 		this.size = size;
 		this.position = position;
-		this.velocity = velocity;
+		this.acceleration = acceleration;
 	}
 
 	@Override
@@ -38,8 +41,8 @@ public class Platform extends Entity {
 			position = new Vector(level.getWidth() / 2 - size.x / 2,
 					level.getHeight() - size.y);
 		}
-		if (velocity == null) {
-			velocity = DEFAULT_VELOCITY;
+		if (acceleration == null) {
+			acceleration = DEFAULT_ACCELERATION;
 		}
 	}
 
@@ -49,26 +52,58 @@ public class Platform extends Entity {
 		// Get movements
 		if (level.getInput().isKeyDown(Input.KEY_LEFT)) {
 			// Move left
-			if (position.x - velocity.x < 0) {
-				position = new Vector(0, position.y);
-			} else {
-				position = position.sub(velocity);
+			if (velocity.x > 0) {
+				// Reset
+				velocity = new Vector(0, acceleration.y);
 			}
-		} else if (level.getInput().isKeyDown(Input.KEY_RIGHT)) {
-			// Move right
-			if (position.x + velocity.x > level.getWidth() - size.x) {
-				position = new Vector(level.getWidth() - size.x, position.y);
+			velocity = velocity.sub(acceleration);
+			if (position.x + velocity.x < 0) {
+				position = new Vector(0, position.y);
 			} else {
 				position = position.add(velocity);
 			}
+		} else if (level.getInput().isKeyDown(Input.KEY_RIGHT)) {
+			// Move right
+			if (velocity.x < 0) {
+				// Reset
+				velocity = new Vector(0, acceleration.y);
+			}
+			velocity = velocity.add(acceleration);
+			if (position.x + velocity.x > level.getWidth() - size.x) {
+				position = new Vector(level.getWidth() - size.x, position.y);
+				// Reset
+				velocity = new Vector(0, acceleration.y);
+			} else {
+				position = position.add(velocity);
+			}
+		} else {
+			if (velocity.x > 0) {
+				if (velocity.x + DECELERATE_FACTOR * acceleration.x < 0) {
+					// Reset
+					velocity = new Vector(0, acceleration.y);
+				} else {
+					velocity = velocity.sub(DECELERATE_FACTOR * acceleration.x,
+							acceleration.y);
+				}
+			} else if (velocity.x < 0) {
+				if (velocity.x + DECELERATE_FACTOR * acceleration.x > 0) {
+					// Reset
+					velocity = new Vector(0, acceleration.y);
+				} else {
+					velocity = velocity.add(DECELERATE_FACTOR * acceleration.x,
+							acceleration.y);
+				}
+			}
+			// Reset
+			velocity = new Vector(0, 0);
 		}
 	}
 
 	@Override
 	public void render(Graphics g) {
 		// Draw the platform
-		// float x = position.x
-		g.drawRect(position.x, position.y, level.getWidth() / 4,
-				level.getHeight() / 16);
+		g.setColor(Color.cyan);
+		g.fillRect(position.x, position.y, level.getWidth() / 4,
+				level.getHeight() / 24);
 	}
 }

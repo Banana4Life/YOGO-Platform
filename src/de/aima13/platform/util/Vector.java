@@ -10,15 +10,22 @@ public class Vector {
 	}
 
 	public Vector add(Vector v) {
-		return new Vector(x + v.x, y + v.y);
+		return add(v.x, v.y);
+	}
+
+	public Vector add(float x, float y) {
+		return new Vector(this.x + x, this.y + y);
 	}
 
 	public Vector sub(Vector v) {
-		return new Vector(x - v.x, y - v.y);
+		return sub(v.x, v.y);
+	}
+
+	public Vector sub(float x, float y) {
+		return new Vector(this.x - x, this.y - y);
 	}
 
 	public double len(Vector v) {
 		return Math.sqrt(x * x + y * y);
 	}
-	
 }
