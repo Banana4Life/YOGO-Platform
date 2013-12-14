@@ -14,10 +14,14 @@ public class Platform extends Entity {
 	protected float speed;
 
 	public Platform(GameLevel level) {
-		this(level, new Vector(level.getWidth() / 2, level.getHeight() / 2));
+		this(level, new Vector(level.getWidth() / 4, level.getHeight() / 16));
 	}
 
-	public Platform(GameLevel level, Vector position) {
+	public Platform(GameLevel level, Vector size) {
+		this(level, size, new Vector(level.getWidth() / 2 - size.x / 2, level.getHeight() - size.y));
+	}
+
+	public Platform(GameLevel level, Vector size, Vector position) {
 		this(level, position, DEFAULT_SPEED);
 	}
 

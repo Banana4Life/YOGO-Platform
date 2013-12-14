@@ -8,6 +8,8 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.util.Log;
 
+import de.aima13.platform.gui.Platform;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +17,7 @@ public class PlatformGame extends BasicGame {
 
 	private AppGameContainer app;
 	private GameLevel level;
+	private Platform platform;
 
 	public PlatformGame() {
 		super("One Platform");
@@ -25,6 +28,8 @@ public class PlatformGame extends BasicGame {
 			app = (AppGameContainer) container;
 		}
 		this.level = new GameLevel(container);
+		platform = new Platform(this.level);
+		this.level.addEntity(platform);
 	}
 
 	public void update(GameContainer container, int delta) {

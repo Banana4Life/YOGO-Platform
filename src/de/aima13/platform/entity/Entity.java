@@ -9,11 +9,13 @@ import org.newdawn.slick.Graphics;
 
 public abstract class Entity {
 	protected Vector position;
+	protected Vector size;
 	protected Vector velocity;
     protected GameLevel level;
 
 	protected Entity() {
 		this.position = new Vector(0, 0);
+		this.size = new Vector(0, 0);
 		this.velocity = new Vector(0, 0);
 	}
 
