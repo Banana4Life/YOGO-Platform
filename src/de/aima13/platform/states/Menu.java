@@ -12,7 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import de.aima13.platform.gui.Motorcycle;
+import de.aima13.platform.entity.Motorcycle;
 import de.aima13.platform.util.Vector;
 
 public class Menu extends BasicGameState {

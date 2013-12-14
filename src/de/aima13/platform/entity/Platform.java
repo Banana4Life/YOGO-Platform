@@ -1,10 +1,9 @@
-package de.aima13.platform.gui;
+package de.aima13.platform.entity;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
-import de.aima13.platform.entity.Entity;
 import de.aima13.platform.util.Vector;
 
 public class Platform extends Entity {

@@ -1,6 +1,5 @@
 package de.aima13.platform.states;
 
-import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -13,7 +12,8 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.aima13.platform.GameLevel;
 import de.aima13.platform.PlatformGame;
-import de.aima13.platform.gui.Platform;
+import de.aima13.platform.entity.Creature;
+import de.aima13.platform.entity.Platform;
 
 public class Game extends BasicGameState {
 
@@ -33,6 +33,7 @@ public class Game extends BasicGameState {
 		this.level = new GameLevel(container, container.getInput());
 		platform = new Platform();
 		this.level.addEntity(platform);
+        this.level.addEntity(new Creature());
 	}
 
 	@Override
