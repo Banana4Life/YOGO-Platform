@@ -1,5 +1,6 @@
 package de.aima13.platform;
 
+import de.aima13.platform.entity.Creature;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
@@ -30,6 +31,7 @@ public class PlatformGame extends BasicGame {
 		this.level = new GameLevel(container, app.getInput());
 		platform = new Platform();
 		this.level.addEntity(platform);
+        this.level.addEntity(new Creature());
 	}
 
 	public void update(GameContainer container, int delta) {
@@ -48,7 +50,7 @@ public class PlatformGame extends BasicGame {
 			if (app != null) {
 				try {
 					int fullhd = 1;
-					app.setDisplayMode(fullhd * 1920, fullhd * 1080, false);
+					app.setDisplayMode(app.getWidth(), app.getHeight(), false);
 					app.reinit();
 				} catch (Exception e) {
 					Log.error(e);
