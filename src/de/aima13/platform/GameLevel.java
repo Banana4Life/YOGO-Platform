@@ -42,4 +42,16 @@ public class GameLevel {
 	private void onRender(GameContainer container, Graphics g) {
 
 	}
+
+	public GameContainer getContainer() {
+		return container;
+	}
+	
+	public int getWidth() {
+		return getContainer().getWidth();
+	}
+	
+	public int getHeight() {
+		return getContainer().getHeight();
+	}
 }

@@ -1,37 +1,35 @@
 package de.aima13.platform.entity;
 
 import de.aima13.platform.GameLevel;
+import de.aima13.platform.util.Vector;
+
 import org.lwjgl.util.vector.Vector2f;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
-public abstract class Entity
-{
-    private final Vector2f position;
-    private final Vector2f velocity;
+public abstract class Entity {
+	protected Vector position;
+	protected Vector velocity;
 
-    protected Entity()
-    {
-        this.position = new Vector2f(0, 0);
-        this.velocity = new Vector2f(0, 0);
-    }
+	protected Entity() {
+		this.position = new Vector(0, 0);
+		this.velocity = new Vector(0, 0);
+	}
 
-    public Vector2f getPosition()
-    {
-        return position;
-    }
+	public Vector getPosition() {
+		return position;
+	}
 
-    public Vector2f getVelocity()
-    {
-        return velocity;
-    }
+	public Vector getVelocity() {
+		return velocity;
+	}
 
-    public void init(GameContainer container, GameLevel level)
-    {}
+	public void init(GameContainer container, GameLevel level) {
+	}
 
-    public void update(GameContainer container, int delta)
-    {}
+	public void update(GameContainer container, int delta) {
+	}
 
-    public void render(GameContainer container, Graphics g)
-    {}
+	public void render(GameContainer container, Graphics g) {
+	}
 }
