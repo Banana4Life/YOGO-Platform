@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 public abstract class Entity {
 	protected Vector position;
 	protected Vector velocity;
+    protected GameLevel level;
 
 	protected Entity() {
 		this.position = new Vector(0, 0);
@@ -24,12 +25,16 @@ public abstract class Entity {
 		return velocity;
 	}
 
-	public void init(GameContainer container, GameLevel level) {
+	public final void init(GameLevel level) {
+        this.level = level;
 	}
 
-	public void update(GameContainer container, int delta) {
+    public void onInit()
+    {}
+
+	public void update(int delta) {
 	}
 
-	public void render(GameContainer container, Graphics g) {
+	public void render(Graphics g) {
 	}
 }

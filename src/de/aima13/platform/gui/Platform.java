@@ -1,6 +1,5 @@
 package de.aima13.platform.gui;
 
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 import de.aima13.platform.GameLevel;
@@ -29,7 +28,7 @@ public class Platform extends Entity {
 	}
 
 	@Override
-	public void render(GameContainer container, Graphics g) {
+	public void render(Graphics g) {
 		// Draw the platform
 		g.drawRect(position.x, position.y, level.getWidth() / 4, level.getHeight() / 16);
 	}

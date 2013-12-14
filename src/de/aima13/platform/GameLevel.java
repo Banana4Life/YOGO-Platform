@@ -18,12 +18,12 @@ public class GameLevel {
 
 	public void addEntity(Entity entity) {
 		this.entities.addLast(entity);
-		entity.init(container, this);
+		entity.init(this);
 	}
 
 	public final void update(GameContainer container, int delta) {
 		for (Entity entity : entities) {
-			entity.update(container, delta);
+			entity.update(delta);
 		}
 		this.onUpdate(container, delta);
 	}
@@ -34,23 +34,23 @@ public class GameLevel {
 
 	public final void render(GameContainer container, Graphics g) {
 		for (Entity entity : entities) {
-			entity.render(container, g);
+			entity.render(g);
 		}
-		this.onRender(container, g);
+		this.onRender(g);
 	}
 
-	private void onRender(GameContainer container, Graphics g) {
+	private void onRender(Graphics g) {
 
 	}
 
 	public GameContainer getContainer() {
 		return container;
 	}
-	
+
 	public int getWidth() {
 		return getContainer().getWidth();
 	}
-	
+
 	public int getHeight() {
 		return getContainer().getHeight();
 	}
