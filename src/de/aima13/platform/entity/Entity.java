@@ -2,9 +2,6 @@ package de.aima13.platform.entity;
 
 import de.aima13.platform.GameLevel;
 import de.aima13.platform.util.Vector;
-
-import org.lwjgl.util.vector.Vector2f;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public abstract class Entity {
