@@ -1,1 +1,6 @@
 /bin
+/out
+/lib
+/.idea
+/*.iml
+/*.xml
