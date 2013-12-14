@@ -27,8 +27,8 @@ public class PlatformGame extends BasicGame {
 		if (container instanceof AppGameContainer) {
 			app = (AppGameContainer) container;
 		}
-		this.level = new GameLevel(container);
-		platform = new Platform(this.level);
+		this.level = new GameLevel(container, app.getInput());
+		platform = new Platform();
 		this.level.addEntity(platform);
 	}
 

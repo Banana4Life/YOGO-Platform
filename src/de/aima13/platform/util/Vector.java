@@ -4,9 +4,9 @@ public class Vector {
 
 	public final float x, y;
 
-	public Vector(float a, float b) {
-		this.x = a;
-		this.y = b;
+	public Vector(float x, float y) {
+		this.x = x;
+		this.y = y;
 	}
 
 	public Vector add(Vector v) {

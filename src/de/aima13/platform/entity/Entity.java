@@ -11,7 +11,7 @@ public abstract class Entity {
 	protected Vector position;
 	protected Vector size;
 	protected Vector velocity;
-    protected GameLevel level;
+	protected GameLevel level;
 
 	protected Entity() {
 		this.position = new Vector(0, 0);
@@ -28,11 +28,12 @@ public abstract class Entity {
 	}
 
 	public final void init(GameLevel level) {
-        this.level = level;
+		this.level = level;
+		onInit();
 	}
 
-    public void onInit()
-    {}
+	public void onInit() {
+	}
 
 	public void update(int delta) {
 	}
