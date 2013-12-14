@@ -51,7 +51,7 @@ public class Menu extends BasicGameState {
 																				// ;)
 		bikePosition = new Vector(0 - bikeDimensions.x, game.getContainer()
 				.getHeight() - bikeDimensions.y);
-		bikeVelocity = new Vector(5f, 0);
+		bikeVelocity = new Vector(15f, 0);
 		bikeDriving = false;
 	}
 
@@ -92,7 +92,7 @@ public class Menu extends BasicGameState {
 		framesWheel[9] = new Image("res/svg/frames-wheel/frame10.png")
 				.getScaledCopy(bikeScale);
 
-		wheelAnim = new Animation(framesWheel, 20);
+		wheelAnim = new Animation(framesWheel, 10);
 		/*
 		 * 
 		 */
