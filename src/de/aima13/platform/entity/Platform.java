@@ -169,7 +169,10 @@ public class Platform extends Entity {
     @Override
     public void onCollide(Entity current, Face collidedFace)
     {
-        this.powerbar.decreaseValue(.1f);
+        if (isActive())
+        {
+            this.powerbar.decreaseValue(.1f);
+        }
     }
 
     @Override

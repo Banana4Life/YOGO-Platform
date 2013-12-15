@@ -76,9 +76,9 @@ public class Creature extends Entity {
             setVelocity(new Vector(0, -5f));
 		}
 
-		if (getPosition().y + getBB().getHeight() > platform.getPosition().y) {
+		if (!failed && getPosition().y + getBB().getHeight() > platform.getPosition().y) {
 			setVelocity(getVelocity().scale(0, 1));
-			failed = true;
+			//failed = true;
 		}
 	}
 
@@ -104,6 +104,7 @@ public class Creature extends Entity {
 
 	public void onJump() {
 		getLevel().getJumpSound().play();
+        setVelocity(new Vector(0, 50));
 	}
 
 	@Override
@@ -125,14 +126,8 @@ public class Creature extends Entity {
 			this.characterSpriteSheet.getSprite(0, 0).draw(pos.x,
 					pos.y, Creature.IMAGE_SCALE);
 		} else {
-			this.jumpingAnimation.getCurrentFrame().draw(
-					pos.x,
-					pos.y
-							+ this.jumpingYOffset[this.jumpingAnimation
-									.getFrame()] * Creature.IMAGE_SCALE,
-					Creature.IMAGE_SCALE);
-			this.currentJumpingYOffset = this.jumpingYOffset[this.jumpingAnimation
-					.getFrame()];
+			this.jumpingAnimation.getCurrentFrame().draw(pos.x, pos.y + this.jumpingYOffset[this.jumpingAnimation.getFrame()] * Creature.IMAGE_SCALE, Creature.IMAGE_SCALE);
+			this.currentJumpingYOffset = this.jumpingYOffset[this.jumpingAnimation.getFrame()];
 		}
 		this.beltAnimation.getCurrentFrame().draw(
 				pos.x + 6 * Creature.IMAGE_SCALE,
@@ -155,8 +150,12 @@ public class Creature extends Entity {
 
 	@Override
 	public void onCollideWithBorder(Face collidedFace) {
+        if (collidedFace != Face.BOTTOM)
+        {
+            return;
+        }
 		if (failed) {
-			die();
+			//die();
 		} else {
 			float x = getPosition().x;
 			float y = getPosition().y;
@@ -170,7 +169,7 @@ public class Creature extends Entity {
 				vY *= -1;
 				break;
 			case BOTTOM:
-                failed = true;
+                //failed = true;
 				Log.error("Collided with the world border!");
 				break;
 			case LEFT:
@@ -190,13 +189,6 @@ public class Creature extends Entity {
 
 	@Override
 	public void onDeath() {
-		getLevel().getGame().enterState(Loose.ID, new EmptyTransition(),
-				new FadeInTransition(Color.black));
-		try {
-			((Game) getLevel().getGame().getState(Game.ID)).resetState();
-		} catch (SlickException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        this.getLevel().getGame().lose();
 	}
 }

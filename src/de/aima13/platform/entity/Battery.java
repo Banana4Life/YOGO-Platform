@@ -49,7 +49,7 @@ public class Battery extends Entity
     @Override
     public void onCollide(Entity current, Face collidedFace)
     {
-        if (current instanceof Platform)
+        if (current instanceof Platform && ((Platform)current).isActive())
         {
             ((Platform)current).getPowerbar().increaseValue(this.getPower());
             die();
