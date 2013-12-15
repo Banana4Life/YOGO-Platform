@@ -28,7 +28,7 @@ public class BatterySpawner extends Entity
         if (current - lastSpawned > DELAY)
         {
             lastSpawned = current;
-            level.spawn(new Battery(random.nextFloat() * .2f)).move(this.position);
+            level.spawn(new Battery(random.nextFloat() * .3f - .1f)).move(this.position);
         }
     }
 
