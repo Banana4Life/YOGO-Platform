@@ -28,7 +28,6 @@ public class Menu extends BasicGameState {
 	protected Sound moveSound, selectSound;
 
 	protected SpriteSheet engine;
-	protected Animation fire;
 	protected Animation plasmaPlatform;
 	protected int scale;
 	protected int width;
@@ -57,13 +56,12 @@ public class Menu extends BasicGameState {
 		} else {
 			throw new SlickException("StateBaseGame isn't a PlatformGame!");
 		}
-		engine = new SpriteSheet("res/brackets.png", 4, 3);
+		engine = new SpriteSheet("res/images/platform/brackets.png", 4, 3);
 		engine.setFilter(Image.FILTER_NEAREST);
 		plasmaPlatform = new Animation(new SpriteSheet(
 				"res/PlasmaPlatform.png", 3, 3), 100);
 		plasmaPlatform.start();
-		fire = new Animation(new SpriteSheet("res/Fire.png", 3, 3), 100);
-		fire.start();
+
 		scale = 6;
 		higlightPosition = new Vector(0, 0);
 		highlightActive = false;
@@ -74,6 +72,7 @@ public class Menu extends BasicGameState {
 		generator = new Random();
 		highlightEntries = new HighlightList(10);
 		selectedEntry = -1;
+		
 		moveSound = new Sound("res/sound/move.wav");
 		selectSound = new Sound("res/sound/select.wav");
 	}

@@ -69,6 +69,10 @@ public class Creature extends Entity {
         return false;
     }
 
+	public void onJump() {
+		level.getJumpSound().play();
+	}
+
     @Override
     public void render(Graphics g)
     {

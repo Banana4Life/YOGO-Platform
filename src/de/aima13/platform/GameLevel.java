@@ -29,15 +29,8 @@ public class GameLevel {
 	private final LinkedList<Entity> entities;
 	private final Input input;
 
-	Image img1, img2, img3;
-
-	int img1Height, img2Height, img3Height;
-	int screenResolution;
-
-	Vector2f position1, position2, position3;
-
 	private TiledBackground background;
-	private Sound plasmaSound;
+	private Sound plasmaSound, jumpSound;
 
 	public GameLevel(PlatformGame game, Input input) throws SlickException {
 		this.game = game;
@@ -58,18 +51,7 @@ public class GameLevel {
 		background.init(this);
 
 		plasmaSound = new Sound("res/sound/plasma.wav");
-
-		img1 = new Image("res/background/background.png");
-		img2 = new Image("res/background/background.png");
-		img3 = new Image("res/background/background.png");
-
-		img1Height = img1.getHeight(); // 1280
-		img2Height = img2.getHeight(); // 1280
-		img3Height = img3.getHeight(); // 1280
-
-		position1 = new Vector2f(0, 0);
-		position2 = new Vector2f(0, position1.y + img1.getHeight());
-		position3 = new Vector2f(0, position2.y + img2.getHeight());
+		jumpSound = new Sound("res/sound/plasma.wav");
 	}
 
 	public void addEntity(Entity entity) {
@@ -148,6 +130,10 @@ public class GameLevel {
 
 	public Sound getPlasmaSound() {
 		return plasmaSound;
+	}
+
+	public Sound getJumpSound() {
+		return jumpSound;
 	}
 
 	private void detectCollisions() {

@@ -11,8 +11,6 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.aima13.platform.PlatformGame;
-import de.aima13.platform.gui.OnHighlightSelectListener;
-import de.aima13.platform.util.Vector;
 
 public class Credits extends BasicGameState {
 
