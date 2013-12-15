@@ -32,6 +32,7 @@ public class Credits extends BasicGameState {
 	private Vector bikePosition;
 	private Vector bikeVelocity;
 	private boolean bikePaused = false;
+	private String hint;
 
 	/*
 	 * 
@@ -99,9 +100,27 @@ public class Credits extends BasicGameState {
 		wheelAnim = new Animation(framesWheel, 15);
 
 		bikePaused = false;
+		hint = "Press \"ESC\" to return to main menu";
 		/*
 		 * 
 		 */
+	}
+
+	public int getRowPixel(int row) {
+		return 100 + row * 25;
+	}
+
+	public int getColPixel() {
+		return 50;
+	}
+
+	public int getHintX(String hint) {
+		return (int) this.game.fontDefault.getWidth(hint);
+	}
+
+	public int getHintY(String hint) {
+		return (int) ((bikeDimensions.y) / 2)
+				- (this.game.fontDefault.getHeight(hint) / 2);
 	}
 
 	@Override
@@ -114,8 +133,18 @@ public class Credits extends BasicGameState {
 				- textWidth / 2, 10, "Credits", Color.white);
 
 		// g.setColor(Color.red);
-		this.game.fontDefault.drawString(50, 100, "Resume Game");
-		this.game.fontDefault.drawString(50, 125, "Exit to Main Menu");
+		this.game.fontDefault.drawString(getColPixel(), getRowPixel(0),
+				"Â© Copyright 2013:");
+		this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(1),
+				"Jonas Dann");
+		this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(2),
+				"Malte Heinzelmann");
+		this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(3),
+				"Phillip Schichtel");
+		this.game.fontDefault.drawString(getColPixel(), getRowPixel(4),
+				"A project developed for LudumDare 2013");
+		this.game.fontDefault.drawString(getColPixel(), getRowPixel(5),
+				"(see Http://ludumdare.com/ for more information)");
 		/*
 		 * Easter EGG
 		 */
@@ -128,6 +157,8 @@ public class Credits extends BasicGameState {
 		/*
 		 * 
 		 */
+		this.game.fontDefault.drawString(bikePosition.x - getHintX(hint),
+				bikePosition.y + getHintY(hint), hint);
 	}
 
 	@Override
@@ -139,7 +170,8 @@ public class Credits extends BasicGameState {
 		if (!bikePaused) {
 			wheelAnim.start();
 			bikePosition = bikePosition.add(bikeVelocity);
-			if (bikePosition.x > game.getContainer().getWidth()) {
+			if (bikePosition.x - getHintX(hint) - 10 > game.getContainer()
+					.getWidth()) {
 				resetBike();
 			}
 		} else {
