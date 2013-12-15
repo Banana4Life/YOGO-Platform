@@ -6,11 +6,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.EmptyTransition;
+import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
@@ -120,4 +123,17 @@ public class PlatformGame extends StateBasedGame {
 	public GameLevel getLevel() {
 		return level;
 	}
+
+    public void lose()
+    {
+        enterState(Loose.ID, new EmptyTransition(), new FadeInTransition(Color.black));
+        try
+        {
+            ((Game)getState(Game.ID)).resetState();
+        }
+        catch (SlickException e)
+        {
+            e.printStackTrace(System.err);
+        }
+    }
 }

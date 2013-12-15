@@ -111,9 +111,8 @@ public class Platform extends Entity {
         {
             // update Animations //
             this.plasmaAnimation.update(delta);
-            this.fireAnimation.update(delta);
-
-            this.offsetCounter++;
+        } else {
+        	this.offsetCounter++;
             if (this.offsetCounter >= 10)
             {
                 this.offsetLeft = new Vector(offsetLeft.x + (this.randomGenerator.nextInt(3) - 1), offsetLeft.y + (this.randomGenerator.nextInt(3) - 1));
@@ -123,6 +122,7 @@ public class Platform extends Entity {
             }
             this.offsetCounter %= 10;
         }
+        this.fireAnimation.update(delta);
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class Platform extends Entity {
 
         Vector p = getPosition();
 
-		this.engineSpriteSheet.getSubImage(0, 0).draw(p.x + this.offsetLeft.x, p.y + getPosition().y, scale);
+		this.engineSpriteSheet.getSubImage(0, 0).draw(p.x + this.offsetLeft.x, p.y + this.offsetLeft.y, scale);
 		this.engineSpriteSheet.getSubImage(1, 0).draw(p.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, p.y + this.offsetRight.y, scale);
 
 		this.fireAnimation.getCurrentFrame().draw(p.x + this.offsetLeft.x + 1 * scale, p.y + this.offsetLeft.y + 6 * scale, scale);
@@ -169,7 +169,10 @@ public class Platform extends Entity {
     @Override
     public void onCollide(Entity current, Face collidedFace)
     {
-        this.powerbar.decreaseValue(.1f);
+        if (isActive())
+        {
+            this.powerbar.decreaseValue(.1f);
+        }
     }
 
     @Override
