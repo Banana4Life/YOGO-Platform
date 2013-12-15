@@ -24,6 +24,10 @@ public class Vector {
 	public Vector sub(float x, float y) {
 		return new Vector(this.x - x, this.y - y);
 	}
+	
+	public Vector mod(float n) {
+		return new Vector(this.x % n, this.y % n);
+	}
 
 	public double len(Vector v) {
 		return Math.sqrt(x * x + y * y);

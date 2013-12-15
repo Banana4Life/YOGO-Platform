@@ -37,7 +37,7 @@ public class Game extends BasicGameState {
 
 	public void resetState() {
 		this.level = new GameLevel(game, container.getInput());
-		platform = new Platform();
+		platform = new Platform(10);
 		this.level.addEntity(platform);
         this.level.addEntity(new Creature(platform));
 	}

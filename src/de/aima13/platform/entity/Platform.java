@@ -1,8 +1,14 @@
 package de.aima13.platform.entity;
 
+import java.util.Random;
+
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 import de.aima13.platform.util.Vector;
 
@@ -10,24 +16,49 @@ public class Platform extends Entity {
 
 	private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
 	private static final float DECELERATE_FACTOR = 1.5f;
+	
+	private SpriteSheet engineSpriteSheet;
+	private Animation plasmaAnimation;
+	private Animation fireAnimation;
+	
+	private int width;
+	private Vector offsetLeft, offsetRight;
+	private int offsetCounter;
+	private boolean isActivated;
+	private int activationCooldown;
+	private int stillActivatedFor;
+	private Random randomGenerator;
 
 	public Platform() {
-		this(null, null, null);
+		this(null, null, null, 3);
+	}
+	
+	public Platform(int width) {
+		this(null, null, null, width);
 	}
 
 	public Platform(Vector size) {
-		this(size, null, null);
+		this(size, null, null, 3);
 	}
 
 	public Platform(Vector size, Vector position) {
-		this(size, position, null);
+		this(size, position, null, 3);
 	}
 
-	public Platform(Vector size, Vector position, Vector acceleration) {
+	public Platform(Vector size, Vector position, Vector acceleration, int width) {
 		super();
 		this.size = size;
 		this.position = position;
 		this.acceleration = acceleration;
+		
+		this.width = width;
+		this.offsetLeft = new Vector(0, 0);
+		this.offsetRight = new Vector(0, 0);
+		this.offsetCounter = 0;
+		this.isActivated = false;
+		this.randomGenerator = new Random();
+		this.activationCooldown = 0;
+		this.stillActivatedFor = 0;
 	}
 
 	@Override
@@ -43,10 +74,40 @@ public class Platform extends Entity {
 		if (acceleration == null) {
 			acceleration = DEFAULT_ACCELERATION;
 		}
+		
+		// load Sprites and Animations //
+		try {
+			this.engineSpriteSheet = new SpriteSheet("res/images/platform/Engine.png", 4, 6);
+			this.engineSpriteSheet.setFilter(Image.FILTER_NEAREST);
+			this.plasmaAnimation = new Animation(new SpriteSheet("res/images/platform/Plasma.png", 3, 3), 100);
+			this.plasmaAnimation.start();
+			this.fireAnimation = new Animation(new SpriteSheet("res/images/platform/Fire.png", 3, 3), 100);
+			this.fireAnimation.start();
+		} catch(SlickException e) {
+			// do nothing
+		}
 	}
 
 	@Override
 	public void update(int delta) {
+		if (this.stillActivatedFor > 0) {
+			this.stillActivatedFor -= delta;
+			if (this.stillActivatedFor < 0) {
+				this.stillActivatedFor = 0;
+			}
+		} else if (this.stillActivatedFor == 0){
+			this.isActivated = false;
+			this.activationCooldown = 1000;
+			this.stillActivatedFor = -1;
+		}
+		if (this.activationCooldown > 0) {
+			this.activationCooldown -= delta;
+		}
+		
+		if (level.getInput().isKeyDown(Input.KEY_A)) {
+			this.activate();
+		}
+		
 		super.update(delta);
 		// Get movements
 		if (level.getInput().isKeyDown(Input.KEY_LEFT)) {
@@ -95,14 +156,55 @@ public class Platform extends Entity {
 			}
 			// Reset
 			velocity = new Vector(0, 0);
+			
+			// update Animations //
+			this.plasmaAnimation.update(delta);
+			this.fireAnimation.update(delta);
+
+			this.offsetCounter++;
+			if (this.offsetCounter >= 10) {
+				this.offsetLeft = new Vector(this.randomGenerator.nextInt(2) - 1, this.randomGenerator.nextInt(2) - 1);
+				this.offsetLeft = this.offsetLeft.mod(1);
+				this.offsetRight = new Vector(this.randomGenerator.nextInt(2) - 1, this.randomGenerator.nextInt(2) - 1);
+				this.offsetRight = this.offsetRight.mod(1);
+			}
+			this.offsetCounter %= 10;
 		}
 	}
 
 	@Override
 	public void render(Graphics g) {
-		// Draw the platform
-		g.setColor(Color.cyan);
-		g.fillRect(position.x, position.y, level.getWidth() / 4,
-				level.getHeight() / 24);
+		float scale = size.x / ((width * 3) + 2);
+		if (this.isActivated) {
+			int currentFrame = this.plasmaAnimation.getFrame();
+			for(int n = 0; n < width; n++) {
+				this.plasmaAnimation.getImage(currentFrame).draw(this.position.x + (1 + n * 3) * scale, this.position.y, scale);
+				currentFrame += this.plasmaAnimation.getFrameCount() / 2;
+				currentFrame %= this.plasmaAnimation.getFrameCount();
+			}
+			
+			this.offsetLeft = new Vector(0, 0);
+			this.offsetRight = new Vector(0, 0);
+			this.offsetCounter = 9;
+		}
+		
+		// g.setColor(Color.white);
+		// g.drawString("isActive = " + isActivated + " stillActivatedFor = " + stillActivatedFor + " cooldown = " + this.activationCooldown, 20, 200);
+		
+		this.engineSpriteSheet.getSubImage(0, 0).draw(this.position.x + this.offsetLeft.x, this.position.y + this.offsetLeft.y, scale);
+		this.engineSpriteSheet.getSubImage(1, 0).draw(this.position.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, this.position.y + this.offsetRight.y, scale);
+		
+		this.fireAnimation.getCurrentFrame().draw(this.position.x + this.offsetLeft.x + 1 * scale, this.position.y + this.offsetLeft.y + 6 * scale, scale);
+		this.fireAnimation.getCurrentFrame().draw(this.position.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, this.position.y + this.offsetRight.y + 6 * scale, scale);
+	}
+	
+	public void activate() {
+		if (this.stillActivatedFor < 0 && this.activationCooldown <= 0) {
+			this.isActivated = true;
+			this.stillActivatedFor = 1000;
+		}
+	}
+	public boolean isActive() {
+		return this.isActivated;
 	}
 }
