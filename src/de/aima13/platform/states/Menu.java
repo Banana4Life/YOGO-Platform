@@ -87,6 +87,10 @@ public class Menu extends BasicGameState {
 		highlightEntries.setWidth(width);
 	}
 
+	public void setHighlightScale(int scale) {
+		this.scale = scale;
+	}
+
 	public void addHighlightEntry(Vector position) {
 		addHighlightEntry(position, new OnHighlightSelectListener() {
 			@Override

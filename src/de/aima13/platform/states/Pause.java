@@ -37,7 +37,7 @@ public class Pause extends Menu {
 		addHighlightEntry(new Vector(50, 120), new OnHighlightSelectListener() {
 
 			@Override
-			public void onSelect(StateBasedGame game) {
+			public void onSelect(StateBasedGame game) throws SlickException {
 				((Game) game.getState(Game.ID)).resetState();
 				game.enterState(MainMenu.ID,
 						new FadeOutTransition(Color.black),

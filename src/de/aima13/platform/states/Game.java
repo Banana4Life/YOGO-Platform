@@ -35,11 +35,11 @@ public class Game extends BasicGameState {
 		resetState();
 	}
 
-	public void resetState() {
+	public void resetState() throws SlickException {
 		this.level = new GameLevel(game, container.getInput());
 		platform = new Platform();
 		this.level.addEntity(platform);
-        this.level.addEntity(new Creature(platform));
+		this.level.addEntity(new Creature(platform));
 	}
 
 	@Override
