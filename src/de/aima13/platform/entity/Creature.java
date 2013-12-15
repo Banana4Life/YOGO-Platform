@@ -1,12 +1,24 @@
 package de.aima13.platform.entity;
 
+import de.aima13.platform.states.Game;
+import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.state.transition.FadeInTransition;
+import org.newdawn.slick.state.transition.FadeOutTransition;
 
 public class Creature extends Entity
 {
+    private final Platform platform;
+    private boolean failed = false;
+
+    public Creature(Platform platform)
+    {
+        this.platform = platform;
+    }
+
     @Override
     public void onInit()
     {
@@ -18,43 +30,15 @@ public class Creature extends Entity
     @Override
     public void update(int delta)
     {
-        float x = position.x;
-        float y = position.y;
-
-        float vX = velocity.x;
-        float vY = velocity.y;
-
-        if (x + vX < 0)
+        Vector newPos = position.add(velocity);
+        if (newPos.y + size.y > platform.position.y)
         {
-            x = 0;
-            vX *= -1;
-        }
-        else if (x + vX + size.x > level.getWidth())
-        {
-            x = level.getWidth() - size.x;
-            vX *= -1;
-        }
-        else
-        {
-            x += vX;
+            newPos = new Vector(position.x, newPos.y);
+            velocity = new Vector(0, velocity.y);
+            failed = true;
         }
 
-        if (y + velocity.y < 0)
-        {
-            y = 0;
-            vY *= -1;
-        }
-        else if (y + velocity.y + size.y > level.getHeight())
-        {
-            y = level.getHeight() - size.y;
-            vY *= -1;
-        }
-        else
-        {
-            y += vY;
-        }
-        position = new Vector(x, y);
-        velocity = new Vector(vX, vY);
+        position = newPos;
     }
 
     @Override
@@ -71,7 +55,56 @@ public class Creature extends Entity
     @Override
     public void onCollide(Entity current, Face collidedFace)
     {
-        this.position = new Vector(this.position.x, current.position.y - this.size.y - 1);
-        this.velocity = new Vector(this.velocity.x, this.velocity.y * -1);
+        if (!failed)
+        {
+            this.position = new Vector(this.position.x, current.position.y - this.size.y - 1);
+            this.velocity = new Vector(this.velocity.x, this.velocity.y * -1);
+        }
+    }
+
+    @Override
+    public void onCollideWithBorder(Face collidedFace)
+    {
+        if (failed)
+        {
+            die();
+        }
+        else
+        {
+            float x = position.x;
+            float y = position.y;
+
+            float vX = velocity.x;
+            float vY = velocity.y;
+
+            switch (collidedFace)
+            {
+                case TOP:
+                    y = 0;
+                    vY *= -1;
+                    break;
+                case BOTTOM:
+                    failed = true;
+                    break;
+                case LEFT:
+                    x = 0;
+                    vX *= -1;
+                    break;
+                case RIGHT:
+                    x = level.getWidth() - size.x - 1;
+                    vX *= -1;
+                    break;
+            }
+
+            position = new Vector(x, y);
+            velocity = new Vector(vX, vY);
+        }
+    }
+
+    @Override
+    public void onDeath()
+    {
+        level.getGame().enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+        ((Game)level.getGame().getState(Game.ID)).resetState();
     }
 }

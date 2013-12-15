@@ -13,11 +13,14 @@ public abstract class Entity {
 	protected Vector acceleration;
 	protected GameLevel level;
 
+    private boolean alive;
+
 	protected Entity() {
 		this.position = new Vector(0, 0);
 		this.size = new Vector(0, 0);
 		this.velocity = new Vector(0, 0);
 		this.acceleration = new Vector(0, 0);
+        this.alive = true;
 	}
 
 	public Vector getPosition() {
@@ -27,6 +30,16 @@ public abstract class Entity {
     public Vector getSize()
     {
         return size;
+    }
+
+    public boolean isAlive()
+    {
+        return this.alive;
+    }
+
+    public void die()
+    {
+        this.alive = false;
     }
 
 	public Vector getVelocity() {
@@ -51,7 +64,12 @@ public abstract class Entity {
 	public void render(Graphics g) {
 	}
 
-    public void onCollide(Entity current, Face collidatedFace) {
+    public void onCollide(Entity current, Face collidedFace) {
+    }
 
+    public void onCollideWithBorder(Face collidedFace) {
+    }
+
+    public void onDeath() {
     }
 }

@@ -34,24 +34,24 @@ public class Game extends BasicGameState {
 		this.container = container;
 		resetState();
 	}
-	
+
 	public void resetState() {
-		this.level = new GameLevel(container, container.getInput());
+		this.level = new GameLevel(game, container.getInput());
 		platform = new Platform();
 		this.level.addEntity(platform);
-        this.level.addEntity(new Creature());
+        this.level.addEntity(new Creature(platform));
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		this.level.render(container, g);
+		this.level.render(g);
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		this.level.update(container, delta);
+		this.level.update(delta);
 	}
 
 	@Override

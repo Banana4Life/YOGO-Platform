@@ -1,9 +1,11 @@
 package de.aima13.platform;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Rect;
+import de.aima13.platform.util.Vector;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -11,12 +13,14 @@ import org.newdawn.slick.Input;
 import de.aima13.platform.entity.Entity;
 
 public class GameLevel {
+    private final PlatformGame game;
+    private final GameContainer container;
 	private final LinkedList<Entity> entities;
-	private final GameContainer container;
 	private final Input input;
 
-	public GameLevel(GameContainer container, Input input) {
-		this.container = container;
+	public GameLevel(PlatformGame game, Input input) {
+        this.game = game;
+		this.container = game.getContainer();
 		this.input = input;
 		entities = new LinkedList<>();
 	}
@@ -26,19 +30,28 @@ public class GameLevel {
 		entity.init(this);
 	}
 
-	public final void update(GameContainer container, int delta) {
-		for (Entity entity : entities) {
-			entity.update(delta);
+	public final void update(int delta) {
+        this.onUpdate(delta);
+        Iterator<Entity> it = this.entities.iterator();
+        Entity e;
+		while (it.hasNext()) {
+            e = it.next();
+            if (!e.isAlive())
+            {
+                it.remove();
+                e.onDeath();
+                continue;
+            }
+			e.update(delta);
 		}
-		this.onUpdate(container, delta);
 		this.detectCollisions();
 	}
 
-	public void onUpdate(GameContainer container, int delta) {
+	public void onUpdate(int delta) {
 
 	}
 
-	public final void render(GameContainer container, Graphics g) {
+	public final void render(Graphics g) {
 		for (Entity entity : entities) {
 			entity.render(g);
 		}
@@ -48,6 +61,10 @@ public class GameLevel {
 	private void onRender(Graphics g) {
 
 	}
+
+    public PlatformGame getGame() {
+        return this.game;
+    }
 
 	public GameContainer getContainer() {
 		return container;
@@ -77,6 +94,28 @@ public class GameLevel {
 				current.onCollide(last, collFace.opposite());
 			}
 		}
+
+        for (Entity entity : this.entities)
+        {
+            Vector pos = entity.getPosition();
+            Vector size = entity.getSize();
+            if (pos.x < 0)
+            {
+                entity.onCollideWithBorder(Face.LEFT);
+            }
+            if (pos.y < 0)
+            {
+                entity.onCollideWithBorder(Face.TOP);
+            }
+            if (pos.x + size.x > getWidth())
+            {
+                entity.onCollideWithBorder(Face.RIGHT);
+            }
+            if (pos.y + size.y > getHeight())
+            {
+                entity.onCollideWithBorder(Face.BOTTOM);
+            }
+        }
 	}
 
 	private Face checkCollision(Entity entityA, Entity entityB) {
