@@ -36,7 +36,7 @@ public class Creature extends Entity {
 	public void onInit() {
 		position = new Vector(0, 0);
 		velocity = new Vector(5, 5);
-		size = new Vector(20, 50);
+		size = new Vector(16 * IMAGE_SCALE, 32 * IMAGE_SCALE);
 		
 		try {
 			this.characterSpriteSheet = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
