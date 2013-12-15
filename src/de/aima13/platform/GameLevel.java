@@ -22,7 +22,7 @@ import de.aima13.platform.entity.Entity;
 import de.aima13.platform.entity.TiledBackground;
 
 public class GameLevel {
-    private static final Vector G = new Vector(0, 9.81f).scale(.2f);
+    private static final Vector G = new Vector(0, 9.81f).scale(.01f);
 
 	private final PlatformGame game;
 	private final GameContainer container;

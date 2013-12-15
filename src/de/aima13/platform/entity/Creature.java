@@ -36,6 +36,7 @@ public class Creature extends Entity {
 
 	@Override
 	public void onInit() {
+        //setGravityScale(0);
         move(Vector.ZERO);
 		//setVelocity(new Vector(5, 5));
         this.setBoundingBox(new Box(Vector.ZERO, new Vector(16 * IMAGE_SCALE, 32 * IMAGE_SCALE)));
@@ -85,7 +86,6 @@ public class Creature extends Entity {
         Box bb = getAbsBB();
         Box platformBb = platform.getAbsBB();
 		if (bb.getBase().x + bb.getWidth() >= platformBb.getBase().x && getPosition().x < platform.getPosition().x + platformBb.getWidth()) {
-			System.out.println("Above platform!");
 			return true;
 		}
 		return false;

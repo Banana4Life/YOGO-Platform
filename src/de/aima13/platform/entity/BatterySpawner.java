@@ -18,7 +18,7 @@ public class BatterySpawner extends Entity
     @Override
     public void onInit()
     {
-        move(3, 0);
+        move(1, 0);
         this.setGravityScale(0);
         this.setBoundingBox(new Box(40, 1));
         this.setVelocity(new Vector(3, 0));
