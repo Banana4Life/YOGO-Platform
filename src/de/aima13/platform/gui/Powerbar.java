@@ -1,47 +1,27 @@
 package de.aima13.platform.gui;
 
-import de.aima13.platform.entity.Entity;
-import de.aima13.platform.util.Vector;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-public class Powerbar extends GuiEntity
-{
-    private static final Vector PADDING = new Vector(10, 10);
-    private static final float HEIGHT = PADDING.y;
+import de.aima13.platform.util.Vector;
 
-    private float power = 1.0f;
+public class Powerbar extends Bar {
 
-    public float getPower()
-    {
-        return power;
-    }
+	
+	public Powerbar() {
+		value = 1.0f;
+	}
 
-    public void setPower(float power)
-    {
-        this.power = Math.max(0f, Math.min(1f, power));
-    }
+	@Override
+	public void render(Graphics g) {
+		super.render(g);
+		final float y = level.getContainer().getHeight() - PADDING.y - HEIGHT;
+		final float width = level.getContainer().getWidth() - 2 * PADDING.x;
 
-    public void increasePower(float add)
-    {
-        setPower(getPower() + add);
-    }
+		g.setColor(Color.red);
+		g.fillRect(PADDING.x, y, width, HEIGHT);
 
-    public void decreasePower(float sub)
-    {
-        setPower(getPower() - sub);
-    }
-
-    @Override
-    public void render(Graphics g)
-    {
-        final float y = level.getContainer().getHeight() - PADDING.y - HEIGHT;
-        final float width = level.getContainer().getWidth() - 2 * PADDING.x;
-
-        g.setColor(Color.red);
-        g.fillRect(PADDING.x, y, width, HEIGHT);
-
-        g.setColor(Color.cyan);
-        g.fillRect(PADDING.x, y, width * power, HEIGHT);
-    }
+		g.setColor(Color.cyan);
+		g.fillRect(PADDING.x, y, width * value, HEIGHT);
+	}
 }

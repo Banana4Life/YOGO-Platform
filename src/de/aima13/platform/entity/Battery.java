@@ -30,7 +30,7 @@ public class Battery extends Entity
     {
         if (current instanceof Platform)
         {
-            ((Platform)current).getPowerbar().increasePower(this.getPower());
+            ((Platform)current).getPowerbar().increaseValue(this.getPower());
             die();
         }
         else if (current instanceof Creature)
