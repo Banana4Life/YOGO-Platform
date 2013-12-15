@@ -1,25 +1,25 @@
 package de.aima13.platform;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Rect;
 import de.aima13.platform.util.Vector;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.entity.Entity;
 import de.aima13.platform.entity.TiledBackground;
-import de.aima13.platform.util.Face;
-import de.aima13.platform.util.Rect;
 
 public class GameLevel {
 	private final PlatformGame game;
@@ -27,14 +27,8 @@ public class GameLevel {
 	private final LinkedList<Entity> entities;
 	private final Input input;
 
-	Image img1, img2, img3;
-
-	int img1Height, img2Height, img3Height;
-	int screenResolution;
-
-	Vector2f position1, position2, position3;
-
 	private TiledBackground background;
+	private Sound plasmaSound, jumpSound;
 
 	public GameLevel(PlatformGame game, Input input) throws SlickException {
 		this.game = game;
@@ -43,45 +37,46 @@ public class GameLevel {
 		this.input = input;
 		entities = new LinkedList<>();
 
-		Image backImg1 = new Image(
-				"res/images/background/BackgroundTileset.png").getSubImage(0,
-				0, 32, 32).getScaledCopy(2f);
-		backImg1.setFilter(Image.FILTER_NEAREST);
-		background = new TiledBackground(new Image[] { backImg1 }, new Vector(
-				backImg1.getWidth(), backImg1.getHeight()));
+		SpriteSheet sheet = new SpriteSheet(new Image(
+				"res/images/background/BackgroundTileset.png"), 32, 32);
+		Image img = new Image("res/images/background/BackgroundTileset.png")
+				.getSubImage(0, 0, 32, 32).getScaledCopy(2f);
+		img.setFilter(Image.FILTER_NEAREST);
+		Image[] set = new Image[] { img };
+		// backImg1.setFilter(Image.FILTER_NEAREST);
+		background = new TiledBackground(set, new Vector(set[0].getWidth(),
+				set[0].getHeight()));
 		background.init(this);
 
-		img1 = new Image("res/background/background.png");
-		img2 = new Image("res/background/background.png");
-		img3 = new Image("res/background/background.png");
-
-		img1Height = img1.getHeight(); // 1280
-		img2Height = img2.getHeight(); // 1280
-		img3Height = img3.getHeight(); // 1280
-
-		position1 = new Vector2f(0, 0);
-		position2 = new Vector2f(0, position1.y + img1.getHeight());
-		position3 = new Vector2f(0, position2.y + img2.getHeight());
+		plasmaSound = new Sound("res/sound/plasma.wav");
+		jumpSound = new Sound("res/sound/plasma.wav");
 	}
 
-	public void addEntity(Entity entity) {
+    public <T extends Entity> T spawn(T e)
+    {
+        this.addEntity(e);
+        return e;
+    }
+
+	protected void addEntity(Entity entity) {
 		this.entities.addLast(entity);
 		entity.init(this);
 	}
 
 	public final void update(int delta) {
 		this.onUpdate(delta);
-		Iterator<Entity> it = this.entities.iterator();
-		Entity e;
-		while (it.hasNext()) {
-			e = it.next();
+		List<Entity> remove = new ArrayList<>();
+		for (Entity e : new ArrayList<>(this.entities)) {
 			if (!e.isAlive()) {
-				it.remove();
+				remove.add(e);
 				e.onDeath();
 				continue;
 			}
 			e.update(delta);
 		}
+
+        this.entities.removeAll(remove);
+
 		this.detectCollisions();
 	}
 
@@ -138,6 +133,14 @@ public class GameLevel {
 		return getContainer().getHeight();
 	}
 
+	public Sound getPlasmaSound() {
+		return plasmaSound;
+	}
+
+	public Sound getJumpSound() {
+		return jumpSound;
+	}
+
 	private void detectCollisions() {
 		Entity last = this.entities.getFirst();
 		Entity current;
@@ -170,12 +173,16 @@ public class GameLevel {
 	}
 
 	private Face checkCollision(Entity entityA, Entity entityB) {
+        if (!entityA.isCollidable() || !entityB.isCollidable())
+        {
+            return null;
+        }
+
 		Rect a = new Rect(entityA.getPosition(), entityA.getSize());
 		Rect b = new Rect(entityB.getPosition(), entityB.getSize());
 
 		Face collFace = b.intersects(a);
 		if (collFace != null) {
-			System.out.println("Intersection: " + collFace);
 			return collFace;
 		}
 

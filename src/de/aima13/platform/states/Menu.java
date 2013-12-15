@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -24,8 +25,9 @@ public class Menu extends BasicGameState {
 
 	protected PlatformGame game; // stored for later use
 
+	protected Sound moveSound, selectSound;
+
 	protected SpriteSheet engine;
-	protected Animation fire;
 	protected Animation plasmaPlatform;
 	protected int scale;
 	protected int width;
@@ -54,13 +56,12 @@ public class Menu extends BasicGameState {
 		} else {
 			throw new SlickException("StateBaseGame isn't a PlatformGame!");
 		}
-		engine = new SpriteSheet("res/brackets.png", 4, 3);
+		engine = new SpriteSheet("res/images/platform/brackets.png", 4, 3);
 		engine.setFilter(Image.FILTER_NEAREST);
 		plasmaPlatform = new Animation(new SpriteSheet(
 				"res/PlasmaPlatform.png", 3, 3), 100);
 		plasmaPlatform.start();
-		fire = new Animation(new SpriteSheet("res/Fire.png", 3, 3), 100);
-		fire.start();
+
 		scale = 6;
 		higlightPosition = new Vector(0, 0);
 		highlightActive = false;
@@ -71,7 +72,9 @@ public class Menu extends BasicGameState {
 		generator = new Random();
 		highlightEntries = new HighlightList(10);
 		selectedEntry = -1;
-
+		
+		moveSound = new Sound("res/sound/move.wav");
+		selectSound = new Sound("res/sound/select.wav");
 	}
 
 	@Override
@@ -166,6 +169,7 @@ public class Menu extends BasicGameState {
 			highlightActive = true;
 			waitForExec = true;
 			waitedFramesCount = 0;
+			selectSound.play();
 		} else {
 			highlightActive = false;
 			if (key == Input.KEY_UP) {
@@ -174,12 +178,14 @@ public class Menu extends BasicGameState {
 				} else {
 					selectedEntry = highlightEntries.size() - 1;
 				}
+				moveSound.play();
 			} else if (key == Input.KEY_DOWN) {
 				if (selectedEntry < highlightEntries.size() - 1) {
 					selectedEntry++;
 				} else {
 					selectedEntry = 0;
 				}
+				moveSound.play();
 			}
 		}
 	}

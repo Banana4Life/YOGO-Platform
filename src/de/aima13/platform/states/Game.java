@@ -2,12 +2,15 @@ package de.aima13.platform.states;
 
 
 
+import de.aima13.platform.entity.BatterySpawner;
+import de.aima13.platform.gui.Powerbar;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -43,9 +46,14 @@ public class Game extends BasicGameState {
 
 	public void resetState() throws SlickException {
 		this.level = new GameLevel(game, container.getInput());
-		platform = new Platform(10);
-		this.level.addEntity(platform);
-		this.level.addEntity(new Creature(platform));
+
+        Powerbar powerbar = level.spawn(new Powerbar());
+		platform = level.spawn(new Platform(powerbar, 10));
+
+        Creature creature = level.spawn(new Creature(platform));
+
+        BatterySpawner spawner = level.spawn(new BatterySpawner());
+        spawner.move(container.getWidth() / 2f, 20);
 	}
 
 	@Override
