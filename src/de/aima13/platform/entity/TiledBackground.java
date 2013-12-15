@@ -5,6 +5,7 @@ import java.util.Random;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.gui.GuiEntity;
 import de.aima13.platform.gui.Tile;
@@ -14,14 +15,14 @@ public class TiledBackground extends GuiEntity {
 
 	protected Tile[][] tiles;
 	protected Random generator;
-	protected SpriteSheet imageSheet;
+	protected SpriteSheet imageSpriteSheet;
 	protected Image[] imageSet;
 	protected Vector imageSize;
 
-	public TiledBackground(SpriteSheet sheet, Vector size) {
+	public TiledBackground(SpriteSheet sheet) {
 		super();
-		imageSheet = sheet;
-		imageSize = size;
+		imageSpriteSheet = sheet;
+		imageSize = new Vector(sheet.getWidth() / sheet.getVerticalCount(), sheet.getHeight() / sheet.getHorizontalCount());
 		generator = new Random();
 	}
 
@@ -33,13 +34,14 @@ public class TiledBackground extends GuiEntity {
 	}
 
 	public void onInit() {
-		if (imageSet.length > 0) {
+		if (imageSet != null || imageSpriteSheet != null) {
 			int width = getLevel().getWidth();
 			int notpr = (int) (width / imageSize.x) + 1; // number
 															// of
 															// tiles
 															// per
 															// row
+			Log.info("" + imageSize.x + " " + imageSize.y);
 			int nor = (int) (getLevel().getHeight() / imageSize.y) + 1; // number
 																		// of
 																		// rows
@@ -47,12 +49,15 @@ public class TiledBackground extends GuiEntity {
 			// add one row in top
 			for (int i = -1; i < nor; i++) {
 				for (int h = 0; h < notpr; h++) {
-					// get random image
-					int randomImage = generator.nextInt(imageSet.length);
-					Tile tile = new Tile(this, imageSet[randomImage],
+					Tile tile = new Tile(this, null,
 							new Vector(h * imageSize.x, i * imageSize.y),
 							i + 1, h);
 					tiles[i + 1][h] = tile;
+					if (i == -1) {
+						tile.setImage(true);
+					} else {
+						tile.setImage(false);
+					}
 				}
 			}
 		}
@@ -65,14 +70,21 @@ public class TiledBackground extends GuiEntity {
 	public void render(Graphics g) {
 		for (int i = 0; i < tiles.length; i++) {
 			for (int h = 0; h < tiles[i].length; h++) {
-				Tile t = tiles[i][h];
-				g.drawImage(t.getImage(), t.getPosition().x, t.getPosition().y);
+				tiles[i][h].render(g);
 			}
 		}
 	}
 
 	public void onLeaveWorld(Tile tile) {
-		// Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
+		 Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
 		tile.moveTo(new Vector(tile.getPosition().x, -imageSize.y));
+		tile.setImage(false);
+	}
+	
+	public Tile getTile(int x, int y) {
+		return tiles[y][x];
+	}
+	public Image getSprite(int x, int y) {
+		return imageSpriteSheet.getSprite(x, y);
 	}
 }

@@ -21,6 +21,7 @@ import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.entity.Entity;
 import de.aima13.platform.entity.TiledBackground;
+import de.aima13.platform.entity.TiledScrollingBackground;
 
 public class GameLevel {
     private static final Vector G = new Vector(0, 9.81f);
@@ -46,15 +47,13 @@ public class GameLevel {
 	}
 
 	public void init() throws SlickException {
-		SpriteSheet sheet = new SpriteSheet(new Image(
-				"res/images/background/BackgroundTileset.png"), 32, 32);
+		SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
 		Image img = new Image("res/images/background/BackgroundTileset.png")
 				.getSubImage(0, 0, 32, 32).getScaledCopy(2f);
 		img.setFilter(Image.FILTER_NEAREST);
 		Image[] set = new Image[] { img };
 		// backImg1.setFilter(Image.FILTER_NEAREST);
-		background = new TiledBackground(set, new Vector(set[0].getWidth(),
-				set[0].getHeight()));
+		background = new TiledScrollingBackground(sheet, new Vector(0, 1));
 		background.init(game);
 
 		plasmaSound = new Sound("res/sound/plasma.wav");

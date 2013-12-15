@@ -12,9 +12,9 @@ public class TiledScrollingBackground extends TiledBackground {
 
 	protected Vector velocity;
 
-	public TiledScrollingBackground(SpriteSheet sheet, Vector size,
+	public TiledScrollingBackground(SpriteSheet sheet,
 			Vector velocity) {
-		super(sheet, size);
+		super(sheet);
 		this.velocity = velocity;
 	}
 
