@@ -87,7 +87,7 @@ public class GameLevel {
         Rect a = new Rect(entityA.getPosition(), entityA.getSize());
         Rect b = new Rect(entityB.getPosition(), entityB.getSize());
 
-        Face collFace = a.intersects(b);
+        Face collFace = b.intersects(a);
         if (collFace != null)
         {
             System.out.println("Intersection: " + collFace);

@@ -1,5 +1,6 @@
 package de.aima13.platform.entity;
 
+import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -65,5 +66,12 @@ public class Creature extends Entity
         g.drawRect(position.x, position.y, size.x, size.y);
         g.fillRect(position.x, position.y, size.x, size.y);
         g.setColor(c);
+    }
+
+    @Override
+    public void onCollide(Entity current, Face collidedFace)
+    {
+        this.position = new Vector(this.position.x, current.position.y - this.size.y - 1);
+        this.velocity = new Vector(this.velocity.x, this.velocity.y * -1);
     }
 }

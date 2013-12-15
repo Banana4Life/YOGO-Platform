@@ -38,7 +38,7 @@ public class Platform extends Entity {
 		}
 		if (position == null) {
 			position = new Vector(level.getWidth() / 2 - size.x / 2,
-					level.getHeight() - size.y);
+					level.getHeight() - size.y - 100);
 		}
 		if (acceleration == null) {
 			acceleration = DEFAULT_ACCELERATION;

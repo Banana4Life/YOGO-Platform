@@ -3,9 +3,9 @@ package de.aima13.platform.util;
 public enum Face
 {
     TOP,
-    RIGHT,
+    LEFT,
     BOTTOM,
-    LEFT;
+    RIGHT;
 
     public Face opposite()
     {

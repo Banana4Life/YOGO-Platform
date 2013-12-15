@@ -3,6 +3,9 @@ package de.aima13.platform;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.aima13.platform.util.Rect;
+import de.aima13.platform.util.Vector;
+import org.lwjgl.Sys;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -22,8 +25,6 @@ public class PlatformGame extends StateBasedGame {
 	public PlatformGame() {
 		super("One Platform");
 	}
-
-	
 
 	public void initStatesList(GameContainer container) throws SlickException {
 		addState(new Menu());
@@ -46,7 +47,7 @@ public class PlatformGame extends StateBasedGame {
 			}
 		}
 	}
-	
+
 	public AppGameContainer getApp() {
 		return app;
 	}
