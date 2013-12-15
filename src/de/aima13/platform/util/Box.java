@@ -1,14 +1,26 @@
 package de.aima13.platform.util;
 
-public class Rect
+public class Box
 {
+    public static final Box ZERO = new Box(Vector.ZERO, Vector.ZERO);
+
     private final Vector base;
     private final Vector size;
 
-    public Rect(Vector base, Vector size)
+    public Box(Vector base, Vector size)
     {
         this.base = base;
         this.size = size;
+    }
+
+    public Box(Vector base, float width, float height)
+    {
+        this(base, new Vector(width, height));
+    }
+
+    public Box(float width, float height)
+    {
+        this(Vector.ZERO, width, height);
     }
 
     public Vector[] getCorners()
@@ -22,6 +34,26 @@ public class Rect
         return corners;
     }
 
+    public Vector getBase()
+    {
+        return this.base;
+    }
+
+    public float getWidth()
+    {
+        return this.size.x;
+    }
+
+    public float getHeight()
+    {
+        return this.size.y;
+    }
+
+    public Box absolute(Vector pos)
+    {
+        return new Box(getBase().add(pos), this.size);
+    }
+
     public boolean contains(Vector v)
     {
         return v.x >= base.x &&
@@ -30,7 +62,7 @@ public class Rect
                v.y < base.y + size.y;
     }
 
-    public Face intersects(Rect r)
+    public Face intersects(Box r)
     {
         Vector[] corners = this.getCorners();
         for (int i = 0; i < corners.length; ++i)

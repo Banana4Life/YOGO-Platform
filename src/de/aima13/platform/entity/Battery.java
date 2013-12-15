@@ -1,6 +1,8 @@
 package de.aima13.platform.entity;
 
+import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
+import de.aima13.platform.util.Vector;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -9,14 +11,14 @@ import org.newdawn.slick.SlickException;
 public class Battery extends Entity
 {
 	private static final int IMAGE_SCALE = 4;
-	
+
     private float power;
     private Image batteryImage;
     private Image batteryNegativeImage;
 
     public Battery(float power) {
         this.power = power;
-        
+
         try {
         	batteryImage = new Image("res/images/otherEntitys/Battery.png");
         	batteryImage.setFilter(Image.FILTER_NEAREST);
@@ -28,18 +30,20 @@ public class Battery extends Entity
     }
 
     @Override
-    public void update(int delta)
+    public void onInit()
     {
-        relativeMove(0, 1);
+        setBoundingBox(new Box(30, 30));
+        setVelocity(new Vector(0, 2));
+        setAcceleration(Vector.ZERO);
     }
 
     @Override
     public void render(Graphics g)
     {
     	if (power >= 0) {
-    		batteryImage.draw(this.position.x, this.position.y, IMAGE_SCALE);
+    		batteryImage.draw(getPosition().x, getPosition().y, IMAGE_SCALE);
     	} else {
-    		batteryNegativeImage.draw(this.position.x, this.position.y, IMAGE_SCALE);
+    		batteryNegativeImage.draw(getPosition().x, getPosition().y, IMAGE_SCALE);
     	}
     }
 
