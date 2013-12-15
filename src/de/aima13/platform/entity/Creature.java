@@ -47,7 +47,7 @@ public class Creature extends Entity {
 			// do nothing
 		}
 		
-		this.inAir = this.prevFallingDown = false;
+		this.inAir = this.prevFallingDown = true;
 	}
 
     @Override
