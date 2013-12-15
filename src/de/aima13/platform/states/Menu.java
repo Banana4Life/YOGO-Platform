@@ -1,179 +1,209 @@
 package de.aima13.platform.states;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
+import org.newdawn.slick.util.Log;
 
-import de.aima13.platform.entity.Motorcycle;
+import de.aima13.platform.PlatformGame;
+import de.aima13.platform.gui.HighlightList;
+import de.aima13.platform.gui.HiglightListEntry;
+import de.aima13.platform.gui.OnHighlightSelectListener;
 import de.aima13.platform.util.Vector;
 
 public class Menu extends BasicGameState {
 
-	public final static int ID = 2;
-	private StateBasedGame game; // stored for later use
+	protected PlatformGame game; // stored for later use
 
-	/*
-	 * Easter EGG
-	 */
+	protected SpriteSheet engine;
+	protected Animation fire;
+	protected Animation plasmaPlatform;
+	protected int scale;
+	protected int width;
+	protected boolean highlightActive;
+	protected Vector higlightPosition;
+	protected Vector offsetLeft, offsetRight;
+	protected int offsetCounter;
+	protected Random generator;
+	protected int selectedEntry;
+	protected boolean waitForExec;
+	protected int waitedFramesCount;
+	protected static final int waitFrames = 60;
 
-	private Image moto;
-	private Image[] framesWheel;
-	private Animation wheelAnim;
-	private float bikeScale = 0.15f;
-	private Vector bikeDimensions;
-	private Vector bikePosition;
-	private Vector bikeVelocity;
-	private boolean bikeDriving = false;
+	protected HighlightList highlightEntries;
 
-	/*
-	 * 
-	 */
+	public final int ID;
 
-	/*
-	 * Easter EGG
-	 */
-	private void resetBike() {
-		bikeDimensions = new Vector(2600f * bikeScale, 1470f * bikeScale + 0f); // add
-																				// 10
-																				// pixels
-																				// spacing
-																				// for
-																				// the
-																				// street
-																				// ;)
-		bikePosition = new Vector(0 - bikeDimensions.x, game.getContainer()
-				.getHeight() - bikeDimensions.y);
-		bikeVelocity = new Vector(15f, 0);
-		bikeDriving = false;
+	public Menu(int id) {
+		ID = id;
 	}
-
-	/*
-	 * 
-	 */
 
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
-		this.game = game;
-		/*
-		 * Easter EGG
-		 */
-		resetBike();
+		if (game instanceof PlatformGame) {
+			this.game = (PlatformGame) game;
+		} else {
+			throw new SlickException("StateBaseGame isn't a PlatformGame!");
+		}
+		engine = new SpriteSheet("res/brackets.png", 4, 3);
+		engine.setFilter(Image.FILTER_NEAREST);
+		plasmaPlatform = new Animation(new SpriteSheet(
+				"res/PlasmaPlatform.png", 3, 3), 100);
+		plasmaPlatform.start();
+		fire = new Animation(new SpriteSheet("res/Fire.png", 3, 3), 100);
+		fire.start();
+		scale = 6;
+		higlightPosition = new Vector(0, 0);
+		highlightActive = false;
+		width = 10;
+		offsetLeft = new Vector(0, 0);
+		offsetRight = new Vector(0, 0);
+		offsetCounter = 0;
+		generator = new Random();
+		highlightEntries = new HighlightList(10);
+		selectedEntry = -1;
 
-		moto = new Image("res/svg/motorcycle-wireframe.png")
-				.getScaledCopy(bikeScale);
+	}
 
-		framesWheel = new Image[10];
-		framesWheel[0] = new Image("res/svg/frames-wheel/frame01.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[1] = new Image("res/svg/frames-wheel/frame02.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[2] = new Image("res/svg/frames-wheel/frame03.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[3] = new Image("res/svg/frames-wheel/frame04.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[4] = new Image("res/svg/frames-wheel/frame05.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[5] = new Image("res/svg/frames-wheel/frame06.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[6] = new Image("res/svg/frames-wheel/frame07.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[7] = new Image("res/svg/frames-wheel/frame08.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[8] = new Image("res/svg/frames-wheel/frame09.png")
-				.getScaledCopy(bikeScale);
-		framesWheel[9] = new Image("res/svg/frames-wheel/frame10.png")
-				.getScaledCopy(bikeScale);
+	@Override
+	public void enter(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		super.enter(container, game);
+		highlightActive = false;
+		waitForExec = false;
+		waitedFramesCount = 0;
+	}
 
-		wheelAnim = new Animation(framesWheel, 10);
-		/*
-		 * 
-		 */
+	public void setHighlightWidth(int width) {
+		highlightEntries.setWidth(width);
+	}
+
+	public void addHighlightEntry(Vector position) {
+		addHighlightEntry(position, new OnHighlightSelectListener() {
+			@Override
+			public void onSelect(StateBasedGame game) {
+				// Do nothing
+			}
+		});
+	}
+
+	public void addHighlightEntry(Vector position,
+			OnHighlightSelectListener listener) {
+		highlightEntries.add(new HiglightListEntry(position, listener));
+		if (highlightEntries.size() == 1) {
+			selectedEntry = 0;
+		}
+	}
+
+	public void addHighlightEntry(Vector position, int width) {
+		addHighlightEntry(position);
+		setHighlightWidth(width);
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
-		g.setColor(Color.white);
-		g.drawString("Higher or Lower", 50, 10);
+		if (selectedEntry >= 0) {
+			width = highlightEntries.getWidth();
+			if (highlightActive) {
+				int currentFrame = plasmaPlatform.getFrame();
+				for (int n = 0; n < width; n++) {
+					plasmaPlatform.getImage(currentFrame).draw(
+							highlightEntries.get(selectedEntry).position.x
+									+ (1 + n * 3) * scale,
+							highlightEntries.get(selectedEntry).position.y,
+							scale);
+					currentFrame += plasmaPlatform.getFrameCount() / 2;
+					currentFrame %= plasmaPlatform.getFrameCount();
+				}
 
-		g.drawString("1. Play Game", 50, 100);
-		g.drawString("2. High Scores", 50, 120);
-		g.drawString("3. Quit", 50, 140);
-		/*
-		 * Easter EGG
-		 */
-		g.drawAnimation(wheelAnim, bikePosition.x + 100 * bikeScale,
-				bikePosition.y + 707f * bikeScale);
-		g.drawAnimation(wheelAnim, bikePosition.x + 1850 * bikeScale,
-				bikePosition.y + 707f * bikeScale);
-		g.drawImage(moto, bikePosition.x, bikePosition.y);
-		/*
-		 * 
-		 */
+				offsetLeft = new Vector(0, 0);
+				offsetRight = new Vector(0, 0);
+				offsetCounter = 9;
+			}
+			engine.getSubImage(0, 0).draw(
+					highlightEntries.get(selectedEntry).position.x
+							+ offsetLeft.x,
+					highlightEntries.get(selectedEntry).position.y
+							+ offsetLeft.y, scale);
+			engine.getSubImage(1, 0).draw(
+					highlightEntries.get(selectedEntry).position.x
+							+ offsetRight.x + 3 * width * scale - 2 * scale,
+					highlightEntries.get(selectedEntry).position.y
+							+ offsetRight.y, scale);
+
+			// fire.getCurrentFrame().draw(
+			// highlightEntries.get(selectedEntry).position.x
+			// + offsetLeft.x + 1 * scale,
+			// highlightEntries.get(selectedEntry).position.y
+			// + offsetLeft.y + 6 * scale, scale);
+			// fire.getCurrentFrame().draw(
+			// highlightEntries.get(selectedEntry).position.x
+			// + offsetRight.x + 3 * width * scale - 2 * scale,
+			// highlightEntries.get(selectedEntry).position.y
+			// + offsetRight.y + 6 * scale, scale);
+		}
+	}
+
+	@Override
+	public void keyReleased(int key, char c) {
+		if (waitForExec)
+			return;
+		if (key == Input.KEY_ENTER) {
+			highlightActive = true;
+			waitForExec = true;
+		} else {
+			highlightActive = false;
+			if (key == Input.KEY_UP) {
+				if (selectedEntry > 0) {
+					selectedEntry--;
+				} else {
+					selectedEntry = highlightEntries.size() - 1;
+				}
+			} else if (key == Input.KEY_DOWN) {
+				if (selectedEntry < highlightEntries.size() - 1) {
+					selectedEntry++;
+				} else {
+					selectedEntry = 0;
+				}
+			}
+		}
 	}
 
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
-		/*
-		 * Easter EGG
-		 */
-		if (bikeDriving) {
-			wheelAnim.start();
-			bikePosition = bikePosition.add(bikeVelocity);
-			if (bikePosition.x > game.getContainer().getWidth()) {
-				resetBike();
-			}
-		} else {
-			wheelAnim.stop();
+		plasmaPlatform.update(delta);
+		// fire.update(delta);
+
+		offsetCounter++;
+		if (offsetCounter >= 10) {
+			offsetLeft = new Vector(generator.nextInt(4) - 2,
+					generator.nextInt(4) - 2);
+			offsetRight = new Vector(generator.nextInt(4) - 2,
+					generator.nextInt(4) - 2);
 		}
-		/*
-		 * 
-		 */
+		offsetCounter %= 10;
+		waitedFramesCount++;
+		if (waitForExec && waitedFramesCount > waitFrames) {
+			waitForExec = false;
+			waitedFramesCount = 0;
+			highlightEntries.get(selectedEntry).listener.onSelect(game);
+		}
 	}
 
 	@Override
 	public int getID() {
 		return ID;
-	}
-
-	public void keyReleased(int key, char c) {
-		switch (key) {
-		case Input.KEY_1:
-			game.enterState(Game.ID, new FadeOutTransition(Color.black),
-					new FadeInTransition(Color.black));
-			break;
-		case Input.KEY_2:
-			// TODO: Implement later
-			break;
-		case Input.KEY_3:
-			System.exit(0);
-			break;
-		/*
-		 * Easter EGG
-		 */
-		case Input.KEY_F12:
-			// Easter EGG! :D
-			if (bikeDriving) {
-				bikeDriving = false;
-			} else {
-				bikeDriving = true;
-			}
-			break;
-		/*
-			 * 
-			 */
-		default:
-			break;
-		}
 	}
 
 }

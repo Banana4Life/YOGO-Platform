@@ -19,6 +19,7 @@ public class Game extends BasicGameState {
 
 	public final static int ID = 1;
 	private PlatformGame game; // stored for later use
+	private GameContainer container;
 
 	private GameLevel level;
 	private Platform platform;
@@ -30,6 +31,11 @@ public class Game extends BasicGameState {
 		} else {
 			throw new SlickException("StateBaseGame isn't a PlatformGame!");
 		}
+		this.container = container;
+		resetState();
+	}
+	
+	public void resetState() {
 		this.level = new GameLevel(container, container.getInput());
 		platform = new Platform();
 		this.level.addEntity(platform);
@@ -56,7 +62,7 @@ public class Game extends BasicGameState {
 	public void keyReleased(int key, char c) {
 		switch (key) {
 		case Input.KEY_ESCAPE:
-			game.enterState(Menu.ID, new FadeOutTransition(Color.black),
+			game.enterState(Pause.ID, new FadeOutTransition(Color.black),
 					new FadeInTransition(Color.black));
 			break;
 		default:
