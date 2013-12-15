@@ -59,7 +59,7 @@ public class Menu extends BasicGameState {
 		engine = new SpriteSheet("res/images/platform/brackets.png", 4, 3);
 		engine.setFilter(Image.FILTER_NEAREST);
 		plasmaPlatform = new Animation(new SpriteSheet(
-				"res/PlasmaPlatform.png", 3, 3), 100);
+				"res/images/platform/Plasma.png", 3, 3), 100);
 		plasmaPlatform.start();
 
 		scale = 6;
