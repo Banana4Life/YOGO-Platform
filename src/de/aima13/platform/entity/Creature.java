@@ -3,6 +3,7 @@ package de.aima13.platform.entity;
 import de.aima13.platform.states.Game;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.util.Face;
+import de.aima13.platform.util.Rect;
 import de.aima13.platform.util.Vector;
 
 import org.newdawn.slick.Color;
@@ -26,27 +27,58 @@ public class Creature extends Entity {
 		size = new Vector(20, 50);
 	}
 
-	@Override
-	public void update(int delta) {
-		Vector newPos = position.add(velocity);
-		if (newPos.y + size.y > platform.position.y) {
-			newPos = new Vector(position.x, newPos.y);
-			velocity = new Vector(0, velocity.y);
-			failed = true;
-		}
+    @Override
+    public void update(int delta)
+    {
+        if (mayTurn())
+        {
+            velocity = new Vector(velocity.x * -1, velocity.y);
+        }
+        Vector newPos = position.add(velocity);
+        if (newPos.y + size.y > platform.position.y)
+        {
+            newPos = new Vector(position.x, newPos.y);
+            velocity = new Vector(0, velocity.y);
+            failed = true;
+        }
 
 		position = newPos;
 	}
 
-	@Override
-	public void render(Graphics g) {
-		super.render(g);
-		Color c = g.getColor();
-		g.setColor(Color.green);
-		g.drawRect(position.x, position.y, size.x, size.y);
-		g.fillRect(position.x, position.y, size.x, size.y);
-		g.setColor(c);
-	}
+    public boolean isAbovePlatform()
+    {
+        if (position.x + size.x >= platform.position.x && position.x < platform.position.x + platform.size.x)
+        {
+            System.out.println("Above platform!");
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isRising()
+    {
+        return velocity.y < 0;
+    }
+
+    public boolean mayTurn()
+    {
+        if (isAbovePlatform() && isRising())
+        {
+            return Math.abs(this.platform.position.y - this.position.y) > 100;
+        }
+        return false;
+    }
+
+    @Override
+    public void render(Graphics g)
+    {
+        super.render(g);
+        Color c = g.getColor();
+        g.setColor(Color.green);
+        g.drawRect(position.x, position.y, size.x, size.y);
+        g.fillRect(position.x, position.y, size.x, size.y);
+        g.setColor(c);
+    }
 
 	@Override
 	public void onCollide(Entity current, Face collidedFace) {

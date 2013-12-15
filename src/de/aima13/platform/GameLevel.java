@@ -175,7 +175,6 @@ public class GameLevel {
 
 		Face collFace = b.intersects(a);
 		if (collFace != null) {
-			System.out.println("Intersection: " + collFace);
 			return collFace;
 		}
 
