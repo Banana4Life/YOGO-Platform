@@ -13,6 +13,8 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.util.Log;
 
@@ -35,6 +37,7 @@ public class GameLevel {
 	Vector2f position1, position2, position3;
 
 	private TiledBackground background;
+	private Sound plasmaSound;
 
 	public GameLevel(PlatformGame game, Input input) throws SlickException {
 		this.game = game;
@@ -43,13 +46,18 @@ public class GameLevel {
 		this.input = input;
 		entities = new LinkedList<>();
 
-		Image backImg1 = new Image(
-				"res/images/background/BackgroundTileset.png").getSubImage(0,
-				0, 32, 32).getScaledCopy(2f);
-		backImg1.setFilter(Image.FILTER_NEAREST);
-		background = new TiledBackground(new Image[] { backImg1 }, new Vector(
-				backImg1.getWidth(), backImg1.getHeight()));
+		SpriteSheet sheet = new SpriteSheet(new Image(
+				"res/images/background/BackgroundTileset.png"), 32, 32);
+		Image img = new Image("res/images/background/BackgroundTileset.png")
+				.getSubImage(0, 0, 32, 32).getScaledCopy(2f);
+		img.setFilter(Image.FILTER_NEAREST);
+		Image[] set = new Image[] { img };
+		// backImg1.setFilter(Image.FILTER_NEAREST);
+		background = new TiledBackground(set, new Vector(set[0].getWidth(),
+				set[0].getHeight()));
 		background.init(this);
+
+		plasmaSound = new Sound("res/sound/plasma.wav");
 
 		img1 = new Image("res/background/background.png");
 		img2 = new Image("res/background/background.png");
@@ -136,6 +144,10 @@ public class GameLevel {
 
 	public int getHeight() {
 		return getContainer().getHeight();
+	}
+
+	public Sound getPlasmaSound() {
+		return plasmaSound;
 	}
 
 	private void detectCollisions() {

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import de.aima13.platform.util.Rect;
 import de.aima13.platform.util.Vector;
+
 import org.lwjgl.Sys;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
@@ -20,6 +21,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
+import de.aima13.platform.states.Credits;
 import de.aima13.platform.states.Game;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.states.Pause;
@@ -40,6 +42,7 @@ public class PlatformGame extends StateBasedGame {
 		addState(new MainMenu());
 		addState(new Pause());
 		addState(new Game());
+		addState(new Credits());
 		init();
 	}
 

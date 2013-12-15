@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -23,6 +24,8 @@ import de.aima13.platform.util.Vector;
 public class Menu extends BasicGameState {
 
 	protected PlatformGame game; // stored for later use
+
+	protected Sound moveSound, selectSound;
 
 	protected SpriteSheet engine;
 	protected Animation fire;
@@ -71,7 +74,8 @@ public class Menu extends BasicGameState {
 		generator = new Random();
 		highlightEntries = new HighlightList(10);
 		selectedEntry = -1;
-
+		moveSound = new Sound("res/sound/move.wav");
+		selectSound = new Sound("res/sound/select.wav");
 	}
 
 	@Override
@@ -166,6 +170,7 @@ public class Menu extends BasicGameState {
 			highlightActive = true;
 			waitForExec = true;
 			waitedFramesCount = 0;
+			selectSound.play();
 		} else {
 			highlightActive = false;
 			if (key == Input.KEY_UP) {
@@ -174,12 +179,14 @@ public class Menu extends BasicGameState {
 				} else {
 					selectedEntry = highlightEntries.size() - 1;
 				}
+				moveSound.play();
 			} else if (key == Input.KEY_DOWN) {
 				if (selectedEntry < highlightEntries.size() - 1) {
 					selectedEntry++;
 				} else {
 					selectedEntry = 0;
 				}
+				moveSound.play();
 			}
 		}
 	}

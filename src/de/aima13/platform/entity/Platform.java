@@ -57,7 +57,7 @@ public class Platform extends Entity {
 		this.isActivated = false;
 		this.randomGenerator = new Random();
 		this.activationCooldown = 0;
-		this.stillActivatedFor = 0;
+		this.stillActivatedFor = -1;
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class Platform extends Entity {
 		}
 
 		// Get movements
-		if (level.getInput().isKeyDown(Input.KEY_LEFT)) {
+		if (level.getInput().isKeyDown(Input.KEY_LEFT) && !isActive()) {
 			// Move left
 			if (velocity.x > 0) {
 				// Reset
@@ -124,7 +124,7 @@ public class Platform extends Entity {
 			} else {
 				position = position.add(velocity);
 			}
-		} else if (level.getInput().isKeyDown(Input.KEY_RIGHT)) {
+		} else if (level.getInput().isKeyDown(Input.KEY_RIGHT) && !isActive()) {
 			// Move right
 			if (velocity.x < 0) {
 				// Reset
@@ -222,6 +222,7 @@ public class Platform extends Entity {
 		if (this.stillActivatedFor < 0 && this.activationCooldown <= 0) {
 			this.isActivated = true;
 			this.stillActivatedFor = 1000;
+			level.getPlasmaSound().play();
 		}
 	}
 

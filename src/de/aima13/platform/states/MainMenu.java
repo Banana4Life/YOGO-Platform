@@ -127,6 +127,14 @@ public class MainMenu extends Menu {
 		addHighlightEntry(new Vector(50, 150 - 2), new OnHighlightSelectListener() {
 
 			@Override
+			public void onSelect(StateBasedGame game) { 
+				game.enterState(Credits.ID, new FadeOutTransition(Color.black),
+						new FadeInTransition(Color.black));
+			}
+		});
+		addHighlightEntry(new Vector(50, 175 - 2), new OnHighlightSelectListener() {
+
+			@Override
 			public void onSelect(StateBasedGame game) {
 				System.exit(0);
 			}
@@ -147,7 +155,8 @@ public class MainMenu extends Menu {
 		// g.setColor(Color.red);
 		this.game.fontDefault.drawString(50, 100, "Play Game");
 		this.game.fontDefault.drawString(50, 125, "High Scores");
-		this.game.fontDefault.drawString(50, 150, "Quit");
+		this.game.fontDefault.drawString(50, 150, "Credits");
+		this.game.fontDefault.drawString(50, 175, "Quit");
 		/*
 		 * Easter EGG
 		 */

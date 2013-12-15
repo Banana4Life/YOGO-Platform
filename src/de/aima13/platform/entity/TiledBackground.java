@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.gui.Tile;
@@ -14,13 +15,22 @@ public class TiledBackground extends Entity {
 
 	protected ArrayList<Tile> tiles;
 	protected Random generator;
+	protected SpriteSheet imageSheet;
 	protected Image[] imageSet;
 	protected Vector imageSize;
 
-	public TiledBackground(Image[] images, Vector size) {
+	public TiledBackground(SpriteSheet sheet, Vector size) {
 		super();
 		tiles = new ArrayList<Tile>();
-		imageSet = images;
+		imageSheet = sheet;
+		imageSize = size;
+		generator = new Random();
+	}
+
+	public TiledBackground(Image[] set, Vector size) {
+		super();
+		tiles = new ArrayList<Tile>();
+		imageSet = set;
 		imageSize = size;
 		generator = new Random();
 	}
@@ -42,7 +52,8 @@ public class TiledBackground extends Entity {
 					// get random image
 					Log.info("add image to list, i:" + i + " h:" + h);
 					int randomImage = generator.nextInt(imageSet.length);
-					Tile tile = new Tile(this, imageSet[randomImage], new Vector(h * imageSize.x, i * imageSize.y));
+					Tile tile = new Tile(this, imageSet[randomImage],
+							new Vector(h * imageSize.x, i * imageSize.y));
 					tiles.add(tile);
 				}
 			}
