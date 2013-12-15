@@ -58,7 +58,7 @@ public class Platform extends Entity {
 		this.isActivated = false;
 		this.randomGenerator = new Random();
 		this.activationCooldown = 0;
-		this.stillActivatedFor = 0;
+		this.stillActivatedFor = -1;
 	}
 
 	@Override
@@ -163,10 +163,10 @@ public class Platform extends Entity {
 
 			this.offsetCounter++;
 			if (this.offsetCounter >= 10) {
-				this.offsetLeft = new Vector(this.randomGenerator.nextInt(2) - 1, this.randomGenerator.nextInt(2) - 1);
-				this.offsetLeft = this.offsetLeft.mod(1);
-				this.offsetRight = new Vector(this.randomGenerator.nextInt(2) - 1, this.randomGenerator.nextInt(2) - 1);
-				this.offsetRight = this.offsetRight.mod(1);
+				this.offsetLeft = new Vector(offsetLeft.x + (this.randomGenerator.nextInt(3) - 1), offsetLeft.y + (this.randomGenerator.nextInt(3) - 1));
+				this.offsetLeft = this.offsetLeft.mod(3);
+				this.offsetRight = new Vector(offsetRight.x + (this.randomGenerator.nextInt(3) - 1), offsetRight.y + (this.randomGenerator.nextInt(3) - 1));
+				this.offsetRight = this.offsetRight.mod(3);
 			}
 			this.offsetCounter %= 10;
 		}
@@ -188,8 +188,8 @@ public class Platform extends Entity {
 			this.offsetCounter = 9;
 		}
 		
-		// g.setColor(Color.white);
-		// g.drawString("isActive = " + isActivated + " stillActivatedFor = " + stillActivatedFor + " cooldown = " + this.activationCooldown, 20, 200);
+		g.setColor(Color.black);
+		g.drawString("xOffset = " + offsetRight.x + " yOffset = " + offsetLeft.y, 20, 200);
 		
 		this.engineSpriteSheet.getSubImage(0, 0).draw(this.position.x + this.offsetLeft.x, this.position.y + this.offsetLeft.y, scale);
 		this.engineSpriteSheet.getSubImage(1, 0).draw(this.position.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, this.position.y + this.offsetRight.y, scale);
