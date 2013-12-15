@@ -3,7 +3,6 @@ package de.aima13.platform.entity;
 import de.aima13.platform.states.Game;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.util.Face;
-import de.aima13.platform.util.Rect;
 import de.aima13.platform.util.Vector;
 
 import org.newdawn.slick.Color;

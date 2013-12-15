@@ -5,7 +5,6 @@ import de.aima13.platform.GameLevel;
 import de.aima13.platform.util.Vector;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
 
 public abstract class Entity {
 	protected Vector position;
@@ -16,6 +15,7 @@ public abstract class Entity {
 	protected GameLevel level;
 
 	private boolean alive;
+    private boolean collidable;
 
 	protected Entity() {
 		this.position = new Vector(0, 0);
@@ -23,9 +23,20 @@ public abstract class Entity {
 		this.velocity = new Vector(0, 0);
 		this.acceleration = new Vector(0, 0);
 		this.alive = true;
+        this.collidable = true;
 	}
 
-	public Vector getPosition() {
+    public boolean isCollidable()
+    {
+        return collidable;
+    }
+
+    public void setCollidable(boolean collidable)
+    {
+        this.collidable = collidable;
+    }
+
+    public Vector getPosition() {
 		return position;
 	}
 
@@ -75,4 +86,24 @@ public abstract class Entity {
 
 	public void onDeath() {
 	}
+
+    public void relativeMove(float x, float y)
+    {
+        this.relativeMove(new Vector(x, y));
+    }
+
+    private void relativeMove(Vector vector)
+    {
+        this.move(position.add(vector));
+    }
+
+    public void move(float x, float y)
+    {
+        move(new Vector(x, y));
+    }
+
+    public void move(Vector vector)
+    {
+        this.position = vector;
+    }
 }

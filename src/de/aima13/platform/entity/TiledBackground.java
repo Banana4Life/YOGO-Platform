@@ -3,6 +3,7 @@ package de.aima13.platform.entity;
 import java.util.ArrayList;
 import java.util.Random;
 
+import de.aima13.platform.gui.GuiEntity;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
@@ -11,7 +12,7 @@ import org.newdawn.slick.util.Log;
 import de.aima13.platform.gui.Tile;
 import de.aima13.platform.util.Vector;
 
-public class TiledBackground extends Entity {
+public class TiledBackground extends GuiEntity {
 
 	protected ArrayList<Tile> tiles;
 	protected Random generator;

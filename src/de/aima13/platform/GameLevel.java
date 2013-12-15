@@ -1,13 +1,13 @@
 package de.aima13.platform;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Rect;
 import de.aima13.platform.util.Vector;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -20,8 +20,6 @@ import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.entity.Entity;
 import de.aima13.platform.entity.TiledBackground;
-import de.aima13.platform.util.Face;
-import de.aima13.platform.util.Rect;
 
 public class GameLevel {
 	private final PlatformGame game;
@@ -72,24 +70,31 @@ public class GameLevel {
 		position3 = new Vector2f(0, position2.y + img2.getHeight());
 	}
 
-	public void addEntity(Entity entity) {
+    public <T extends Entity> T spawn(T e)
+    {
+        this.addEntity(e);
+        return e;
+    }
+
+	protected void addEntity(Entity entity) {
 		this.entities.addLast(entity);
 		entity.init(this);
 	}
 
 	public final void update(int delta) {
 		this.onUpdate(delta);
-		Iterator<Entity> it = this.entities.iterator();
-		Entity e;
-		while (it.hasNext()) {
-			e = it.next();
+		List<Entity> remove = new ArrayList<>();
+		for (Entity e : new ArrayList<>(this.entities)) {
 			if (!e.isAlive()) {
-				it.remove();
+				remove.add(e);
 				e.onDeath();
 				continue;
 			}
 			e.update(delta);
 		}
+
+        this.entities.removeAll(remove);
+
 		this.detectCollisions();
 	}
 
@@ -182,6 +187,11 @@ public class GameLevel {
 	}
 
 	private Face checkCollision(Entity entityA, Entity entityB) {
+        if (!entityA.isCollidable() || !entityB.isCollidable())
+        {
+            return null;
+        }
+
 		Rect a = new Rect(entityA.getPosition(), entityA.getSize());
 		Rect b = new Rect(entityB.getPosition(), entityB.getSize());
 
