@@ -17,13 +17,12 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.entity.Entity;
 import de.aima13.platform.entity.TiledBackground;
 
 public class GameLevel {
-    private static final Vector G = new Vector(0, 9.81f);
+    private static final Vector G = new Vector(0, 9.81f).scale(.2f);
 
 	private final PlatformGame game;
 	private final GameContainer container;
@@ -103,7 +102,7 @@ public class GameLevel {
 				continue;
 			}
             e.relativeMove(e.getVelocity());
-            e.setVelocity(e.getVelocity().add(e.getAcceleration().add(this.gravity.scale(e.getGravityScale() * 0))));
+            e.setVelocity(e.getVelocity().add(e.getAcceleration().add(this.gravity.scale(e.getGravityScale()))));
 			e.update(delta);
 		}
 

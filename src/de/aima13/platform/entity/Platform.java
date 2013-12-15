@@ -2,6 +2,7 @@ package de.aima13.platform.entity;
 
 import java.util.Random;
 
+import de.aima13.platform.GameLevel;
 import de.aima13.platform.gui.Powerbar;
 import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
@@ -54,8 +55,9 @@ public class Platform extends Entity {
     @Override
     public void onInit() throws SlickException {
         this.setGravityScale(0);
-        this.setBoundingBox(new Box(level.getWidth() / 4, level.getHeight() / 16));
-        move(level.getWidth() / 2 - getBB().getWidth() / 2, level.getHeight() - getBB().getHeight() - 100);
+        GameLevel lvl = getLevel();
+        this.setBoundingBox(new Box(lvl.getWidth() / 4, lvl.getHeight() / 16));
+        move(lvl.getWidth() / 2 - getBB().getWidth() / 2, lvl.getHeight() - getBB().getHeight() - 100);
 
         // load Sprites and Animations //
         this.engineSpriteSheet = new SpriteSheet("res/images/platform/Engine.png", 4, 6);
@@ -83,18 +85,19 @@ public class Platform extends Entity {
 			this.activationCooldown -= delta;
 		}
 
-		if (level.getInput().isKeyDown(Input.KEY_A)) {
+        GameLevel lvl = getLevel();
+		if (lvl.getInput().isKeyDown(Input.KEY_A)) {
 			this.activate();
             setVelocity(Vector.ZERO);
             setAcceleration(Vector.ZERO);
 		}
 
 		// Get movements
-		if (level.getInput().isKeyDown(Input.KEY_LEFT) && !isActive()) {
+		if (lvl.getInput().isKeyDown(Input.KEY_LEFT) && !isActive()) {
 			// Move left
             setAcceleration(DEFAULT_ACCELERATION.scale(-1));
 
-		} else if (level.getInput().isKeyDown(Input.KEY_RIGHT) && !isActive()) {
+		} else if (lvl.getInput().isKeyDown(Input.KEY_RIGHT) && !isActive()) {
 			// Move right
             setAcceleration(DEFAULT_ACCELERATION);
 
@@ -155,7 +158,7 @@ public class Platform extends Entity {
 		if (this.stillActivatedFor < 0 && this.activationCooldown <= 0) {
 			this.active = true;
 			this.stillActivatedFor = 1000;
-			level.getPlasmaSound().play();
+			getLevel().getPlasmaSound().play();
 		}
 	}
 

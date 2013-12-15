@@ -10,7 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
 public abstract class Entity {
-    protected GameLevel level;
+    private GameLevel level;
 
 	private Vector position;
 	private Vector velocity;

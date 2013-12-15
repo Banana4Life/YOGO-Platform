@@ -103,7 +103,7 @@ public class Creature extends Entity {
 	}
 
 	public void onJump() {
-		level.getJumpSound().play();
+		getLevel().getJumpSound().play();
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public class Creature extends Entity {
 				vX *= -1;
 				break;
 			case RIGHT:
-				x = level.getWidth() - getBB().getWidth() - 1;
+				x = getLevel().getWidth() - getBB().getWidth() - 1;
 				vX *= -1;
 				break;
 			}
@@ -190,10 +190,10 @@ public class Creature extends Entity {
 
 	@Override
 	public void onDeath() {
-		level.getGame().enterState(Loose.ID, new EmptyTransition(),
+		getLevel().getGame().enterState(Loose.ID, new EmptyTransition(),
 				new FadeInTransition(Color.black));
 		try {
-			((Game) level.getGame().getState(Game.ID)).resetState();
+			((Game) getLevel().getGame().getState(Game.ID)).resetState();
 		} catch (SlickException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

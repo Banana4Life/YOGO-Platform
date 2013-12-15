@@ -1,6 +1,7 @@
 package de.aima13.platform.gui;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 
 public class Powerbar extends Bar {
@@ -13,8 +14,9 @@ public class Powerbar extends Bar {
 	@Override
 	public void render(Graphics g) {
 		super.render(g);
-		final float y = level.getContainer().getHeight() - PADDING.y - HEIGHT;
-		final float width = level.getContainer().getWidth() - 2 * PADDING.x;
+        GameContainer c = getLevel().getContainer();
+		final float y = c.getHeight() - PADDING.y - HEIGHT;
+		final float width = c.getWidth() - 2 * PADDING.x;
 
 		g.setColor(Color.red);
 		g.fillRect(PADDING.x, y, width, HEIGHT);
