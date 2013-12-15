@@ -23,6 +23,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import de.aima13.platform.states.Credits;
 import de.aima13.platform.states.Game;
+import de.aima13.platform.states.Loose;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.states.Pause;
 
@@ -43,8 +44,11 @@ public class PlatformGame extends StateBasedGame {
 		addState(new Pause());
 		addState(new Game());
 		addState(new Credits());
+		addState(new Loose());
 		init();
 	}
+	
+	
 
 	public TrueTypeFont loadFont(String res) {
 		return loadFont(res, Font.PLAIN);
