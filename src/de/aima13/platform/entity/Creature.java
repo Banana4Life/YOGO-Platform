@@ -142,7 +142,7 @@ public class Creature extends Entity {
 
 	@Override
 	public void onCollide(Entity current, Face collidedFace) {
-		if (!failed) {
+		if (!failed && current instanceof Platform) {
 			this.position = new Vector(this.position.x, current.position.y
 					- this.size.y - 1);
 			this.velocity = new Vector(this.velocity.x, this.velocity.y * -1);

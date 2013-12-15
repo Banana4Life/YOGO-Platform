@@ -1,8 +1,10 @@
 package de.aima13.platform;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Rect;
@@ -142,19 +144,36 @@ public class GameLevel {
 	}
 
 	private void detectCollisions() {
-		Entity last = this.entities.getFirst();
-		Entity current;
-		for (int i = 1; i < this.entities.size(); ++i) {
-			current = this.entities.get(i);
+        Set<Long> checked = new HashSet<>();
+        for (Entity a : this.entities)
+        {
+            for (Entity b : this.entities)
+            {
+                if (a == b)
+                {
+                    continue;
+                }
+                long combinedHash = (long)a.hashCode() + (long)b.hashCode();
+                if (checked.contains(combinedHash))
+                {
+                    continue;
+                }
+                checked.add(combinedHash);
 
-			Face collFace = this.checkCollision(last, current);
-			if (collFace != null) {
-				last.onCollide(current, collFace);
-				current.onCollide(last, collFace.opposite());
-			}
-		}
+                Face collFace = this.checkCollision(a, b);
+                if (collFace != null)
+                {
+                    a.onCollide(b, collFace);
+                    b.onCollide(a, collFace.opposite());
+                }
+            }
+        }
 
 		for (Entity entity : this.entities) {
+            if (!entity.isCollidable())
+            {
+                continue;
+            }
 			Vector pos = entity.getPosition();
 			Vector size = entity.getSize();
 			if (pos.x < 0) {
