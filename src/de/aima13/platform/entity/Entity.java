@@ -1,49 +1,49 @@
 package de.aima13.platform.entity;
 
+import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import de.aima13.platform.GameLevel;
 import de.aima13.platform.PlatformGame;
 import de.aima13.platform.util.Vector;
 
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 
 public abstract class Entity {
-	protected Vector position;
+    protected GameLevel level;
 
-	protected Vector size;
-	protected Vector velocity;
-	protected Vector acceleration;
-	protected GameLevel level;
+	private Vector position;
+	private Vector velocity;
+	private Vector acceleration;
+    private Box boundingBox;
 
 	private boolean alive;
-    private boolean collidable;
+    private float gravityScale = 1f;
 
 	protected Entity() {
-		this.position = new Vector(0, 0);
-		this.size = new Vector(0, 0);
-		this.velocity = new Vector(0, 0);
-		this.acceleration = new Vector(0, 0);
+		this.position = Vector.ZERO;
+        this.velocity = Vector.ZERO;
+		this.acceleration = Vector.ZERO;
+        this.boundingBox = null;
 		this.alive = true;
-        this.collidable = true;
 	}
-
-    public boolean isCollidable()
-    {
-        return collidable;
-    }
-
-    public void setCollidable(boolean collidable)
-    {
-        this.collidable = collidable;
-    }
 
     public Vector getPosition() {
 		return position;
 	}
 
-	public Vector getSize() {
-		return size;
+	public Box getBB() {
+		return this.boundingBox;
 	}
+
+    public Box getAbsBB()
+    {
+        if (this.boundingBox == null)
+        {
+            return null;
+        }
+        return this.boundingBox.absolute(this.position);
+    }
 
 	public boolean isAlive() {
 		return this.alive;
@@ -57,20 +57,28 @@ public abstract class Entity {
 		return velocity;
 	}
 
-	public Vector getAcceleration() {
-		return acceleration;
-	}
+    public Vector getAcceleration()
+    {
+        return acceleration;
+    }
+
+    public void setAcceleration(Vector acceleration)
+    {
+        this.acceleration = acceleration;
+    }
 
 	public GameLevel getLevel() {
 		return level;
 	}
 
-	public final void init(PlatformGame game) {
+	public final void init(PlatformGame game) throws SlickException
+    {
 		this.level = game.getLevel();
 		onInit();
 	}
 
-	public void onInit() {
+	public void onInit() throws SlickException
+    {
 	}
 
 	public void update(int delta) {
@@ -93,7 +101,7 @@ public abstract class Entity {
         this.relativeMove(new Vector(x, y));
     }
 
-    private void relativeMove(Vector vector)
+    public void relativeMove(Vector vector)
     {
         this.move(position.add(vector));
     }
@@ -106,5 +114,25 @@ public abstract class Entity {
     public void move(Vector vector)
     {
         this.position = vector;
+    }
+
+    public void setVelocity(Vector velocity)
+    {
+        this.velocity = velocity;
+    }
+
+    public float getGravityScale()
+    {
+        return gravityScale;
+    }
+
+    public void setGravityScale(float gravityScale)
+    {
+        this.gravityScale = gravityScale;
+    }
+
+    public void setBoundingBox(Box boundingBox)
+    {
+        this.boundingBox = boundingBox;
     }
 }

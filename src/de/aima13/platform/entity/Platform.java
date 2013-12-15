@@ -3,9 +3,9 @@ package de.aima13.platform.entity;
 import java.util.Random;
 
 import de.aima13.platform.gui.Powerbar;
+import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
@@ -27,39 +27,20 @@ public class Platform extends Entity {
 	private int width;
 	private Vector offsetLeft, offsetRight;
 	private int offsetCounter;
-	private boolean isActivated;
+	private boolean active;
 	private int activationCooldown;
 	private int stillActivatedFor;
 	private Random randomGenerator;
 
-	public Platform(Powerbar powerbar) {
-		this(powerbar, null, null, null, 3);
-	}
-
 	public Platform(Powerbar powerbar, int width) {
-		this(powerbar, null, null, null, width);
-	}
-
-	public Platform(Powerbar powerbar, Vector size) {
-		this(powerbar, size, null, null, 3);
-	}
-
-	public Platform(Powerbar powerbar, Vector size, Vector position) {
-		this(powerbar, size, position, null, 3);
-	}
-
-	public Platform(Powerbar powerbar, Vector size, Vector position, Vector acceleration, int width) {
 		super();
         this.powerbar = powerbar;
-        this.size = size;
-		this.position = position;
-		this.acceleration = acceleration;
 
 		this.width = width;
 		this.offsetLeft = new Vector(0, 0);
 		this.offsetRight = new Vector(0, 0);
 		this.offsetCounter = 0;
-		this.isActivated = false;
+		this.active = false;
 		this.randomGenerator = new Random();
 		this.activationCooldown = 0;
 		this.stillActivatedFor = -1;
@@ -71,34 +52,19 @@ public class Platform extends Entity {
     }
 
     @Override
-	public void onInit() {
-		super.onInit();
-		if (size == null) {
-			size = new Vector(level.getWidth() / 4, level.getHeight() / 16);
-		}
-		if (position == null) {
-			position = new Vector(level.getWidth() / 2 - size.x / 2,
-					level.getHeight() - size.y - 100);
-		}
-		if (acceleration == null) {
-			acceleration = DEFAULT_ACCELERATION;
-		}
+    public void onInit() throws SlickException {
+        this.setGravityScale(0);
+        this.setBoundingBox(new Box(level.getWidth() / 4, level.getHeight() / 16));
+        move(level.getWidth() / 2 - getBB().getWidth() / 2, level.getHeight() - getBB().getHeight() - 100);
 
-		// load Sprites and Animations //
-		try {
-			this.engineSpriteSheet = new SpriteSheet(
-					"res/images/platform/Engine.png", 4, 6);
-			this.engineSpriteSheet.setFilter(Image.FILTER_NEAREST);
-			this.plasmaAnimation = new Animation(new SpriteSheet(
-					"res/images/platform/Plasma.png", 3, 3), 100);
-			this.plasmaAnimation.start();
-			this.fireAnimation = new Animation(new SpriteSheet(
-					"res/images/platform/Fire.png", 3, 3), 100);
-			this.fireAnimation.start();
-		} catch (SlickException e) {
-			// do nothing
-		}
-	}
+        // load Sprites and Animations //
+        this.engineSpriteSheet = new SpriteSheet("res/images/platform/Engine.png", 4, 6);
+        this.engineSpriteSheet.setFilter(Image.FILTER_NEAREST);
+        this.plasmaAnimation = new Animation(new SpriteSheet("res/images/platform/Plasma.png", 3, 3), 100);
+        this.plasmaAnimation.start();
+        this.fireAnimation = new Animation(new SpriteSheet("res/images/platform/Fire.png", 3, 3), 100);
+        this.fireAnimation.start();
+    }
 
 	@Override
 	public void update(int delta) {
@@ -109,7 +75,7 @@ public class Platform extends Entity {
 				this.stillActivatedFor = 0;
 			}
 		} else if (this.stillActivatedFor == 0) {
-			this.isActivated = false;
+			this.active = false;
 			this.activationCooldown = 1000;
 			this.stillActivatedFor = -1;
 		}
@@ -119,79 +85,51 @@ public class Platform extends Entity {
 
 		if (level.getInput().isKeyDown(Input.KEY_A)) {
 			this.activate();
+            setVelocity(Vector.ZERO);
+            setAcceleration(Vector.ZERO);
 		}
 
 		// Get movements
 		if (level.getInput().isKeyDown(Input.KEY_LEFT) && !isActive()) {
 			// Move left
-			if (velocity.x > 0) {
-				// Reset
-				velocity = new Vector(0, acceleration.y);
-			}
-			velocity = velocity.sub(acceleration);
-			if (position.x + velocity.x < 0) {
-				position = new Vector(0, position.y);
-			} else {
-				position = position.add(velocity);
-			}
+            setAcceleration(DEFAULT_ACCELERATION.scale(-1));
+
 		} else if (level.getInput().isKeyDown(Input.KEY_RIGHT) && !isActive()) {
 			// Move right
-			if (velocity.x < 0) {
-				// Reset
-				velocity = new Vector(0, acceleration.y);
-			}
-			velocity = velocity.add(acceleration);
-			if (position.x + velocity.x > level.getWidth() - size.x) {
-				position = new Vector(level.getWidth() - size.x, position.y);
-				// Reset
-				velocity = new Vector(0, acceleration.y);
-			} else {
-				position = position.add(velocity);
-			}
+            setAcceleration(DEFAULT_ACCELERATION);
+
 		} else {
-			if (velocity.x > 0) {
-				if (velocity.x + DECELERATE_FACTOR * acceleration.x < 0) {
-					// Reset
-					velocity = new Vector(0, acceleration.y);
-				} else {
-					velocity = velocity.sub(DECELERATE_FACTOR * acceleration.x,
-							acceleration.y);
-				}
-			} else if (velocity.x < 0) {
-				if (velocity.x + DECELERATE_FACTOR * acceleration.x > 0) {
-					// Reset
-					velocity = new Vector(0, acceleration.y);
-				} else {
-					velocity = velocity.add(DECELERATE_FACTOR * acceleration.x,
-							acceleration.y);
-				}
-			}
-			// Reset
-			velocity = new Vector(0, 0);
+            setAcceleration(Vector.ZERO);
+            setVelocity(Vector.ZERO);
 
-			// update Animations //
-			this.plasmaAnimation.update(delta);
-			this.fireAnimation.update(delta);
-
-			this.offsetCounter++;
-			if (this.offsetCounter >= 10) {
-				this.offsetLeft = new Vector(offsetLeft.x + (this.randomGenerator.nextInt(3) - 1), offsetLeft.y + (this.randomGenerator.nextInt(3) - 1));
-				this.offsetLeft = this.offsetLeft.mod(3);
-				this.offsetRight = new Vector(offsetRight.x + (this.randomGenerator.nextInt(3) - 1), offsetRight.y + (this.randomGenerator.nextInt(3) - 1));
-				this.offsetRight = this.offsetRight.mod(3);
-			}
-			this.offsetCounter %= 10;
 		}
+
+        if (isActive())
+        {
+            // update Animations //
+            this.plasmaAnimation.update(delta);
+            this.fireAnimation.update(delta);
+
+            this.offsetCounter++;
+            if (this.offsetCounter >= 10)
+            {
+                this.offsetLeft = new Vector(offsetLeft.x + (this.randomGenerator.nextInt(3) - 1), offsetLeft.y + (this.randomGenerator.nextInt(3) - 1));
+                this.offsetLeft = this.offsetLeft.mod(3);
+                this.offsetRight = new Vector(offsetRight.x + (this.randomGenerator.nextInt(3) - 1), offsetRight.y + (this.randomGenerator.nextInt(3) - 1));
+                this.offsetRight = this.offsetRight.mod(3);
+            }
+            this.offsetCounter %= 10;
+        }
 	}
 
 	@Override
 	public void render(Graphics g) {
-		float scale = size.x / ((width * 3) + 2);
-		if (this.isActivated) {
+		float scale = getBB().getWidth() / ((width * 3) + 2);
+		if (this.active) {
 			int currentFrame = this.plasmaAnimation.getFrame();
 			for (int n = 0; n < width; n++) {
 				this.plasmaAnimation.getImage(currentFrame).draw(
-						this.position.x + (1 + n * 3) * scale, this.position.y,
+						getPosition().x + (1 + n * 3) * scale, getPosition().y,
 						scale);
 				currentFrame += this.plasmaAnimation.getFrameCount() / 2;
 				currentFrame %= this.plasmaAnimation.getFrameCount();
@@ -203,29 +141,52 @@ public class Platform extends Entity {
 		}
 		// g.setColor(Color.black);
 		// g.drawString("xOffset = " + offsetRight.x + " yOffset = " + offsetLeft.y, 20, 200);
-		
-		this.engineSpriteSheet.getSubImage(0, 0).draw(this.position.x + this.offsetLeft.x, this.position.y + this.offsetLeft.y, scale);
-		this.engineSpriteSheet.getSubImage(1, 0).draw(this.position.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, this.position.y + this.offsetRight.y, scale);
 
-		this.fireAnimation.getCurrentFrame().draw(this.position.x + this.offsetLeft.x + 1 * scale, this.position.y + this.offsetLeft.y + 6 * scale, scale);
-		this.fireAnimation.getCurrentFrame().draw(this.position.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, this.position.y + this.offsetRight.y + 6 * scale, scale);
+        Vector p = getPosition();
+
+		this.engineSpriteSheet.getSubImage(0, 0).draw(p.x + this.offsetLeft.x, p.y + getPosition().y, scale);
+		this.engineSpriteSheet.getSubImage(1, 0).draw(p.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, p.y + this.offsetRight.y, scale);
+
+		this.fireAnimation.getCurrentFrame().draw(p.x + this.offsetLeft.x + 1 * scale, p.y + this.offsetLeft.y + 6 * scale, scale);
+		this.fireAnimation.getCurrentFrame().draw(p.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, p.y + this.offsetRight.y + 6 * scale, scale);
 	}
 
 	public void activate() {
 		if (this.stillActivatedFor < 0 && this.activationCooldown <= 0) {
-			this.isActivated = true;
+			this.active = true;
 			this.stillActivatedFor = 1000;
 			level.getPlasmaSound().play();
 		}
 	}
 
 	public boolean isActive() {
-		return this.isActivated;
+		return this.active;
 	}
 
     @Override
     public void onCollide(Entity current, Face collidedFace)
     {
-        this.powerbar.decreasePower(.1f);
+        this.powerbar.decreaseValue(.1f);
+    }
+
+    @Override
+    public void onCollideWithBorder(Face collidedFace)
+    {
+        switch (collidedFace)
+        {
+            case LEFT:
+                move(getPosition().scale(0, 1));
+                setVelocity(Vector.ZERO);
+                setAcceleration(Vector.ZERO);
+                break;
+            case RIGHT:
+                move(new Vector(getLevel().getWidth() - getBB().getWidth() - 1, getPosition().y));
+                setVelocity(Vector.ZERO);
+                setAcceleration(Vector.ZERO);
+                break;
+            default:
+                System.err.println("Should not happen!");
+                new IllegalStateException().printStackTrace(System.err);
+        }
     }
 }

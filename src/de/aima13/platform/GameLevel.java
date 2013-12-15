@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
-import de.aima13.platform.util.Rect;
 import de.aima13.platform.util.Vector;
 
 import org.newdawn.slick.GameContainer;
@@ -17,17 +17,19 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.entity.Entity;
 import de.aima13.platform.entity.TiledBackground;
 
 public class GameLevel {
+    private static final Vector G = new Vector(0, 9.81f);
+
 	private final PlatformGame game;
 	private final GameContainer container;
 	private final LinkedList<Entity> entities;
 	private final Input input;
+    private Vector gravity;
 
 	private TiledBackground background;
 	private Sound plasmaSound, jumpSound;
@@ -54,6 +56,10 @@ public class GameLevel {
 		background = new TiledBackground(set, new Vector(set[0].getWidth(),
 				set[0].getHeight()));
 		background.init(game);
+
+		plasmaSound = new Sound("res/sound/plasma.wav");
+		jumpSound = new Sound("res/sound/plasma.wav");
+        this.gravity = G;
 	}
 
 	public <T extends Entity> T spawn(T e) {
@@ -61,9 +67,26 @@ public class GameLevel {
 		return e;
 	}
 
-	protected void addEntity(Entity entity) {
-		this.entities.addLast(entity);
-		entity.init(game);
+    public Vector getGravity()
+    {
+        return gravity;
+    }
+
+    public void setGravity(Vector gravity)
+    {
+        this.gravity = gravity;
+    }
+
+    protected void addEntity(Entity entity) {
+        try
+        {
+            entity.init(game);
+            this.entities.addLast(entity);
+        }
+        catch (SlickException e)
+        {
+            e.printStackTrace(System.err);
+        }
 	}
 
 	public void reset() {
@@ -79,6 +102,8 @@ public class GameLevel {
 				e.onDeath();
 				continue;
 			}
+            e.relativeMove(e.getVelocity());
+            e.setVelocity(e.getVelocity().add(e.getAcceleration().add(this.gravity.scale(e.getGravityScale() * 0))));
 			e.update(delta);
 		}
 
@@ -169,33 +194,35 @@ public class GameLevel {
 		}
 
 		for (Entity entity : this.entities) {
-			if (!entity.isCollidable()) {
-				continue;
-			}
-			Vector pos = entity.getPosition();
-			Vector size = entity.getSize();
-			if (pos.x < 0) {
+			Box bb = entity.getAbsBB();
+            if (bb == null)
+            {
+                continue;
+            }
+            Vector b = bb.getBase();
+			if (b.x < 0) {
 				entity.onCollideWithBorder(Face.LEFT);
 			}
-			if (pos.y < 0) {
+			if (b.y < 0) {
 				entity.onCollideWithBorder(Face.TOP);
 			}
-			if (pos.x + size.x > getWidth()) {
+			if (b.x + bb.getWidth() > getWidth()) {
 				entity.onCollideWithBorder(Face.RIGHT);
 			}
-			if (pos.y + size.y > getHeight()) {
+			if (b.y + bb.getHeight() > getHeight()) {
 				entity.onCollideWithBorder(Face.BOTTOM);
 			}
 		}
 	}
 
 	private Face checkCollision(Entity entityA, Entity entityB) {
-		if (!entityA.isCollidable() || !entityB.isCollidable()) {
-			return null;
-		}
+		Box a = entityA.getAbsBB();
+		Box b = entityB.getAbsBB();
 
-		Rect a = new Rect(entityA.getPosition(), entityA.getSize());
-		Rect b = new Rect(entityB.getPosition(), entityB.getSize());
+        if (a == null || b == null)
+        {
+            return null;
+        }
 
 		Face collFace = b.intersects(a);
 		if (collFace != null) {
