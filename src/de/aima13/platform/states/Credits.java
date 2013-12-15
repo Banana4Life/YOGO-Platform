@@ -27,12 +27,15 @@ public class Credits extends BasicGameState {
 	private Image moto;
 	private Image[] framesWheel;
 	private Animation wheelAnim;
-	private float bikeScale = 0.15f;
+	private float bikeScale = 0.1f;
 	private Vector bikeDimensions;
 	private Vector bikePosition;
 	private Vector bikeVelocity;
 	private boolean bikePaused = false;
 	private String hint;
+	private int waitedFramesDrive;
+	private boolean waitToDrive, bikeWaited;
+	private final static int waitFramesToDrive = 60;
 
 	/*
 	 * 
@@ -54,6 +57,9 @@ public class Credits extends BasicGameState {
 				.getHeight() - bikeDimensions.y);
 		bikeVelocity = new Vector(10f, 0);
 		bikePaused = false;
+		waitedFramesDrive = 0;
+		bikeWaited = false;
+		waitToDrive = false;
 	}
 
 	/*
@@ -74,6 +80,7 @@ public class Credits extends BasicGameState {
 
 		moto = new Image("res/svg/motorcycle-wireframe.png")
 				.getScaledCopy(bikeScale);
+		moto.setRotation(-30);
 
 		framesWheel = new Image[10];
 		framesWheel[0] = new Image("res/svg/frames-wheel/frame01.png")
@@ -124,6 +131,13 @@ public class Credits extends BasicGameState {
 	}
 
 	@Override
+	public void enter(GameContainer container, StateBasedGame game)
+			throws SlickException {
+		bikePaused = false;
+		wheelAnim.start();
+	}
+
+	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		g.setColor(Color.white);
@@ -150,15 +164,16 @@ public class Credits extends BasicGameState {
 		 */
 		g.drawAnimation(wheelAnim, bikePosition.x + 100 * bikeScale,
 				bikePosition.y + 707f * bikeScale);
-		g.drawAnimation(wheelAnim, bikePosition.x + 1850 * bikeScale,
-				bikePosition.y + 707f * bikeScale);
-		g.drawImage(moto, bikePosition.x, bikePosition.y);
+		// g.drawAnimation(wheelAnim, bikePosition.x + 1850 * bikeScale,
+		// bikePosition.y + 707f * bikeScale);
+		g.drawImage(moto, bikePosition.x - 300 * bikeScale, bikePosition.y
+				- 360 * bikeScale);
 
 		/*
 		 * 
 		 */
-		this.game.fontDefault.drawString(bikePosition.x - getHintX(hint),
-				bikePosition.y + getHintY(hint), hint);
+		this.game.fontDefault.drawString(bikePosition.x - getHintX(hint) - 300
+				* bikeScale, bikePosition.y + getHintY(hint), hint);
 	}
 
 	@Override
@@ -167,12 +182,26 @@ public class Credits extends BasicGameState {
 		/*
 		 * Easter EGG
 		 */
+		if (waitToDrive) {
+			waitedFramesDrive++;
+			if (waitedFramesDrive > waitFramesToDrive) {
+				waitToDrive = false;
+				bikePaused = false;
+				waitedFramesDrive = 0;
+			}
+		}
 		if (!bikePaused) {
 			wheelAnim.start();
 			bikePosition = bikePosition.add(bikeVelocity);
 			if (bikePosition.x - getHintX(hint) - 10 > game.getContainer()
 					.getWidth()) {
 				resetBike();
+			} else if (bikePosition.x + bikeDimensions.x - 45 >= game
+					.getContainer().getWidth() && !bikeWaited) {
+				bikePaused = true;
+				waitedFramesDrive = 0;
+				waitToDrive = true;
+				bikeWaited = true;
 			}
 		} else {
 			wheelAnim.stop();
@@ -186,6 +215,7 @@ public class Credits extends BasicGameState {
 		super.keyReleased(key, c);
 		switch (key) {
 		case Input.KEY_ESCAPE:
+			resetBike();
 			game.enterState(MainMenu.ID, new FadeOutTransition(Color.black),
 					new FadeInTransition(Color.black));
 			break;
