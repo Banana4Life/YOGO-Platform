@@ -1,8 +1,11 @@
 package de.aima13.platform.states;
 
+
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
@@ -14,6 +17,8 @@ import de.aima13.platform.GameLevel;
 import de.aima13.platform.PlatformGame;
 import de.aima13.platform.entity.Creature;
 import de.aima13.platform.entity.Platform;
+import de.aima13.platform.entity.TiledBackground;
+import de.aima13.platform.util.Vector;
 
 public class Game extends BasicGameState {
 
@@ -23,6 +28,7 @@ public class Game extends BasicGameState {
 
 	private GameLevel level;
 	private Platform platform;
+	private TiledBackground background;
 
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
@@ -35,11 +41,11 @@ public class Game extends BasicGameState {
 		resetState();
 	}
 
-	public void resetState() {
+	public void resetState() throws SlickException {
 		this.level = new GameLevel(game, container.getInput());
 		platform = new Platform(10);
 		this.level.addEntity(platform);
-        this.level.addEntity(new Creature(platform));
+		this.level.addEntity(new Creature(platform));
 	}
 
 	@Override

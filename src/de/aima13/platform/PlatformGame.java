@@ -28,10 +28,9 @@ public class PlatformGame extends StateBasedGame {
 
 	private AppGameContainer app;
 	/** The fonts to draw to the screen */
+	public TrueTypeFont fontDefault;
 	public TrueTypeFont fontHeader;
 
-	/** Boolean flag on whether AntiAliasing is enabled or not */
-	private boolean antiAlias = true;
 
 	public PlatformGame() {
 		super("One Platform");
@@ -44,19 +43,39 @@ public class PlatformGame extends StateBasedGame {
 		init();
 	}
 
-	public void init() {
+	public TrueTypeFont loadFont(String res) {
+		return loadFont(res, Font.PLAIN);
+	}
+
+	public TrueTypeFont loadFont(String res, float size) {
+		return loadFont(res, size, Font.PLAIN);
+	}
+
+	public TrueTypeFont loadFont(String res, int style) {
+		return loadFont(res, 18f, style);
+	}
+
+	public TrueTypeFont loadFont(String res, float size, int style) {
+		return loadFont(res, size, style, true);
+	}
+
+	public TrueTypeFont loadFont(String res, float size, int style, boolean antiAlias) {
 		try {
-			InputStream inputStream = ResourceLoader
-					.getResourceAsStream("res/font/Ubuntu-R.ttf");
+			InputStream inputStream = ResourceLoader.getResourceAsStream(res);
 
-			Font ttfUbuntu = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-			ttfUbuntu = ttfUbuntu.deriveFont(54f); // set font size
-			ttfUbuntu = ttfUbuntu.deriveFont(Font.BOLD); // set font size
-			fontHeader = new TrueTypeFont(ttfUbuntu, antiAlias);
-
+			Font ttf = Font.createFont(Font.TRUETYPE_FONT, inputStream);
+			ttf = ttf.deriveFont(size); // set font size
+			ttf = ttf.deriveFont(style); // set font style
+			return new TrueTypeFont(ttf, antiAlias);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	public void init() {
+		fontDefault = loadFont("res/font/minecraft.ttf");
+		fontHeader = loadFont("res/font/minecraft.ttf", 54f);
 	}
 
 	public void keyPressed(int key, char c) {
