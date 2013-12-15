@@ -2,6 +2,8 @@ package de.aima13.platform.entity;
 
 import java.util.Random;
 
+import de.aima13.platform.gui.Powerbar;
+import de.aima13.platform.util.Face;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -15,8 +17,9 @@ public class Platform extends Entity {
 
 	private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
 	private static final float DECELERATE_FACTOR = 1.5f;
+    private final Powerbar powerbar;
 
-	private SpriteSheet engineSpriteSheet;
+    private SpriteSheet engineSpriteSheet;
 	private Animation plasmaAnimation;
 	private Animation fireAnimation;
 
@@ -28,25 +31,26 @@ public class Platform extends Entity {
 	private int stillActivatedFor;
 	private Random randomGenerator;
 
-	public Platform() {
-		this(null, null, null, 3);
+	public Platform(Powerbar powerbar) {
+		this(powerbar, null, null, null, 3);
 	}
 
-	public Platform(int width) {
-		this(null, null, null, width);
+	public Platform(Powerbar powerbar, int width) {
+		this(powerbar, null, null, null, width);
 	}
 
-	public Platform(Vector size) {
-		this(size, null, null, 3);
+	public Platform(Powerbar powerbar, Vector size) {
+		this(powerbar, size, null, null, 3);
 	}
 
-	public Platform(Vector size, Vector position) {
-		this(size, position, null, 3);
+	public Platform(Powerbar powerbar, Vector size, Vector position) {
+		this(powerbar, size, position, null, 3);
 	}
 
-	public Platform(Vector size, Vector position, Vector acceleration, int width) {
+	public Platform(Powerbar powerbar, Vector size, Vector position, Vector acceleration, int width) {
 		super();
-		this.size = size;
+        this.powerbar = powerbar;
+        this.size = size;
 		this.position = position;
 		this.acceleration = acceleration;
 
@@ -60,7 +64,12 @@ public class Platform extends Entity {
 		this.stillActivatedFor = -1;
 	}
 
-	@Override
+    public Powerbar getPowerbar()
+    {
+        return powerbar;
+    }
+
+    @Override
 	public void onInit() {
 		super.onInit();
 		if (size == null) {
@@ -197,25 +206,13 @@ public class Platform extends Entity {
 		}
 
 		// g.setColor(Color.white);
-		// g.drawString("isActive = " + isActivated + " stillActivatedFor = " +
-		// stillActivatedFor + " cooldown = " + this.activationCooldown, 20,
-		// 200);
+		// g.drawString("isActive = " + isActivated + " stillActivatedFor = " + stillActivatedFor + " cooldown = " + this.activationCooldown, 20, 200);
 
-		this.engineSpriteSheet.getSubImage(0, 0).draw(
-				this.position.x + this.offsetLeft.x,
-				this.position.y + this.offsetLeft.y, scale);
-		this.engineSpriteSheet.getSubImage(1, 0).draw(
-				this.position.x + this.offsetRight.x + 3 * this.width * scale
-						- 2 * scale, this.position.y + this.offsetRight.y,
-				scale);
+		this.engineSpriteSheet.getSubImage(0, 0).draw(this.position.x + this.offsetLeft.x, this.position.y + this.offsetLeft.y, scale);
+		this.engineSpriteSheet.getSubImage(1, 0).draw(this.position.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, this.position.y + this.offsetRight.y, scale);
 
-		this.fireAnimation.getCurrentFrame().draw(
-				this.position.x + this.offsetLeft.x + 1 * scale,
-				this.position.y + this.offsetLeft.y + 6 * scale, scale);
-		this.fireAnimation.getCurrentFrame().draw(
-				this.position.x + this.offsetRight.x + 3 * this.width * scale
-						- 2 * scale,
-				this.position.y + this.offsetRight.y + 6 * scale, scale);
+		this.fireAnimation.getCurrentFrame().draw(this.position.x + this.offsetLeft.x + 1 * scale, this.position.y + this.offsetLeft.y + 6 * scale, scale);
+		this.fireAnimation.getCurrentFrame().draw(this.position.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, this.position.y + this.offsetRight.y + 6 * scale, scale);
 	}
 
 	public void activate() {
@@ -229,4 +226,10 @@ public class Platform extends Entity {
 	public boolean isActive() {
 		return this.isActivated;
 	}
+
+    @Override
+    public void onCollide(Entity current, Face collidedFace)
+    {
+        this.powerbar.decreasePower(.1f);
+    }
 }

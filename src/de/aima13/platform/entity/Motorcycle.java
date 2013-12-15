@@ -1,11 +1,12 @@
 package de.aima13.platform.entity;
 
+import de.aima13.platform.gui.GuiEntity;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-public class Motorcycle extends Entity {
+public class Motorcycle extends GuiEntity {
 	private Image mainTile;
 
 	public Motorcycle(String ressource) throws SlickException {
