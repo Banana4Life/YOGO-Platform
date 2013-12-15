@@ -79,15 +79,15 @@ public class Creature extends Entity {
 
 			this.velocity = new Vector(0, -5f);
 		}
-		
-//		Vector newPos = position.add(velocity);
-//		if (newPos.y + size.y > platform.position.y) {
-//			newPos = new Vector(position.x, newPos.y);
-//			velocity = new Vector(0, velocity.y);
-//			failed = true;
-//		}
-//
-//		position = newPos;
+
+		// Vector newPos = position.add(velocity);
+		// if (newPos.y + size.y > platform.position.y) {
+		// newPos = new Vector(position.x, newPos.y);
+		// velocity = new Vector(0, velocity.y);
+		// failed = true;
+		// }
+		//
+		// position = newPos;
 		if (position.y + size.y > platform.position.y) {
 			velocity = new Vector(0, velocity.y);
 			failed = true;
@@ -153,9 +153,8 @@ public class Creature extends Entity {
 
 	@Override
 	public void onCollide(Entity current, Face collidedFace) {
-		if (!failed && current instanceof Platform) {
-			this.position = new Vector(this.position.x, current.position.y
-					- this.size.y - 1);
+		if (!failed && current instanceof Platform && ((Platform) current).isActive()) {
+			this.position = new Vector(this.position.x, current.position.y - this.size.y - 1);
 			this.velocity = new Vector(0, 0);
 
 			this.inAir = false;
@@ -181,7 +180,7 @@ public class Creature extends Entity {
 				vY *= -1;
 				break;
 			case BOTTOM:
-				 failed = true;
+				failed = true;
 				Log.error("Phillips Collision hat gefailt!");
 				break;
 			case LEFT:
@@ -201,8 +200,7 @@ public class Creature extends Entity {
 
 	@Override
 	public void onDeath() {
-		level.getGame().enterState(Loose.ID,
-				new EmptyTransition(),
+		level.getGame().enterState(Loose.ID, new EmptyTransition(),
 				new FadeInTransition(Color.black));
 		try {
 			((Game) level.getGame().getState(Game.ID)).resetState();

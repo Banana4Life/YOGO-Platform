@@ -1,20 +1,18 @@
 package de.aima13.platform.entity;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-import de.aima13.platform.gui.GuiEntity;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.util.Log;
 
+import de.aima13.platform.gui.GuiEntity;
 import de.aima13.platform.gui.Tile;
 import de.aima13.platform.util.Vector;
 
 public class TiledBackground extends GuiEntity {
 
-	protected ArrayList<Tile> tiles;
+	protected Tile[][] tiles;
 	protected Random generator;
 	protected SpriteSheet imageSheet;
 	protected Image[] imageSet;
@@ -22,7 +20,6 @@ public class TiledBackground extends GuiEntity {
 
 	public TiledBackground(SpriteSheet sheet, Vector size) {
 		super();
-		tiles = new ArrayList<Tile>();
 		imageSheet = sheet;
 		imageSize = size;
 		generator = new Random();
@@ -30,7 +27,6 @@ public class TiledBackground extends GuiEntity {
 
 	public TiledBackground(Image[] set, Vector size) {
 		super();
-		tiles = new ArrayList<Tile>();
 		imageSet = set;
 		imageSize = size;
 		generator = new Random();
@@ -47,14 +43,16 @@ public class TiledBackground extends GuiEntity {
 			int nor = (int) (getLevel().getHeight() / imageSize.y) + 1; // number
 																		// of
 																		// rows
+			tiles = new Tile[nor + 1][notpr];
 			// add one row in top
 			for (int i = -1; i < nor; i++) {
 				for (int h = 0; h < notpr; h++) {
 					// get random image
 					int randomImage = generator.nextInt(imageSet.length);
 					Tile tile = new Tile(this, imageSet[randomImage],
-							new Vector(h * imageSize.x, i * imageSize.y));
-					tiles.add(tile);
+							new Vector(h * imageSize.x, i * imageSize.y),
+							i + 1, h);
+					tiles[i + 1][h] = tile;
 				}
 			}
 		}
@@ -65,12 +63,16 @@ public class TiledBackground extends GuiEntity {
 	}
 
 	public void render(Graphics g) {
-		for (Tile t : tiles) {
-			g.drawImage(t.getImage(), t.getPosition().x, t.getPosition().y);
+		for (int i = 0; i < tiles.length; i++) {
+			for (int h = 0; h < tiles[i].length; h++) {
+				Tile t = tiles[i][h];
+				g.drawImage(t.getImage(), t.getPosition().x, t.getPosition().y);
+			}
 		}
 	}
 
 	public void onLeaveWorld(Tile tile) {
-		tiles.remove(tile);
+		// Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
+		tile.moveTo(new Vector(tile.getPosition().x, -imageSize.y));
 	}
 }

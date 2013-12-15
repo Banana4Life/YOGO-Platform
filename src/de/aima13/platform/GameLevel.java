@@ -66,6 +66,10 @@ public class GameLevel {
 		entity.init(game);
 	}
 
+	public void reset() {
+		entities.clear();
+	}
+
 	public final void update(int delta) {
 		this.onUpdate(delta);
 		List<Entity> remove = new ArrayList<>();

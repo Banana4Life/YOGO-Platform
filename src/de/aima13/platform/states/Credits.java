@@ -27,7 +27,7 @@ public class Credits extends BasicGameState {
 	private Image moto;
 	private Image[] framesWheel;
 	private Animation wheelAnim;
-	private float bikeScale = 0.2f;
+	private float bikeScale = 0.15f;
 	private Vector bikeDimensions;
 	private Vector bikePosition;
 	private Vector bikeVelocity;

@@ -43,6 +43,7 @@ public class Game extends BasicGameState {
 
 	public void resetState() throws SlickException {
 		this.level = game.getLevel();
+		level.reset();
 		
 		Powerbar powerbar = level.spawn(new Powerbar());
 		platform = level.spawn(new Platform(powerbar, 10));

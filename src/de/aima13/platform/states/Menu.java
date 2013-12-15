@@ -1,6 +1,5 @@
 package de.aima13.platform.states;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import org.newdawn.slick.Animation;
@@ -13,10 +12,9 @@ import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.PlatformGame;
-import de.aima13.platform.entity.TiledBackground;
+import de.aima13.platform.entity.TiledScrollingBackground;
 import de.aima13.platform.gui.HighlightList;
 import de.aima13.platform.gui.HiglightListEntry;
 import de.aima13.platform.gui.OnHighlightSelectListener;
@@ -41,7 +39,7 @@ public class Menu extends BasicGameState {
 	protected boolean waitForExec;
 	protected int waitedFramesCount;
 	protected static final int waitFrames = 30;
-	private TiledBackground background;
+	private TiledScrollingBackground background;
 
 	protected HighlightList highlightEntries;
 
@@ -85,8 +83,8 @@ public class Menu extends BasicGameState {
 		img.setFilter(Image.FILTER_NEAREST);
 		Image[] set = new Image[] { img };
 		// backImg1.setFilter(Image.FILTER_NEAREST);
-		background = new TiledBackground(set, new Vector(set[0].getWidth(),
-				set[0].getHeight()));
+		background = new TiledScrollingBackground(set, new Vector(set[0].getWidth(),
+				set[0].getHeight()), new Vector(0, 2));
 		background.init(this.game);
 	}
 
@@ -207,6 +205,7 @@ public class Menu extends BasicGameState {
 	@Override
 	public void update(GameContainer container, StateBasedGame game, int delta)
 			throws SlickException {
+		background.update(delta);
 		plasmaPlatform.update(delta);
 		// fire.update(delta);
 
