@@ -90,7 +90,7 @@ public class GameLevel {
 		this.onUpdate(delta);
 		List<Entity> remove = new ArrayList<>();
 		for (Entity e : new ArrayList<>(this.entities)) {
-			if (!e.isAlive()) {
+			if (!e.isAlive() || outOfRange(e)) {
 				remove.add(e);
 				e.onDeath();
 				continue;
@@ -104,6 +104,11 @@ public class GameLevel {
 
 		this.detectCollisions();
 	}
+
+    private boolean outOfRange(Entity e)
+    {
+        return (e.getPosition().y > getHeight() * 2 || e.getPosition().x > getWidth() * 2);
+    }
 
 	public void onUpdate(int delta) {
 
