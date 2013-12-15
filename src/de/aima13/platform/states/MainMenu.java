@@ -20,6 +20,7 @@ import de.aima13.platform.util.Vector;
 public class MainMenu extends Menu {
 
 	public final static int ID = 2;
+	public Image title;
 
 	/*
 	 * Easter EGG
@@ -73,6 +74,10 @@ public class MainMenu extends Menu {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.init(container, game);
+		
+		title = new Image("res/images/background/Title.png");
+		title.setFilter(Image.FILTER_NEAREST);
+		
 		/*
 		 * Easter EGG
 		 */
@@ -148,10 +153,12 @@ public class MainMenu extends Menu {
 		super.render(container, game, g);
 		g.setColor(Color.white);
 
-		int textWidth = this.game.fontHeader.getWidth("Main Menu");
-		this.game.fontHeader.drawString(game.getContainer().getWidth() / 2
-				- textWidth / 2, 10, "Main Menu", Color.white);
+		// int textWidth = this.game.fontHeader.getWidth("Main Menu");
+		// this.game.fontHeader.drawString(game.getContainer().getWidth() / 2
+		//		- textWidth / 2, 10, "Main Menu", Color.white);
 
+		title.draw(0, 0, 2);
+		
 		// g.setColor(Color.red);
 		this.game.fontDefault.drawString(50, 100, "Play Game");
 		this.game.fontDefault.drawString(50, 125, "High Scores");

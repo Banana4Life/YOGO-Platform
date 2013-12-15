@@ -5,15 +5,28 @@ import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 public class Creature extends Entity {
+	private static final float IMAGE_SCALE = 4; 
 	private final Platform platform;
 	private boolean failed = false;
+	
+	protected SpriteSheet characterSpriteSheet;
+	protected Animation jumpingAnimation;
+	protected int currentJumpingYOffset = 0;
+	protected int[] jumpingYOffset = {3, 5, 6, 5, 3};
+	protected Animation beltAnimation;
+
+	protected boolean inAir;
+	protected boolean prevFallingDown;
 
 	public Creature(Platform platform) {
 		this.platform = platform;
@@ -24,11 +37,25 @@ public class Creature extends Entity {
 		position = new Vector(0, 0);
 		velocity = new Vector(5, 5);
 		size = new Vector(20, 50);
+		
+		try {
+			this.characterSpriteSheet = new SpriteSheet("res/CharacterSpriteSheet.png", 16, 32);
+			this.characterSpriteSheet.setFilter(Image.FILTER_NEAREST);
+			this.beltAnimation = new Animation(new SpriteSheet("res/Belt.png", 4, 1), 100);
+			this.jumpingAnimation = new Animation(this.characterSpriteSheet, 0, 3, 5, 3, true, 30, false);
+		} catch (SlickException e) {
+			// do nothing
+		}
+		
+		this.inAir = this.prevFallingDown = false;
 	}
 
     @Override
     public void update(int delta)
     {
+    	this.jumpingAnimation.update(delta);
+		this.beltAnimation.update(delta);
+		
         if (mayTurn())
         {
             velocity = new Vector(velocity.x * -1, velocity.y);
@@ -42,6 +69,27 @@ public class Creature extends Entity {
         }
 
 		position = newPos;
+		
+		if (this.inAir) {
+			this.prevFallingDown = (this.velocity.y > 0);
+		}
+		
+		/*
+		if (this.jumping.getFrame() == 5) {
+			this.ySpeed = -2;
+			this.inAir = true;
+			this.jumping.stop();
+			this.jumping.setCurrentFrame(0);
+			this.currentJumpingYOffset = 0;
+		}
+		if (this.y > platform.y - 32 * scale) {
+			this.ySpeed = 0;
+			this.y = platform.y - 32 * scale;
+			this.inAir = false;
+			this.fallingDown = false;
+			this.jumping.start();
+		}
+		*/
 	}
 
     public boolean isAbovePlatform()
@@ -76,11 +124,20 @@ public class Creature extends Entity {
     public void render(Graphics g)
     {
         super.render(g);
-        Color c = g.getColor();
-        g.setColor(Color.green);
-        g.drawRect(position.x, position.y, size.x, size.y);
-        g.fillRect(position.x, position.y, size.x, size.y);
-        g.setColor(c);
+
+        if (this.velocity.y >= 0 && this.inAir) {
+			if (!this.prevFallingDown) {
+				this.characterSpriteSheet.getSprite(0, 2).draw(this.position.x, this.position.y, Creature.IMAGE_SCALE);
+			} else {
+				this.characterSpriteSheet.getSprite(0, 1).draw(this.position.x, this.position.y, Creature.IMAGE_SCALE);
+			}
+		} else if (this.inAir) {
+			this.characterSpriteSheet.getSprite(0, 0).draw(this.position.x, this.position.y, Creature.IMAGE_SCALE);
+		} else {
+			this.jumpingAnimation.getCurrentFrame().draw(this.position.x, this.position.y + this.jumpingYOffset[this.jumpingAnimation.getFrame()] * Creature.IMAGE_SCALE, Creature.IMAGE_SCALE);
+			this.currentJumpingYOffset = this.jumpingYOffset[this.jumpingAnimation.getFrame()];
+		}
+		this.beltAnimation.getCurrentFrame().draw(this.position.x + 6 * Creature.IMAGE_SCALE, this.position.y + this.currentJumpingYOffset * Creature.IMAGE_SCALE + 15 * Creature.IMAGE_SCALE, Creature.IMAGE_SCALE);
     }
 
 	@Override
