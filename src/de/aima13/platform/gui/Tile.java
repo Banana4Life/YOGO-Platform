@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 
 import de.aima13.platform.entity.TiledBackground;
 import de.aima13.platform.util.Vector;
+import org.newdawn.slick.Image;
 
 public class Tile {
 

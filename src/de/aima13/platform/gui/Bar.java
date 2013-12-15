@@ -1,9 +1,7 @@
 package de.aima13.platform.gui;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-
 import de.aima13.platform.util.Vector;
+import org.newdawn.slick.Graphics;
 
 public class Bar extends GuiEntity {
 	protected static final Vector PADDING = new Vector(10, 10);
