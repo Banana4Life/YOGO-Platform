@@ -2,6 +2,8 @@ package de.aima13.platform.states;
 
 import de.aima13.platform.entity.BatterySpawner;
 import de.aima13.platform.gui.Powerbar;
+import de.aima13.platform.gui.TiledBackground;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -18,7 +20,6 @@ import de.aima13.platform.GameLevel;
 import de.aima13.platform.PlatformGame;
 import de.aima13.platform.entity.Creature;
 import de.aima13.platform.entity.Platform;
-import de.aima13.platform.entity.TiledBackground;
 import de.aima13.platform.util.Vector;
 
 public class Game extends BasicGameState {
