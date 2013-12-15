@@ -8,8 +8,11 @@ import de.aima13.platform.util.Vector;
 
 public class TiledScrollingBackground extends TiledBackground {
 
-	protected TiledScrollingBackground(SpriteSheet sheet, Vector size) {
+	protected Vector velocity;
+	
+	protected TiledScrollingBackground(SpriteSheet sheet, Vector size, Vector velocity) {
 		super(sheet, size);
+		this.velocity = velocity;
 	}
 
 	public void onInit() {
@@ -17,6 +20,7 @@ public class TiledScrollingBackground extends TiledBackground {
 	}
 
 	public void update(int delta) {
+		
 	}
 
 	public void render(Graphics g) {

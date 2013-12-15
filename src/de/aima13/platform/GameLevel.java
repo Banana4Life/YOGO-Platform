@@ -39,6 +39,11 @@ public class GameLevel {
 		this.input = input;
 		entities = new LinkedList<>();
 
+		plasmaSound = new Sound("res/sound/plasma.wav");
+		jumpSound = new Sound("res/sound/plasma.wav");
+	}
+
+	public void init() throws SlickException {
 		SpriteSheet sheet = new SpriteSheet(new Image(
 				"res/images/background/BackgroundTileset.png"), 32, 32);
 		Image img = new Image("res/images/background/BackgroundTileset.png")
@@ -48,21 +53,17 @@ public class GameLevel {
 		// backImg1.setFilter(Image.FILTER_NEAREST);
 		background = new TiledBackground(set, new Vector(set[0].getWidth(),
 				set[0].getHeight()));
-		background.init(this);
-
-		plasmaSound = new Sound("res/sound/plasma.wav");
-		jumpSound = new Sound("res/sound/plasma.wav");
+		background.init(game);
 	}
 
-    public <T extends Entity> T spawn(T e)
-    {
-        this.addEntity(e);
-        return e;
-    }
+	public <T extends Entity> T spawn(T e) {
+		this.addEntity(e);
+		return e;
+	}
 
 	protected void addEntity(Entity entity) {
 		this.entities.addLast(entity);
-		entity.init(this);
+		entity.init(game);
 	}
 
 	public final void update(int delta) {
@@ -77,7 +78,7 @@ public class GameLevel {
 			e.update(delta);
 		}
 
-        this.entities.removeAll(remove);
+		this.entities.removeAll(remove);
 
 		this.detectCollisions();
 	}
@@ -111,7 +112,6 @@ public class GameLevel {
 		// position1.y += 5;
 		// position2.y += 5;
 		// position3.y += 5;
-		Log.info("render background");
 		background.render(g);
 	}
 
@@ -144,36 +144,30 @@ public class GameLevel {
 	}
 
 	private void detectCollisions() {
-        Set<Long> checked = new HashSet<>();
-        for (Entity a : this.entities)
-        {
-            for (Entity b : this.entities)
-            {
-                if (a == b)
-                {
-                    continue;
-                }
-                long combinedHash = (long)a.hashCode() + (long)b.hashCode();
-                if (checked.contains(combinedHash))
-                {
-                    continue;
-                }
-                checked.add(combinedHash);
+		Set<Long> checked = new HashSet<>();
+		for (Entity a : this.entities) {
+			for (Entity b : this.entities) {
+				if (a == b) {
+					continue;
+				}
+				long combinedHash = (long) a.hashCode() + (long) b.hashCode();
+				if (checked.contains(combinedHash)) {
+					continue;
+				}
+				checked.add(combinedHash);
 
-                Face collFace = this.checkCollision(a, b);
-                if (collFace != null)
-                {
-                    a.onCollide(b, collFace);
-                    b.onCollide(a, collFace.opposite());
-                }
-            }
-        }
+				Face collFace = this.checkCollision(a, b);
+				if (collFace != null) {
+					a.onCollide(b, collFace);
+					b.onCollide(a, collFace.opposite());
+				}
+			}
+		}
 
 		for (Entity entity : this.entities) {
-            if (!entity.isCollidable())
-            {
-                continue;
-            }
+			if (!entity.isCollidable()) {
+				continue;
+			}
 			Vector pos = entity.getPosition();
 			Vector size = entity.getSize();
 			if (pos.x < 0) {
@@ -192,10 +186,9 @@ public class GameLevel {
 	}
 
 	private Face checkCollision(Entity entityA, Entity entityB) {
-        if (!entityA.isCollidable() || !entityB.isCollidable())
-        {
-            return null;
-        }
+		if (!entityA.isCollidable() || !entityB.isCollidable()) {
+			return null;
+		}
 
 		Rect a = new Rect(entityA.getPosition(), entityA.getSize());
 		Rect b = new Rect(entityB.getPosition(), entityB.getSize());

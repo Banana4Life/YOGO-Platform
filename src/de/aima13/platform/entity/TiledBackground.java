@@ -38,27 +38,25 @@ public class TiledBackground extends GuiEntity {
 
 	public void onInit() {
 		if (imageSet.length > 0) {
-			int notpr = (int) (getLevel().getWidth() / imageSize.x) + 1; // number
-																			// of
-																			// tiles
-																			// per
-																			// row
+			int width = getLevel().getWidth();
+			int notpr = (int) (width / imageSize.x) + 1; // number
+															// of
+															// tiles
+															// per
+															// row
 			int nor = (int) (getLevel().getHeight() / imageSize.y) + 1; // number
 																		// of
 																		// rows
 			// add one row in top
-			Log.info("creating background");
 			for (int i = -1; i < nor; i++) {
 				for (int h = 0; h < notpr; h++) {
 					// get random image
-					Log.info("add image to list, i:" + i + " h:" + h);
 					int randomImage = generator.nextInt(imageSet.length);
 					Tile tile = new Tile(this, imageSet[randomImage],
 							new Vector(h * imageSize.x, i * imageSize.y));
 					tiles.add(tile);
 				}
 			}
-			Log.info("created background");
 		}
 	}
 
@@ -67,11 +65,9 @@ public class TiledBackground extends GuiEntity {
 	}
 
 	public void render(Graphics g) {
-		Log.info("rendering background");
 		for (Tile t : tiles) {
 			g.drawImage(t.getImage(), t.getPosition().x, t.getPosition().y);
 		}
-		Log.info("rendered background");
 	}
 
 	public void onLeaveWorld(Tile tile) {
