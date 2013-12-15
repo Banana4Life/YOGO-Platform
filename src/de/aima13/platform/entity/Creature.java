@@ -39,9 +39,9 @@ public class Creature extends Entity {
 		size = new Vector(20, 50);
 		
 		try {
-			this.characterSpriteSheet = new SpriteSheet("res/CharacterSpriteSheet.png", 16, 32);
+			this.characterSpriteSheet = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
 			this.characterSpriteSheet.setFilter(Image.FILTER_NEAREST);
-			this.beltAnimation = new Animation(new SpriteSheet("res/Belt.png", 4, 1), 100);
+			this.beltAnimation = new Animation(new SpriteSheet("res/images/character/Belt.png", 4, 1), 100);
 			this.jumpingAnimation = new Animation(this.characterSpriteSheet, 0, 3, 5, 3, true, 30, false);
 		} catch (SlickException e) {
 			// do nothing
@@ -74,22 +74,14 @@ public class Creature extends Entity {
 			this.prevFallingDown = (this.velocity.y > 0);
 		}
 		
-		/*
-		if (this.jumping.getFrame() == 5) {
-			this.ySpeed = -2;
+		if (this.jumpingAnimation.getFrame() == this.jumpingAnimation.getFrameCount() - 1) {
 			this.inAir = true;
-			this.jumping.stop();
-			this.jumping.setCurrentFrame(0);
+			this.jumpingAnimation.stop();
+			this.jumpingAnimation.setCurrentFrame(0);
 			this.currentJumpingYOffset = 0;
+			
+			this.velocity = new Vector(0, -5f);
 		}
-		if (this.y > platform.y - 32 * scale) {
-			this.ySpeed = 0;
-			this.y = platform.y - 32 * scale;
-			this.inAir = false;
-			this.fallingDown = false;
-			this.jumping.start();
-		}
-		*/
 	}
 
     public boolean isAbovePlatform()
@@ -145,7 +137,10 @@ public class Creature extends Entity {
 		if (!failed && current instanceof Platform) {
 			this.position = new Vector(this.position.x, current.position.y
 					- this.size.y - 1);
-			this.velocity = new Vector(this.velocity.x, this.velocity.y * -1);
+			this.velocity = new Vector(0, 0);
+			
+			this.inAir = false;
+			this.jumpingAnimation.start();
 		}
 	}
 
