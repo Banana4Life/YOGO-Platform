@@ -31,7 +31,7 @@ public class GameLevel {
 			entity.update(delta);
 		}
 		this.onUpdate(container, delta);
-        this.detectCollisions();
+		this.detectCollisions();
 	}
 
 	public void onUpdate(GameContainer container, int delta) {
@@ -65,35 +65,30 @@ public class GameLevel {
 		return getContainer().getHeight();
 	}
 
-    private void detectCollisions()
-    {
-        Entity last = this.entities.getFirst();
-        Entity current;
-        for (int i = 1; i < this.entities.size(); ++i)
-        {
-            current = this.entities.get(i);
+	private void detectCollisions() {
+		Entity last = this.entities.getFirst();
+		Entity current;
+		for (int i = 1; i < this.entities.size(); ++i) {
+			current = this.entities.get(i);
 
-            Face collFace = this.checkCollision(last, current);
-            if (collFace != null)
-            {
-                last.onCollide(current, collFace);
-                current.onCollide(last, collFace.opposite());
-            }
-        }
-    }
+			Face collFace = this.checkCollision(last, current);
+			if (collFace != null) {
+				last.onCollide(current, collFace);
+				current.onCollide(last, collFace.opposite());
+			}
+		}
+	}
 
-    private Face checkCollision(Entity entityA, Entity entityB)
-    {
-        Rect a = new Rect(entityA.getPosition(), entityA.getSize());
-        Rect b = new Rect(entityB.getPosition(), entityB.getSize());
+	private Face checkCollision(Entity entityA, Entity entityB) {
+		Rect a = new Rect(entityA.getPosition(), entityA.getSize());
+		Rect b = new Rect(entityB.getPosition(), entityB.getSize());
 
-        Face collFace = b.intersects(a);
-        if (collFace != null)
-        {
-            System.out.println("Intersection: " + collFace);
-            return collFace;
-        }
+		Face collFace = b.intersects(a);
+		if (collFace != null) {
+			System.out.println("Intersection: " + collFace);
+			return collFace;
+		}
 
-        return null;
-    }
+		return null;
+	}
 }

@@ -37,7 +37,7 @@ public class Menu extends BasicGameState {
 	protected int selectedEntry;
 	protected boolean waitForExec;
 	protected int waitedFramesCount;
-	protected static final int waitFrames = 60;
+	protected static final int waitFrames = 30;
 
 	protected HighlightList highlightEntries;
 
@@ -161,6 +161,7 @@ public class Menu extends BasicGameState {
 		if (key == Input.KEY_ENTER) {
 			highlightActive = true;
 			waitForExec = true;
+			waitedFramesCount = 0;
 		} else {
 			highlightActive = false;
 			if (key == Input.KEY_UP) {
@@ -193,11 +194,13 @@ public class Menu extends BasicGameState {
 					generator.nextInt(4) - 2);
 		}
 		offsetCounter %= 10;
-		waitedFramesCount++;
-		if (waitForExec && waitedFramesCount > waitFrames) {
-			waitForExec = false;
-			waitedFramesCount = 0;
-			highlightEntries.get(selectedEntry).listener.onSelect(game);
+		if (waitForExec) {
+			waitedFramesCount++;
+			if (waitForExec && waitedFramesCount > waitFrames) {
+				waitForExec = false;
+				waitedFramesCount = 0;
+				highlightEntries.get(selectedEntry).listener.onSelect(game);
+			}
 		}
 	}
 
