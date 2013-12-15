@@ -1,7 +1,5 @@
 package de.aima13.platform.states;
 
-
-
 import de.aima13.platform.entity.BatterySpawner;
 import de.aima13.platform.gui.Powerbar;
 import org.newdawn.slick.Color;
@@ -28,10 +26,9 @@ public class Game extends BasicGameState {
 	public final static int ID = 1;
 	private PlatformGame game; // stored for later use
 	private GameContainer container;
-
 	private GameLevel level;
+
 	private Platform platform;
-	private TiledBackground background;
 
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
@@ -45,15 +42,15 @@ public class Game extends BasicGameState {
 	}
 
 	public void resetState() throws SlickException {
-		this.level = new GameLevel(game, container.getInput());
-
-        Powerbar powerbar = level.spawn(new Powerbar());
+		this.level = game.getLevel();
+		
+		Powerbar powerbar = level.spawn(new Powerbar());
 		platform = level.spawn(new Platform(powerbar, 10));
 
-        Creature creature = level.spawn(new Creature(platform));
+		Creature creature = level.spawn(new Creature(platform));
 
-        BatterySpawner spawner = level.spawn(new BatterySpawner());
-        spawner.move(container.getWidth() / 2f, 20);
+		BatterySpawner spawner = level.spawn(new BatterySpawner());
+		spawner.move(container.getWidth() / 2f, 20);
 	}
 
 	@Override

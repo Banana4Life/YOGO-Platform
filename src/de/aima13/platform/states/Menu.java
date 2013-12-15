@@ -16,6 +16,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.PlatformGame;
+import de.aima13.platform.entity.TiledBackground;
 import de.aima13.platform.gui.HighlightList;
 import de.aima13.platform.gui.HiglightListEntry;
 import de.aima13.platform.gui.OnHighlightSelectListener;
@@ -40,6 +41,7 @@ public class Menu extends BasicGameState {
 	protected boolean waitForExec;
 	protected int waitedFramesCount;
 	protected static final int waitFrames = 30;
+	private TiledBackground background;
 
 	protected HighlightList highlightEntries;
 
@@ -72,9 +74,20 @@ public class Menu extends BasicGameState {
 		generator = new Random();
 		highlightEntries = new HighlightList(10);
 		selectedEntry = -1;
-		
+
 		moveSound = new Sound("res/sound/move.wav");
 		selectSound = new Sound("res/sound/select.wav");
+
+		SpriteSheet sheet = new SpriteSheet(new Image(
+				"res/images/background/BackgroundTileset.png"), 32, 32);
+		Image img = new Image("res/images/background/BackgroundTileset.png")
+				.getSubImage(0, 0, 32, 32).getScaledCopy(2f);
+		img.setFilter(Image.FILTER_NEAREST);
+		Image[] set = new Image[] { img };
+		// backImg1.setFilter(Image.FILTER_NEAREST);
+		background = new TiledBackground(set, new Vector(set[0].getWidth(),
+				set[0].getHeight()));
+		background.init(this.game);
 	}
 
 	@Override
@@ -119,6 +132,7 @@ public class Menu extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
+		background.render(g);
 		if (selectedEntry >= 0) {
 			width = highlightEntries.getWidth();
 			if (highlightActive) {

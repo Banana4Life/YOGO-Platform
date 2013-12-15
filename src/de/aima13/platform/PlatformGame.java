@@ -34,12 +34,17 @@ public class PlatformGame extends StateBasedGame {
 	public TrueTypeFont fontDefault;
 	public TrueTypeFont fontHeader;
 
+	private GameContainer container;
+	private GameLevel level;
 
 	public PlatformGame() {
-		super("One Platform");
+		super("#YOGO Platform");
 	}
 
 	public void initStatesList(GameContainer container) throws SlickException {
+		this.container = container;
+		level = new GameLevel(this, container.getInput());
+		level.init();
 		addState(new MainMenu());
 		addState(new Pause());
 		addState(new Game());
@@ -47,8 +52,6 @@ public class PlatformGame extends StateBasedGame {
 		addState(new Loose());
 		init();
 	}
-	
-	
 
 	public TrueTypeFont loadFont(String res) {
 		return loadFont(res, Font.PLAIN);
@@ -66,7 +69,8 @@ public class PlatformGame extends StateBasedGame {
 		return loadFont(res, size, style, true);
 	}
 
-	public TrueTypeFont loadFont(String res, float size, int style, boolean antiAlias) {
+	public TrueTypeFont loadFont(String res, float size, int style,
+			boolean antiAlias) {
 		try {
 			InputStream inputStream = ResourceLoader.getResourceAsStream(res);
 
@@ -80,7 +84,7 @@ public class PlatformGame extends StateBasedGame {
 		return null;
 	}
 
-	public void init() {
+	public void init() throws SlickException {
 		fontDefault = loadFont("res/font/minecraft.ttf");
 		fontHeader = loadFont("res/font/minecraft.ttf", 54f);
 	}
@@ -118,5 +122,9 @@ public class PlatformGame extends StateBasedGame {
 			Logger.getLogger(PlatformGame.class.getName()).log(Level.SEVERE,
 					null, ex);
 		}
+	}
+
+	public GameLevel getLevel() {
+		return level;
 	}
 }
