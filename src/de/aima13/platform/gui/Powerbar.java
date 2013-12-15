@@ -3,11 +3,9 @@ package de.aima13.platform.gui;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-import de.aima13.platform.util.Vector;
-
 public class Powerbar extends Bar {
 
-	
+
 	public Powerbar() {
 		value = 1.0f;
 	}
