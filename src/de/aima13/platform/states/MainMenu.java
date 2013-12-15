@@ -21,6 +21,7 @@ public class MainMenu extends Menu {
 
 	public final static int ID = 2;
 	public Image title;
+	int column = 100;
 
 	/*
 	 * Easter EGG
@@ -74,10 +75,10 @@ public class MainMenu extends Menu {
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		super.init(container, game);
-		
+
 		title = new Image("res/images/background/Title.png");
 		title.setFilter(Image.FILTER_NEAREST);
-		
+
 		/*
 		 * Easter EGG
 		 */
@@ -120,31 +121,34 @@ public class MainMenu extends Menu {
 
 		setHighlightWidth(8);
 		setHighlightScale(7);
-		addHighlightEntry(new Vector(50, 100 - 2), new OnHighlightSelectListener() {
+		addHighlightEntry(new Vector(column, 200 - 2),
+				new OnHighlightSelectListener() {
 
-			@Override
-			public void onSelect(StateBasedGame game) { 
-				game.enterState(Game.ID, new FadeOutTransition(Color.black),
-						new FadeInTransition(Color.black));
-			}
-		});
-		addHighlightEntry(new Vector(50, 125 - 2));
-		addHighlightEntry(new Vector(50, 150 - 2), new OnHighlightSelectListener() {
+					@Override
+					public void onSelect(StateBasedGame game) {
+						game.enterState(Game.ID, new FadeOutTransition(
+								Color.black), new FadeInTransition(Color.black));
+					}
+				});
+		addHighlightEntry(new Vector(column, 225 - 2));
+		addHighlightEntry(new Vector(column, 250 - 2),
+				new OnHighlightSelectListener() {
 
-			@Override
-			public void onSelect(StateBasedGame game) { 
-				game.enterState(Credits.ID, new FadeOutTransition(Color.black),
-						new FadeInTransition(Color.black));
-			}
-		});
-		addHighlightEntry(new Vector(50, 175 - 2), new OnHighlightSelectListener() {
+					@Override
+					public void onSelect(StateBasedGame game) {
+						game.enterState(Credits.ID, new FadeOutTransition(
+								Color.black), new FadeInTransition(Color.black));
+					}
+				});
+		addHighlightEntry(new Vector(column, 275 - 2),
+				new OnHighlightSelectListener() {
 
-			@Override
-			public void onSelect(StateBasedGame game) {
-				System.exit(0);
-			}
+					@Override
+					public void onSelect(StateBasedGame game) {
+						System.exit(0);
+					}
 
-		});
+				});
 	}
 
 	@Override
@@ -155,15 +159,15 @@ public class MainMenu extends Menu {
 
 		// int textWidth = this.game.fontHeader.getWidth("Main Menu");
 		// this.game.fontHeader.drawString(game.getContainer().getWidth() / 2
-		//		- textWidth / 2, 10, "Main Menu", Color.white);
+		// - textWidth / 2, 10, "Main Menu", Color.white);
 
 		title.draw(0, 0, 2);
-		
+
 		// g.setColor(Color.red);
-		this.game.fontDefault.drawString(50, 100, "Play Game");
-		this.game.fontDefault.drawString(50, 125, "High Scores");
-		this.game.fontDefault.drawString(50, 150, "Credits");
-		this.game.fontDefault.drawString(50, 175, "Quit");
+		this.game.fontDefault.drawString(column, 200, "Play Game");
+		this.game.fontDefault.drawString(column, 225, "High Scores");
+		this.game.fontDefault.drawString(column, 250, "Credits");
+		this.game.fontDefault.drawString(column, 275, "Quit");
 		/*
 		 * Easter EGG
 		 */
