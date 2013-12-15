@@ -22,11 +22,10 @@ import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Rect;
 
 public class GameLevel {
-    private final PlatformGame game;
-    private final GameContainer container;
+	private final PlatformGame game;
+	private final GameContainer container;
 	private final LinkedList<Entity> entities;
 	private final Input input;
-
 
 	Image img1, img2, img3;
 
@@ -34,17 +33,20 @@ public class GameLevel {
 	int screenResolution;
 
 	Vector2f position1, position2, position3;
-	
+
 	private TiledBackground background;
 
 	public GameLevel(PlatformGame game, Input input) throws SlickException {
-        this.game = game;
+		this.game = game;
 		this.container = game.getContainer();
 
 		this.input = input;
 		entities = new LinkedList<>();
 
-		Image backImg1 = new Image("res/background/tile.png");
+		Image backImg1 = new Image(
+				"res/images/background/BackgroundTileset.png").getSubImage(0,
+				0, 32, 32).getScaledCopy(2f);
+		backImg1.setFilter(Image.FILTER_NEAREST);
 		background = new TiledBackground(new Image[] { backImg1 }, new Vector(
 				backImg1.getWidth(), backImg1.getHeight()));
 		background.init(this);
@@ -68,17 +70,16 @@ public class GameLevel {
 	}
 
 	public final void update(int delta) {
-        this.onUpdate(delta);
-        Iterator<Entity> it = this.entities.iterator();
-        Entity e;
+		this.onUpdate(delta);
+		Iterator<Entity> it = this.entities.iterator();
+		Entity e;
 		while (it.hasNext()) {
-            e = it.next();
-            if (!e.isAlive())
-            {
-                it.remove();
-                e.onDeath();
-                continue;
-            }
+			e = it.next();
+			if (!e.isAlive()) {
+				it.remove();
+				e.onDeath();
+				continue;
+			}
 			e.update(delta);
 		}
 		this.detectCollisions();
@@ -88,7 +89,6 @@ public class GameLevel {
 
 	}
 
-
 	public final void render(Graphics g) {
 		this.onRender(g);
 		for (Entity entity : entities) {
@@ -97,30 +97,30 @@ public class GameLevel {
 	}
 
 	private void onRender(Graphics g) {
-//		if (position1.y > 0) {
-//			// oben platz
-//			position3.y = position1.y - img1Height;
-//		}
-//		if (position2.y > 0) {
-//			position1.y = position2.y - img2Height;
-//		}
-//		if (position3.y > 0) {
-//			position2.y = position3.y - img3Height;
-//		}
-//		g.drawImage(img1, position1.x, position1.y);
-//		g.drawImage(img2, position2.x, position2.y);
-//		g.drawImage(img3, position3.x, position3.y);
-//
-//		position1.y += 5;
-//		position2.y += 5;
-//		position3.y += 5;
+		// if (position1.y > 0) {
+		// // oben platz
+		// position3.y = position1.y - img1Height;
+		// }
+		// if (position2.y > 0) {
+		// position1.y = position2.y - img2Height;
+		// }
+		// if (position3.y > 0) {
+		// position2.y = position3.y - img3Height;
+		// }
+		// g.drawImage(img1, position1.x, position1.y);
+		// g.drawImage(img2, position2.x, position2.y);
+		// g.drawImage(img3, position3.x, position3.y);
+		//
+		// position1.y += 5;
+		// position2.y += 5;
+		// position3.y += 5;
 		Log.info("render background");
 		background.render(g);
 	}
 
-    public PlatformGame getGame() {
-        return this.game;
-    }
+	public PlatformGame getGame() {
+		return this.game;
+	}
 
 	public GameContainer getContainer() {
 		return container;
@@ -151,27 +151,22 @@ public class GameLevel {
 			}
 		}
 
-        for (Entity entity : this.entities)
-        {
-            Vector pos = entity.getPosition();
-            Vector size = entity.getSize();
-            if (pos.x < 0)
-            {
-                entity.onCollideWithBorder(Face.LEFT);
-            }
-            if (pos.y < 0)
-            {
-                entity.onCollideWithBorder(Face.TOP);
-            }
-            if (pos.x + size.x > getWidth())
-            {
-                entity.onCollideWithBorder(Face.RIGHT);
-            }
-            if (pos.y + size.y > getHeight())
-            {
-                entity.onCollideWithBorder(Face.BOTTOM);
-            }
-        }
+		for (Entity entity : this.entities) {
+			Vector pos = entity.getPosition();
+			Vector size = entity.getSize();
+			if (pos.x < 0) {
+				entity.onCollideWithBorder(Face.LEFT);
+			}
+			if (pos.y < 0) {
+				entity.onCollideWithBorder(Face.TOP);
+			}
+			if (pos.x + size.x > getWidth()) {
+				entity.onCollideWithBorder(Face.RIGHT);
+			}
+			if (pos.y + size.y > getHeight()) {
+				entity.onCollideWithBorder(Face.BOTTOM);
+			}
+		}
 	}
 
 	private Face checkCollision(Entity entityA, Entity entityB) {
