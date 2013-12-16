@@ -1,13 +1,7 @@
 package de.aima13.platform;
 
 import java.awt.Font;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
@@ -19,14 +13,14 @@ import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.EmptyTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.util.Log;
 import org.newdawn.slick.util.ResourceLoader;
 
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.CSVWriter;
+import de.aima13.platform.gui.Points;
 import de.aima13.platform.highscore.HighscoreManager;
 import de.aima13.platform.states.Credits;
+import de.aima13.platform.states.EnterHighscore;
 import de.aima13.platform.states.Game;
+import de.aima13.platform.states.Highscores;
 import de.aima13.platform.states.Loose;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.states.Pause;
@@ -49,9 +43,11 @@ public class PlatformGame extends StateBasedGame {
     public boolean             shaderColorActive;
     
     public Color               globalTextColor = Color.white;
+    public final Points        currentPoints;
     
     public PlatformGame() {
         super("#YOGO Platform");
+        currentPoints = new Points();
     }
     
     @Override
@@ -63,6 +59,8 @@ public class PlatformGame extends StateBasedGame {
         addState(new Game());
         addState(new Credits());
         addState(new Loose());
+        addState(new Highscores());
+        addState(new EnterHighscore());
         init();
     }
     
@@ -128,8 +126,9 @@ public class PlatformGame extends StateBasedGame {
         return level;
     }
     
-    public void lose() {
-        enterState(Loose.ID, new EmptyTransition(), new FadeInTransition(Color.black));
+    public void lose(Points points) {
+        currentPoints.setPoints(points.getPoints());
+        enterState(EnterHighscore.ID, new EmptyTransition(), new FadeInTransition(Color.black));
         try {
             ((Game) getState(Game.ID)).resetState();
         } catch (SlickException e) {

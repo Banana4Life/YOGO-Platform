@@ -192,7 +192,7 @@ public class Creature extends Entity {
     
     @Override
     public void onDeath() {
-        this.getLevel().getGame().lose();
+        this.getLevel().getGame().lose(this.points);
     }
     
     public boolean isInAir() {

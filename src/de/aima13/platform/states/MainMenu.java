@@ -119,7 +119,14 @@ public class MainMenu extends Menu {
                 game.enterState(Game.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         });
-        addHighlightEntry(new Vector(column, 225 - 2));
+        addHighlightEntry(new Vector(column, 225 - 2), new OnHighlightSelectListener() {
+            
+            @Override
+            public void onSelect(StateBasedGame game) {
+                game.enterState(Highscores.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
+        });
+        ;
         addHighlightEntry(new Vector(column, 250 - 2), new OnHighlightSelectListener() {
             
             @Override
