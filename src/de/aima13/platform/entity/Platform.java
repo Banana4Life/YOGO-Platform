@@ -89,7 +89,7 @@ public class Platform extends Entity {
         }
         
         GameLevel lvl = getLevel();
-        if (lvl.getInput().isKeyDown(Input.KEY_A)) {
+        if (lvl.getInput().isKeyDown(Input.KEY_SPACE)) {
             this.setActivated(true);
             setVelocity(Vector.ZERO);
             setAcceleration(Vector.ZERO);
