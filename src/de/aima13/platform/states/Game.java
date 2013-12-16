@@ -50,9 +50,9 @@ public class Game extends BasicGameState {
 
 
 		PowerBar powerBar = level.spawn(new PowerBar());
-        Points points = level.spawn(new Points());
 		CooldownBar cooldownBar = level.spawn(new CooldownBar());
-		platform = level.spawn(new Platform(powerBar, 10));
+        Points points = level.spawn(new Points());
+		platform = level.spawn(new Platform(powerBar, cooldownBar, 10));
 
 		Creature creature = level.spawn(new Creature(platform, points));
 

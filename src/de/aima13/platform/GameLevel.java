@@ -132,23 +132,6 @@ public class GameLevel {
 	}
 
 	private void onRender(Graphics g) {
-		// if (position1.y > 0) {
-		// // oben platz
-		// position3.y = position1.y - img1Height;
-		// }
-		// if (position2.y > 0) {
-		// position1.y = position2.y - img2Height;
-		// }
-		// if (position3.y > 0) {
-		// position2.y = position3.y - img3Height;
-		// }
-		// g.drawImage(img1, position1.x, position1.y);
-		// g.drawImage(img2, position2.x, position2.y);
-		// g.drawImage(img3, position3.x, position3.y);
-		//
-		// position1.y += 5;
-		// position2.y += 5;
-		// position3.y += 5;
 		background.render(g);
 	}
 
