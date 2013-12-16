@@ -43,7 +43,6 @@ public class Tile {
         if ((position.x + tileImage.getWidth()) < 0) {
             background.onLeaveWorld(this, Face.LEFT);
         }
-        
         if (position.x > background.getLevel().getWidth()) {
             background.onLeaveWorld(this, Face.RIGHT);
         }
