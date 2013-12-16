@@ -41,7 +41,6 @@ public class GameLevel {
         
         this.input = input;
         entities = new LinkedList<>();
-        
     }
     
     public void toggleCollisionsEnabled() {
@@ -105,7 +104,7 @@ public class GameLevel {
             
             e.preUpdate(delta);
             e.relativeMove(e.getVelocity());
-            e.setVelocity(e.getVelocity().add(e.getAcceleration().add(this.gravity.scale(e.getGravityScale()))));
+            e.accelerate(e.getAcceleration().add(this.gravity.scale(e.getGravityScale())));
             
             e.update(delta);
         }

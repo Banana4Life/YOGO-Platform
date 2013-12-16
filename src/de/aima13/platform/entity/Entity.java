@@ -133,4 +133,12 @@ public abstract class Entity {
     
     public void preUpdate(int delta) {
     }
+
+    public void accelerate(Vector v) {
+        setVelocity(getVelocity().add(v));
+    }
+
+    public void accelerate(float x, float y) {
+        accelerate(new Vector(x, y));
+    }
 }
