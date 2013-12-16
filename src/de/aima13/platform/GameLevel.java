@@ -95,6 +95,7 @@ public class GameLevel {
 				e.onDeath();
 				continue;
 			}
+            e.preUpdate(delta);
             e.relativeMove(e.getVelocity());
             e.setVelocity(e.getVelocity().add(e.getAcceleration().add(this.gravity.scale(e.getGravityScale()))));
 			e.update(delta);
