@@ -60,7 +60,7 @@ public class Help extends BasicGameState {
         this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 1), "Move you platform left and right");
         
         
-        this.game.fontDefault.drawString(getColPixel(), getRowPixel(keyboardRow +3), "\"A\":");
+        this.game.fontDefault.drawString(getColPixel(), getRowPixel(keyboardRow +3), "\"SPACE\":");
         this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 4), "Activate your platform. But remember:");
         this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 5), "it needs energy and has a cooldown time!");
         

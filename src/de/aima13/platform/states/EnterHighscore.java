@@ -16,29 +16,29 @@ import de.aima13.platform.highscore.Score;
 
 public class EnterHighscore extends BasicGameState {
     
-    public final static int  ID         = 7;
+    public final static int          ID           = 7;
     
-    private static final int MAX_LENGTH = 20;
-
-    private static final int CURSOR_BLINK = 15;
+    private static final int         MAX_LENGTH   = 20;
     
-    protected PlatformGame   game;
-    private ArrayList<Score> scores;
-    private String           enteredName;
-    private boolean          underscoreVisible;
-    private int              framesDelay;
+    private static final int         CURSOR_BLINK = 15;
+    
+    protected PlatformGame           game;
+    private ArrayList<Score>         scores;
+    private String                   enteredName;
+    private boolean                  underscoreVisible;
+    private int                      framesDelay;
     private TiledScrollingBackground background;
-
+    
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         if (game instanceof PlatformGame) {
             this.game = (PlatformGame) game;
         } else {
             throw new SlickException("StateBaseGame isn't a PlatformGame!");
         }
-
+        
         SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
         background = new TiledScrollingBackground(sheet, new Vector(0, 1));
-
+        
         background.init(this.game);
     }
     
@@ -79,6 +79,8 @@ public class EnterHighscore extends BasicGameState {
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(3), "Name:");
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(4), enteredName + (underscoreVisible ? "_" : ""));
         
+        this.game.fontDefault.drawString(getColPixel(), getRowPixel(6), "To abort, press ESC");
+        
     }
     
     @Override
@@ -108,6 +110,8 @@ public class EnterHighscore extends BasicGameState {
                     this.game.getHighscoreManager().addScore(enteredName, this.game.currentPoints.getPoints());
                     game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
                 }
+            case Input.KEY_ESCAPE:
+                game.enterState(MainMenu.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
                 break;
             default:
                 break;
