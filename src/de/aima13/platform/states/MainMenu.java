@@ -142,7 +142,7 @@ public class MainMenu extends Menu {
             }
             
         });
-        addHighlightEntry(new Vector(column, 275 - 2), new OnHighlightSelectListener() {
+        addHighlightEntry(new Vector(column, 300 - 2), new OnHighlightSelectListener() {
             
             @Override
             public void onSelect(StateBasedGame game) {
