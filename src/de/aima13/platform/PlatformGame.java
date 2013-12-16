@@ -1,14 +1,18 @@
 package de.aima13.platform;
 
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.KeyListener;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.state.StateBasedGame;
@@ -22,8 +26,11 @@ import de.aima13.platform.states.Game;
 import de.aima13.platform.states.Loose;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.states.Pause;
+import de.aima13.platform.util.CheatEngine;
 
 public class PlatformGame extends StateBasedGame {
+
+	public CheatEngine cheatEngine;
 
 	private AppGameContainer app;
 	/** The fonts to draw to the screen */
@@ -33,8 +40,15 @@ public class PlatformGame extends StateBasedGame {
 	private GameContainer container;
 	private GameLevel level;
 
+	public Image imageColorA, imageColorB;
+	public Animation shaderColor;
+	public boolean shaderColorActive;
+	
+	public Color globalTextColor = Color.white;
+
 	public PlatformGame() {
 		super("#YOGO Platform");
+
 	}
 
 	public void initStatesList(GameContainer container) throws SlickException {
@@ -47,6 +61,18 @@ public class PlatformGame extends StateBasedGame {
 		addState(new Credits());
 		addState(new Loose());
 		init();
+	}
+
+	public void init() throws SlickException {
+		fontDefault = loadFont("res/font/minecraft.ttf");
+		fontHeader = loadFont("res/font/minecraft.ttf", 54f);
+
+		imageColorA = new Image("res/images/shader/color-a.png");
+		imageColorB = new Image("res/images/shader/color-b.png");
+		shaderColor = new Animation(new Image[] { imageColorA, imageColorB },
+				25);
+		cheatEngine = new CheatEngine(this);
+		shaderColorActive = false;
 	}
 
 	public TrueTypeFont loadFont(String res) {
@@ -71,8 +97,7 @@ public class PlatformGame extends StateBasedGame {
 			InputStream inputStream = ResourceLoader.getResourceAsStream(res);
 
 			Font ttf = Font.createFont(Font.TRUETYPE_FONT, inputStream);
-			ttf = ttf.deriveFont(size); // set font size
-			ttf = ttf.deriveFont(style); // set font style
+			ttf = ttf.deriveFont(style, size);
 			return new TrueTypeFont(ttf, antiAlias);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,14 +105,10 @@ public class PlatformGame extends StateBasedGame {
 		return null;
 	}
 
-	public void init() throws SlickException {
-		fontDefault = loadFont("res/font/minecraft.ttf");
-		fontHeader = loadFont("res/font/minecraft.ttf", 54f);
-	}
-
 	public void keyPressed(int key, char c) {
+		super.keyPressed(key, c);
 		if (key == Input.KEY_ESCAPE) {
-			// System.exit(0);
+			// game.getContainer().exit();
 		}
 		if (key == Input.KEY_F1) {
 			if (app != null) {
@@ -99,6 +120,14 @@ public class PlatformGame extends StateBasedGame {
 					Log.error(e);
 				}
 			}
+		}
+	}
+
+	@Override
+	public void keyReleased(int key, char c) {
+		super.keyReleased(key, c);
+		if (getCurrentStateID() == MainMenu.ID) {
+			cheatEngine.onKeyPress(key, c);
 		}
 	}
 
@@ -124,16 +153,13 @@ public class PlatformGame extends StateBasedGame {
 		return level;
 	}
 
-    public void lose()
-    {
-        enterState(Loose.ID, new EmptyTransition(), new FadeInTransition(Color.black));
-        try
-        {
-            ((Game)getState(Game.ID)).resetState();
-        }
-        catch (SlickException e)
-        {
-            e.printStackTrace(System.err);
-        }
-    }
+	public void lose() {
+		enterState(Loose.ID, new EmptyTransition(), new FadeInTransition(
+				Color.black));
+		try {
+			((Game) getState(Game.ID)).resetState();
+		} catch (SlickException e) {
+			e.printStackTrace(System.err);
+		}
+	}
 }

@@ -7,6 +7,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -15,6 +16,7 @@ import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.entity.Motorcycle;
 import de.aima13.platform.gui.OnHighlightSelectListener;
+import de.aima13.platform.util.Cheat;
 import de.aima13.platform.util.Vector;
 
 public class MainMenu extends Menu {
@@ -22,7 +24,8 @@ public class MainMenu extends Menu {
 	public final static int ID = 2;
 	public Image title;
 	int column = 100;
-
+	protected Sound cheatSound;
+	
 	/*
 	 * Easter EGG
 	 */
@@ -44,6 +47,9 @@ public class MainMenu extends Menu {
 	/*
 	 * 
 	 */
+
+	private boolean cheatSwitch;
+	private int showCheatFrames;
 
 	public MainMenu() {
 		super(ID);
@@ -78,6 +84,8 @@ public class MainMenu extends Menu {
 
 		title = new Image("res/images/background/Title.png");
 		title.setFilter(Image.FILTER_NEAREST);
+		
+		cheatSound = new Sound("res/sound/cheat.wav");
 
 		/*
 		 * Easter EGG
@@ -145,7 +153,7 @@ public class MainMenu extends Menu {
 
 					@Override
 					public void onSelect(StateBasedGame game) {
-						System.exit(0);
+						game.getContainer().exit();
 					}
 
 				});
@@ -163,11 +171,10 @@ public class MainMenu extends Menu {
 
 		title.draw(0, 0, 2);
 
-		// g.setColor(Color.red);
-		this.game.fontDefault.drawString(column, 200, "Play Game");
-		this.game.fontDefault.drawString(column, 225, "High Scores");
-		this.game.fontDefault.drawString(column, 250, "Credits");
-		this.game.fontDefault.drawString(column, 275, "Quit");
+		this.game.fontDefault.drawString(column, 200, "Play Game", this.game.globalTextColor);
+		this.game.fontDefault.drawString(column, 225, "High Scores", this.game.globalTextColor);
+		this.game.fontDefault.drawString(column, 250, "Credits", this.game.globalTextColor);
+		this.game.fontDefault.drawString(column, 275, "Quit", this.game.globalTextColor);
 		/*
 		 * Easter EGG
 		 */
@@ -189,6 +196,13 @@ public class MainMenu extends Menu {
 		/*
 		 * 
 		 */
+		if (showCheatFrames > 0) {
+			String cheat = "Cheat " + (cheatSwitch ? "" : "de") + "activated!";
+			this.game.fontDefault.drawString(5, this.game.getContainer()
+					.getHeight() - this.game.fontDefault.getHeight(cheat) - 5,
+					cheat, this.game.globalTextColor);
+			showCheatFrames--;
+		}
 	}
 
 	@Override
@@ -223,7 +237,7 @@ public class MainMenu extends Menu {
 			// TODO: Implement later
 			break;
 		case Input.KEY_3:
-			System.exit(0);
+			game.getContainer().exit();
 			break;
 		/*
 		 * Easter EGG
@@ -243,6 +257,12 @@ public class MainMenu extends Menu {
 		default:
 			break;
 		}
+	}
+
+	public void showCheatActivated(boolean switched) {
+		cheatSwitch = switched;
+		showCheatFrames = 120;
+		cheatSound.play();
 	}
 
 }

@@ -94,7 +94,7 @@ public class Loose extends Menu {
 			// TODO: Implement later
 			break;
 		case Input.KEY_3:
-			System.exit(0);
+			game.getContainer().exit();
 			break;
 		default:
 			break;

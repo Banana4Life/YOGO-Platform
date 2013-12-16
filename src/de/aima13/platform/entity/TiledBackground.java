@@ -76,7 +76,7 @@ public class TiledBackground extends GuiEntity {
 	}
 
 	public void onLeaveWorld(Tile tile) {
-		 Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
+//		 Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
 		tile.moveTo(new Vector(tile.getPosition().x, -imageSize.y));
 		tile.setImage(false);
 	}

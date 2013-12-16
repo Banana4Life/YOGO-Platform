@@ -44,7 +44,7 @@ public class Game extends BasicGameState {
 	public void resetState() throws SlickException {
 		this.level = game.getLevel();
 		level.reset();
-		
+
 		Powerbar powerbar = level.spawn(new Powerbar());
 		platform = level.spawn(new Platform(powerbar, 10));
 
@@ -58,6 +58,10 @@ public class Game extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics g)
 			throws SlickException {
 		this.level.render(g);
+		if (this.game.shaderColorActive) {
+			this.game.shaderColor.draw(0, 0, this.game.getContainer()
+					.getWidth(), this.game.getContainer().getHeight());
+		}
 	}
 
 	@Override

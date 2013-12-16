@@ -27,25 +27,27 @@ public class Pause extends Menu {
 		super.init(container, game);
 		setHighlightWidth(10);
 		setHighlightScale(7);
-		addHighlightEntry(new Vector(50, 100 - 2), new OnHighlightSelectListener() {
+		addHighlightEntry(new Vector(50, 100 - 2),
+				new OnHighlightSelectListener() {
 
-			@Override
-			public void onSelect(StateBasedGame game) {
-				game.enterState(Game.ID, new FadeOutTransition(Color.black),
-						new FadeInTransition(Color.black));
-			}
-		});
-		addHighlightEntry(new Vector(50, 125 - 2), new OnHighlightSelectListener() {
+					@Override
+					public void onSelect(StateBasedGame game) {
+						game.enterState(Game.ID, new FadeOutTransition(
+								Color.black), new FadeInTransition(Color.black));
+					}
+				});
+		addHighlightEntry(new Vector(50, 125 - 2),
+				new OnHighlightSelectListener() {
 
-			@Override
-			public void onSelect(StateBasedGame game) throws SlickException {
-				((Game) game.getState(Game.ID)).resetState();
-				game.enterState(MainMenu.ID,
-						new FadeOutTransition(Color.black),
-						new FadeInTransition(Color.black));
-			}
+					@Override
+					public void onSelect(StateBasedGame game)
+							throws SlickException {
+						((Game) game.getState(Game.ID)).resetState();
+						game.enterState(MainMenu.ID, new FadeOutTransition(
+								Color.black), new FadeInTransition(Color.black));
+					}
 
-		});
+				});
 	}
 
 	@Override
@@ -56,11 +58,11 @@ public class Pause extends Menu {
 
 		int textWidth = this.game.fontHeader.getWidth("Pause Menu");
 		this.game.fontHeader.drawString(game.getContainer().getWidth() / 2
-				- textWidth / 2, 10, "Pause Menu", Color.white);
+				- textWidth / 2, 10, "Pause Menu", this.game.globalTextColor);
 
 		// g.setColor(Color.red);
-		this.game.fontDefault.drawString(50, 100, "Resume Game");
-		this.game.fontDefault.drawString(50, 125, "Exit to Main Menu");
+		this.game.fontDefault.drawString(50, 100, "Resume Game", this.game.globalTextColor);
+		this.game.fontDefault.drawString(50, 125, "Exit to Main Menu", this.game.globalTextColor);
 
 	}
 
@@ -77,12 +79,6 @@ public class Pause extends Menu {
 		case Input.KEY_ESCAPE:
 			game.enterState(Game.ID, new FadeOutTransition(Color.black),
 					new FadeInTransition(Color.black));
-			break;
-		case Input.KEY_2:
-			// TODO: Implement later
-			break;
-		case Input.KEY_3:
-			System.exit(0);
 			break;
 		default:
 			break;

@@ -6,10 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import de.aima13.platform.util.Box;
-import de.aima13.platform.util.Face;
-import de.aima13.platform.util.Vector;
-
+import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -21,15 +18,18 @@ import org.newdawn.slick.SpriteSheet;
 import de.aima13.platform.entity.Entity;
 import de.aima13.platform.entity.TiledBackground;
 import de.aima13.platform.entity.TiledScrollingBackground;
+import de.aima13.platform.util.Box;
+import de.aima13.platform.util.Face;
+import de.aima13.platform.util.Vector;
 
 public class GameLevel {
-    private static final Vector G = new Vector(0, 9.81f).scale(.01f);
+	private static final Vector G = new Vector(0, 9.81f).scale(.01f);
 
 	private final PlatformGame game;
 	private final GameContainer container;
 	private final LinkedList<Entity> entities;
 	private final Input input;
-    private Vector gravity;
+	private Vector gravity;
 
 	private TiledBackground background;
 	private Sound plasmaSound, jumpSound;
@@ -46,7 +46,8 @@ public class GameLevel {
 	}
 
 	public void init() throws SlickException {
-		SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
+		SpriteSheet sheet = new SpriteSheet(
+				"res/images/background/BackgroundTileset.png", 32, 32);
 		Image img = new Image("res/images/background/BackgroundTileset.png")
 				.getSubImage(0, 0, 32, 32).getScaledCopy(2f);
 		img.setFilter(Image.FILTER_NEAREST);
@@ -57,7 +58,7 @@ public class GameLevel {
 
 		plasmaSound = new Sound("res/sound/plasma.wav");
 		jumpSound = new Sound("res/sound/plasma.wav");
-        this.gravity = G;
+		this.gravity = G;
 	}
 
 	public <T extends Entity> T spawn(T e) {
@@ -65,26 +66,21 @@ public class GameLevel {
 		return e;
 	}
 
-    public Vector getGravity()
-    {
-        return gravity;
-    }
+	public Vector getGravity() {
+		return gravity;
+	}
 
-    public void setGravity(Vector gravity)
-    {
-        this.gravity = gravity;
-    }
+	public void setGravity(Vector gravity) {
+		this.gravity = gravity;
+	}
 
-    protected void addEntity(Entity entity) {
-        try
-        {
-            entity.init(game);
-            this.entities.addLast(entity);
-        }
-        catch (SlickException e)
-        {
-            e.printStackTrace(System.err);
-        }
+	protected void addEntity(Entity entity) {
+		try {
+			entity.init(game);
+			this.entities.addLast(entity);
+		} catch (SlickException e) {
+			e.printStackTrace(System.err);
+		}
 	}
 
 	public void reset() {
@@ -100,8 +96,10 @@ public class GameLevel {
 				e.onDeath();
 				continue;
 			}
-            e.relativeMove(e.getVelocity());
-            e.setVelocity(e.getVelocity().add(e.getAcceleration().add(this.gravity.scale(e.getGravityScale()))));
+			e.relativeMove(e.getVelocity());
+			e.setVelocity(e.getVelocity().add(
+					e.getAcceleration().add(
+							this.gravity.scale(e.getGravityScale()))));
 			e.update(delta);
 		}
 
@@ -110,10 +108,9 @@ public class GameLevel {
 		this.detectCollisions();
 	}
 
-    private boolean outOfRange(Entity e)
-    {
-        return (e.getPosition().y > getHeight() * 2 || e.getPosition().x > getWidth() * 2);
-    }
+	private boolean outOfRange(Entity e) {
+		return (e.getPosition().y > getHeight() * 2 || e.getPosition().x > getWidth() * 2);
+	}
 
 	public void onUpdate(int delta) {
 
@@ -198,11 +195,10 @@ public class GameLevel {
 
 		for (Entity entity : this.entities) {
 			Box bb = entity.getAbsBB();
-            if (bb == null)
-            {
-                continue;
-            }
-            Vector b = bb.getBase();
+			if (bb == null) {
+				continue;
+			}
+			Vector b = bb.getBase();
 			if (b.x < 0) {
 				entity.onCollideWithBorder(Face.LEFT);
 			}
@@ -222,10 +218,9 @@ public class GameLevel {
 		Box a = entityA.getAbsBB();
 		Box b = entityB.getAbsBB();
 
-        if (a == null || b == null)
-        {
-            return null;
-        }
+		if (a == null || b == null) {
+			return null;
+		}
 
 		Face collFace = b.intersects(a);
 		if (collFace != null) {
