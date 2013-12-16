@@ -10,11 +10,11 @@ import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
 public class BatterySpawner extends Entity {
-    private static final long DELAY       = (long)(1000 * .8);
-
+    private static final long DELAY       = (long) (1000 * .8);
+    
     private long              lastSpawned = 0;
     private Random            random      = new Random();
-
+    
     @Override
     public void onInit() {
         move(1, -10);
@@ -22,22 +22,25 @@ public class BatterySpawner extends Entity {
         this.setBB(new Box(40, 1));
         this.setVelocity(new Vector(3, 0));
     }
-
+    
     @Override
     public void update(int delta) {
         long current = System.currentTimeMillis();
         if (current - lastSpawned > DELAY) {
             lastSpawned = current;
-            getLevel().spawn(new Battery(random.nextFloat() * .3f - .1f)).move(getPosition().add(getBB().getWidth() / 2, 0));
+            int rand = random.nextInt(10);
+            if (rand % 3 == 0) {
+                getLevel().spawn(new Battery(random.nextFloat() * .3f - .1f)).move(getPosition().add(getBB().getWidth() / 2, 0));
+            }
         }
     }
-
+    
     @Override
     public void render(Graphics g) {
         g.setColor(Color.yellow);
         g.fillRect(getPosition().x - 10, getPosition().y - 10, 20, 20);
     }
-
+    
     @Override
     public void onCollideWithBorder(Face collidedFace) {
         switch (collidedFace) {

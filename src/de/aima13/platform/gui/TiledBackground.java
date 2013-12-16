@@ -7,6 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 
 import de.aima13.platform.entity.Tile;
+import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
 public class TiledBackground extends GuiEntity {
@@ -57,10 +58,18 @@ public class TiledBackground extends GuiEntity {
         }
     }
     
-    public void onLeaveWorld(Tile tile) {
-        
+    public void onLeaveWorld(Tile tile, Face face) {
         // Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
-        tile.moveTo(new Vector(tile.getPosition().x, -imageSize.y));
+        switch (face) {
+            case BOTTOM:
+                // left window bottom
+                tile.moveTo(new Vector(tile.getPosition().x, -imageSize.y));
+                break;
+            case TOP:
+                // left winodow top
+                tile.moveTo(new Vector(tile.getPosition().x, getLevel().getHeight()));
+                break;
+        }
         tile.setImage(false);
     }
     

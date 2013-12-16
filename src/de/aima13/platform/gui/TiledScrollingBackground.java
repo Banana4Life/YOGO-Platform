@@ -14,6 +14,10 @@ public class TiledScrollingBackground extends TiledBackground {
         this.velocity = velocity;
     }
     
+    public void setVelocity(Vector v) {
+        this.velocity = v;
+    }
+    
     public void onInit() {
         super.onInit();
     }

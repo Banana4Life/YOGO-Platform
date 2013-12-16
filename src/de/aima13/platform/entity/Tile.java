@@ -6,6 +6,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
 import de.aima13.platform.gui.TiledBackground;
+import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
 public class Tile {
@@ -39,8 +40,18 @@ public class Tile {
     
     public void move(float x, float y) {
         position = position.add(x, y);
-        if (((position.x + tileImage.getWidth()) < 0) || (position.x > background.getLevel().getWidth()) || (position.y + tileImage.getHeight() < 0) || (position.y > background.getLevel().getHeight())) {
-            background.onLeaveWorld(this);
+        if ((position.x + tileImage.getWidth()) < 0) {
+            background.onLeaveWorld(this, Face.LEFT);
+        }
+        
+        if (position.x > background.getLevel().getWidth()) {
+            background.onLeaveWorld(this, Face.RIGHT);
+        }
+        if (position.y + tileImage.getHeight() < 0) {
+            background.onLeaveWorld(this, Face.TOP);
+        }
+        if (position.y > background.getLevel().getHeight()) {
+            background.onLeaveWorld(this, Face.BOTTOM);
         }
     }
     

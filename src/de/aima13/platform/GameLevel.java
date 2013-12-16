@@ -31,7 +31,7 @@ public class GameLevel {
     private Vector                   gravity;
     private boolean                  collisionsEnabled;
     
-    private TiledBackground          background;
+    private TiledScrollingBackground background;
     private Sound                    plasmaSound, jumpSound;
     
     public GameLevel(PlatformGame game, Input input) throws SlickException {
@@ -58,12 +58,16 @@ public class GameLevel {
     public void init() throws SlickException {
         SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
         
-        background = new TiledScrollingBackground(sheet, new Vector(0, 1));
+        background = new TiledScrollingBackground(sheet, new Vector(0, 0));
         background.init(game);
         
         plasmaSound = new Sound("res/sound/plasma.wav");
         jumpSound = new Sound("res/sound/jump.wav");
         this.gravity = G;
+    }
+    
+    public void setBackgroundVelocity(Vector v) {
+        this.background.setVelocity(v);
     }
     
     public <T extends Entity> T spawn(T e) {
@@ -119,7 +123,7 @@ public class GameLevel {
     }
     
     public void onUpdate(int delta) {
-        
+        background.update(delta);
     }
     
     public final void render(Graphics g) {

@@ -16,43 +16,43 @@ public class Creature extends Entity {
     private static final float IMAGE_SCALE           = 4;
     private final Platform     platform;
     private final Points       points;
-
+    
     protected SpriteSheet      charSprite;
     protected Animation        jumpingAnimation;
     protected int              currentJumpingYOffset = 0;
     protected int[]            jumpingYOffset        = { 3, 5, 6, 5, 3 };
     protected Animation        beltAnimation;
-
+    
     protected boolean          inAir;
     protected boolean          prevFallingDown;
     private boolean            lost;
-
+    
     public Creature(Platform platform, Points points) {
         this.platform = platform;
         this.points = points;
         this.lost = false;
     }
-
+    
     @Override
     public void onInit() throws SlickException {
         // setGravityScale(0);
-
+        
         move(100, 20);
-
+        
         float width = 16 * IMAGE_SCALE / 2;
         float height = 32 * IMAGE_SCALE;
-
+        
         this.setBB(new Box(new Vector(width / 2, 0), new Vector(width, height)));
-
+        
         this.charSprite = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
         this.charSprite.setFilter(Image.FILTER_NEAREST);
         this.beltAnimation = new Animation(new SpriteSheet("res/images/character/Belt.png", 4, 1), 100);
         this.jumpingAnimation = new Animation(this.charSprite, 0, 3, 5, 3, true, 30, false);
         jumpingAnimation.stop();
-
+        
         this.inAir = this.prevFallingDown = true;
     }
-
+    
     @Override
     public void preUpdate(int delta) {
         if (getPosition().y + getBB().getHeight() > platform.getPosition().y) {
@@ -60,30 +60,31 @@ public class Creature extends Entity {
             this.lost = true;
         }
     }
-
+    
     @Override
     public void update(int delta) {
         this.jumpingAnimation.update(delta);
         this.beltAnimation.update(delta);
-
+        
         if (mayTurn()) {
             setVelocity(getVelocity().scale(-1, 1));
         }
-
+        
         if (this.inAir) {
             this.prevFallingDown = (getVelocity().y > 0);
+            this.platform.getLevel().setBackgroundVelocity(getVelocity());
         }
-
+        
         if (this.jumpingAnimation.getFrame() == this.jumpingAnimation.getFrameCount() - 1) {
             this.inAir = true;
             this.jumpingAnimation.stop();
             this.jumpingAnimation.setCurrentFrame(0);
             this.currentJumpingYOffset = 0;
-
+            
             setVelocity(new Vector(0, -5f));
         }
     }
-
+    
     public boolean isAbovePlatform() {
         Box bb = getAbsBB();
         Box platformBb = platform.getAbsBB();
@@ -92,31 +93,32 @@ public class Creature extends Entity {
         }
         return false;
     }
-
+    
     public boolean isRising() {
         return getVelocity().y < 0;
     }
-
+    
     public boolean mayTurn() {
         if (isAbovePlatform() && isRising()) {
             return Math.abs(this.platform.getPosition().y - this.getPosition().y) > 100;
         }
         return false;
     }
-
+    
     public void onJump() {
         getLevel().getJumpSound().play();
         setVelocity(new Vector(0, -30));
         this.points.addPoints(500);
+        
     }
-
+    
     @Override
     public void render(Graphics g) {
         super.render(g);
-
+        
         Vector pos = getPosition();
         Vector v = getVelocity();
-
+        
         if (v.y >= 0 && isInAir()) {
             if (!prevFallingDown) {
                 charSprite.getSprite(0, 2).draw(pos.x, pos.y, IMAGE_SCALE);
@@ -131,32 +133,31 @@ public class Creature extends Entity {
         }
         this.beltAnimation.getCurrentFrame().draw(pos.x + 6 * IMAGE_SCALE, pos.y + this.currentJumpingYOffset * IMAGE_SCALE + 15 * IMAGE_SCALE, IMAGE_SCALE);
     }
-
+    
     @Override
     public void onCollide(Entity target, Face collidedFace) {
-        if (target instanceof Platform && ((Platform)target).isActive() && !isLost())
-        {
+        if (target instanceof Platform && ((Platform) target).isActive() && !isLost()) {
             move(getPosition().x, target.getPosition().y - this.getBB().getHeight() - 1);
             setVelocity(Vector.ZERO);
-
+            
             this.inAir = false;
             this.jumpingAnimation.start();
             this.onJump();
         }
     }
-
+    
     @Override
     public void onCollideWithBorder(Face collidedFace) {
         if (collidedFace != Face.BOTTOM) {
             return;
         }
-
+        
         float x = getPosition().x;
         float y = getPosition().y;
-
+        
         float vX = getVelocity().x;
         float vY = getVelocity().y;
-
+        
         switch (collidedFace) {
             case TOP:
                 y = 0;
@@ -175,22 +176,21 @@ public class Creature extends Entity {
                 vX *= -1;
                 break;
         }
-
+        
         move(x, y);
         setVelocity(new Vector(vX, vY));
     }
-
+    
     @Override
     public void onDeath() {
         this.getLevel().getGame().lose();
     }
-
+    
     public boolean isInAir() {
         return inAir;
     }
-
-    public boolean isLost()
-    {
+    
+    public boolean isLost() {
         return lost;
     }
 }
