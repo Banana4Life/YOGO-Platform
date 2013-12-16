@@ -24,9 +24,11 @@ public class Creature extends Entity {
 
 	protected boolean inAir;
 	protected boolean prevFallingDown;
+    private boolean lost;
 
-	public Creature(Platform platform) {
+    public Creature(Platform platform) {
 		this.platform = platform;
+        this.lost = false;
 	}
 
 	@Override
@@ -49,7 +51,17 @@ public class Creature extends Entity {
 		this.inAir = this.prevFallingDown = true;
 	}
 
-	@Override
+    @Override
+    public void preUpdate(int delta)
+    {
+        if (getPosition().y + getBB().getHeight() > platform.getPosition().y)
+        {
+            setVelocity(getVelocity().scale(0, 1));
+            this.lost = true;
+        }
+    }
+
+    @Override
 	public void update(int delta) {
 		this.jumpingAnimation.update(delta);
 		this.beltAnimation.update(delta);
@@ -70,10 +82,6 @@ public class Creature extends Entity {
 
             setVelocity(new Vector(0, -5f));
 		}
-
-		if (getPosition().y + getBB().getHeight() > platform.getPosition().y) {
-			setVelocity(getVelocity().scale(0, 1));
-        }
 	}
 
 	public boolean isAbovePlatform() {
@@ -108,7 +116,6 @@ public class Creature extends Entity {
 
         Vector pos = getPosition();
         Vector v = getVelocity();
-        drawBB(g, Color.cyan);
 
         if (v.y >= 0 && isInAir())
         {
@@ -135,7 +142,7 @@ public class Creature extends Entity {
 
 	@Override
 	public void onCollide(Entity target, Face collidedFace) {
-		if (target instanceof Platform && ((Platform) target).isActive()) {
+		if (target instanceof Platform && ((Platform) target).isActive() && !this.lost) {
 			move(getPosition().x, target.getPosition().y - this.getBB().getHeight() - 1);
 			setVelocity(Vector.ZERO);
 

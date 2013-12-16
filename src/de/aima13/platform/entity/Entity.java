@@ -145,4 +145,7 @@ public abstract class Entity {
         g.drawRect(b.getBase().x, b.getBase().y, b.getWidth(), b.getHeight());
         g.fillRect(b.getBase().x, b.getBase().y, b.getWidth(), b.getHeight());
     }
+
+    public void preUpdate(int delta)
+    {}
 }
