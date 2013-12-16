@@ -32,7 +32,7 @@ public class GameLevel {
     private boolean                  collisionsEnabled;
     
     private TiledScrollingBackground background;
-    private Sound                    plasmaSound, jumpSound;
+    private Sound                    plasmaSound, jumpSound, deathSound;
     
     public GameLevel(PlatformGame game, Input input) throws SlickException {
         this.game = game;
@@ -63,6 +63,8 @@ public class GameLevel {
         
         plasmaSound = new Sound("res/sound/plasma.wav");
         jumpSound = new Sound("res/sound/jump.wav");
+        deathSound = new Sound("res/sound/death.wav");
+        
         this.gravity = G;
     }
     
@@ -163,6 +165,10 @@ public class GameLevel {
     
     public Sound getJumpSound() {
         return jumpSound;
+    }
+    
+    public Sound getDeathSound() {
+        return deathSound;
     }
     
     private void detectCollisions() {

@@ -126,6 +126,7 @@ public class PlatformGame extends StateBasedGame {
     }
     
     public void lose(Points points) {
+        getLevel().getDeathSound().play();
         currentPoints.setPoints(points.getPoints());
         enterState(EnterHighscore.ID, new EmptyTransition(), new FadeInTransition(Color.black));
         try {
