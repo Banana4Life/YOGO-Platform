@@ -26,11 +26,13 @@ public class Creature extends Entity {
     protected boolean          inAir;
     protected boolean          prevFallingDown;
     private boolean            lost;
-    
+    private boolean            turned;
+
     public Creature(Platform platform, Points points) {
         this.platform = platform;
         this.points = points;
         this.lost = false;
+        this.turned = false;
     }
     
     @Override
@@ -66,6 +68,19 @@ public class Creature extends Entity {
         this.jumpingAnimation.update(delta);
         this.beltAnimation.update(delta);
         
+        if (isRising())
+        {
+            if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > 0)
+            {
+                turned = true;
+                //accelerate(50, 0);
+            }
+        }
+        else
+        {
+            this.turned = false;
+        }
+
         if (mayTurn()) {
             setVelocity(getVelocity().scale(-1, 1));
         }
@@ -80,8 +95,8 @@ public class Creature extends Entity {
             this.jumpingAnimation.stop();
             this.jumpingAnimation.setCurrentFrame(0);
             this.currentJumpingYOffset = 0;
-            
-            setVelocity(new Vector(0, -5f));
+
+            accelerate(0, -9.5f);
         }
     }
     
@@ -107,7 +122,6 @@ public class Creature extends Entity {
     
     public void onJump() {
         getLevel().getJumpSound().play();
-        setVelocity(new Vector(0, -30));
         this.points.addPoints(500);
         
     }
