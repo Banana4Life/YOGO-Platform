@@ -42,7 +42,7 @@ public class Creature extends Entity {
         // setGravityScale(0);
         
         move(100, 20);
-        accelerate(5, 0);
+        accelerate(2.5f, 0);
         
         float width = 16 * IMAGE_SCALE / 2;
         float height = 32 * IMAGE_SCALE;
