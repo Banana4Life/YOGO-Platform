@@ -131,8 +131,16 @@ public class MainMenu extends Menu {
             
             @Override
             public void onSelect(StateBasedGame game) {
+                game.enterState(Help.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
+            }
+        });
+        addHighlightEntry(new Vector(column, 275 - 2), new OnHighlightSelectListener() {
+            
+            @Override
+            public void onSelect(StateBasedGame game) {
                 game.enterState(Credits.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
+            
         });
         addHighlightEntry(new Vector(column, 275 - 2), new OnHighlightSelectListener() {
             
@@ -157,8 +165,9 @@ public class MainMenu extends Menu {
         
         this.game.fontDefault.drawString(column, 200, "Play Game", this.game.globalTextColor);
         this.game.fontDefault.drawString(column, 225, "High Scores", this.game.globalTextColor);
-        this.game.fontDefault.drawString(column, 250, "Credits", this.game.globalTextColor);
-        this.game.fontDefault.drawString(column, 275, "Quit", this.game.globalTextColor);
+        this.game.fontDefault.drawString(column, 250, "Help", this.game.globalTextColor);
+        this.game.fontDefault.drawString(column, 275, "Credits", this.game.globalTextColor);
+        this.game.fontDefault.drawString(column, 300, "Quit", this.game.globalTextColor);
         /*
          * Easter EGG
          */

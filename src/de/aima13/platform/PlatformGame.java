@@ -19,6 +19,7 @@ import de.aima13.platform.highscore.HighscoreManager;
 import de.aima13.platform.states.Credits;
 import de.aima13.platform.states.EnterHighscore;
 import de.aima13.platform.states.Game;
+import de.aima13.platform.states.Help;
 import de.aima13.platform.states.Highscores;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.states.Pause;
@@ -58,6 +59,7 @@ public class PlatformGame extends StateBasedGame {
         addState(new Credits());
         addState(new Highscores());
         addState(new EnterHighscore());
+        addState(new Help());
         init();
     }
     
