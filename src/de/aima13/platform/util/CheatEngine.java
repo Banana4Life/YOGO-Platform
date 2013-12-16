@@ -18,25 +18,14 @@ public class CheatEngine {
     private ArrayList<Cheat>       activatedCheats;
     
     private String                 currentCheat;
-    public Cheat                   lastCheat;
     
     public CheatEngine(PlatformGame game) {
         this.game = game;
         cheatList = new HashMap<String, Cheat>();
         activatedCheats = new ArrayList<Cheat>();
-        addCheat(new Cheat("a", new CheatAction() {
-            public void onCheat(PlatformGame game) {
-                System.exit(0);
-            }
-        }));
-        addCheat(new Cheat("steffen", new CheatAction() {
-            public void onCheat(PlatformGame game) {
-                game.shaderColorActive = !game.shaderColorActive;
-            }
-        }));
         addCheat(new Cheat("malte", new CheatAction() {
             public void onCheat(PlatformGame game) {
-                // Go bikes, go!!!
+                game.shaderColorActive = !game.shaderColorActive;
             }
         }));
         addCheat(new Cheat("jonas", new CheatAction() {
@@ -46,7 +35,7 @@ public class CheatEngine {
         }));
         addCheat(new Cheat("phillip", new CheatAction() {
             public void onCheat(PlatformGame game) {
-                // kollision deaktivieren
+                // disable collisions
                 game.getLevel().toggleCollisionsEnabled();
             }
         }));

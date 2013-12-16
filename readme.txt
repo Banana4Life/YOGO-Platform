@@ -17,26 +17,26 @@ Where we failed:
 - We made no plan
 - The code is total crap and patched-up like hell :) 
 
-For our first time in Ludum Dare we were pretty successful, since we finsihed a game and we are confident, that we do better next time. :)
+For our first time in Ludum Dare we were pretty successful, since we finished a game and we are confident, that we do better next time. :)
 
 Controls:
-- left arrowkey : move left
-- right arrowkey: move right
+- left arrow key : move left
+- right arrow key: move right
 - space         : activate platform 
 
 Description:
 #YOGO Platform is about a platform(you) that tries to save the last robot out of a burning factory building, 
 that is constantly trying to jump in the fire below your platform.
-To fullfill this quest you can activate your platform by pressing "SPACE". But watch your powerbar, so you do not run out of power.
-Collect the falling yellow batterys to fill your powerbar and avoid the falling white batterys, that take power from your powerbar.
+To fulfill this quest you can activate your platform by pressing "SPACE". But watch your power bar, so you do not run out of power.
+Collect the falling yellow batteries to fill your power bar and avoid the falling white batteries, that take power from your power bar.
 
 Programming Language: Java
 Graphics Engine: Slick2D
 
 Programmers:
-Malte Heinzelmann
-Phillip Schichtel
-Jonas Dann
+Malte Heinzelmann (GUI)
+Phillip Schichtel (Movement & Collisions)
+Jonas Dann (Animations)
 
 Artist:
 Jonas Dann
@@ -45,7 +45,7 @@ Sounds:
 Malte Heinzelmann
 
 Cheat codes:
-Type the cheatcode and the press "end" on your keyboard
+Type the cheat code and then press "end" on your keyboard
 - "phillip" : to turn off the collisions (insider joke)
 - "jonas"   : to make some of the fonts black (insider joke)
 - "malte"   : make the game a bit harder ;)
