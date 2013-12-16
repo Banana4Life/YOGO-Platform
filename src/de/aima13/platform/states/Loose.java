@@ -73,13 +73,8 @@ public class Loose extends Menu {
         super.keyReleased(key, c);
         switch (key) {
             case Input.KEY_ESCAPE:
-                game.enterState(Game.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
-                break;
-            case Input.KEY_2:
-                // TODO: Implement later
-                break;
-            case Input.KEY_3:
-                game.getContainer().exit();
+                // game.enterState(Game.ID, new FadeOutTransition(Color.black),
+                // new FadeInTransition(Color.black));
                 break;
             default:
                 break;

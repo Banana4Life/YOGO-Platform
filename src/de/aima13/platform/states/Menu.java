@@ -86,6 +86,7 @@ public class Menu extends BasicGameState {
         highlightActive = false;
         waitForExec = false;
         waitedFramesCount = 0;
+        selectedEntry = (highlightEntries.size() > 0) ? 0 : -1;
     }
     
     public void setHighlightWidth(int width) {

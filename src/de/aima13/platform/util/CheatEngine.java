@@ -57,6 +57,7 @@ public class CheatEngine {
             @Override
             public void onCheat(PlatformGame game) {
                 // kollision deaktivieren
+                game.getLevel().toggleCollisionsEnabled();
             }
         }));
         currentCheat = "";

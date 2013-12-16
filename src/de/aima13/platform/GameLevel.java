@@ -44,6 +44,10 @@ public class GameLevel {
         
     }
     
+    public void toggleCollisionsEnabled() {
+        this.collisionsEnabled = !this.collisionsEnabled;
+    }
+    
     public void setCollisionsEnabled(boolean state) {
         this.collisionsEnabled = state;
     }

@@ -202,17 +202,9 @@ public class MainMenu extends Menu {
     public void keyReleased(int key, char c) {
         super.keyReleased(key, c);
         switch (key) {
-            case Input.KEY_1:
-                break;
-            case Input.KEY_2:
-                // TODO: Implement later
-                break;
-            case Input.KEY_3:
-                game.getContainer().exit();
-                break;
-            /*
-             * Easter EGG
-             */
+        /*
+         * Easter EGG
+         */
             case Input.KEY_F12:
                 // Easter EGG! :D
                 if (bikeDriving) {

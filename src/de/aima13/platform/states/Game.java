@@ -21,18 +21,20 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import de.aima13.platform.GameLevel;
 import de.aima13.platform.PlatformGame;
 import de.aima13.platform.entity.Creature;
+import de.aima13.platform.entity.KillingFire;
 import de.aima13.platform.entity.Platform;
 import de.aima13.platform.util.Vector;
 
 public class Game extends BasicGameState {
 
     public final static int ID = 1;
-    private PlatformGame    game;     // stored for later use
+    private PlatformGame    game;       // stored for later use
     private GameContainer   container;
     private GameLevel       level;
 
     private Platform        platform;
-
+    private KillingFire     killingFire;
+    
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         if (game instanceof PlatformGame) {
             this.game = (PlatformGame) game;
@@ -51,7 +53,8 @@ public class Game extends BasicGameState {
         CooldownBar cooldownBar = level.spawn(new CooldownBar());
         Points points = level.spawn(new Points());
         platform = level.spawn(new Platform(powerBar, cooldownBar, 10));
-
+        //killingFire = level.spawn(new KillingFire());
+        
         Creature creature = level.spawn(new Creature(platform, points));
 
         BatterySpawner spawner = level.spawn(new BatterySpawner());
