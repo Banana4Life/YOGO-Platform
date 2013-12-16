@@ -60,6 +60,13 @@ public class CheatEngine {
                 game.getLevel().toggleCollisionsEnabled();
             }
         }));
+        addCheat(new Cheat("soundoff", new CheatAction() {
+            @Override
+            public void onCheat(PlatformGame game) {
+                game.getContainer().setSoundOn(!game.getContainer().isSoundOn());
+                game.getContainer().setMusicOn(!game.getContainer().isMusicOn());
+            }
+        }));
         currentCheat = "";
     }
     
