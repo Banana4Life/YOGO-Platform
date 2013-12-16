@@ -3,12 +3,7 @@ package de.aima13.platform.entity;
 import java.util.Random;
 
 import de.aima13.platform.gui.Points;
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.*;
 
 import de.aima13.platform.GameLevel;
 import de.aima13.platform.gui.CooldownBar;
@@ -133,6 +128,8 @@ public class Platform extends Entity {
     
     @Override
     public void render(Graphics g) {
+
+        drawBB(g, Color.green);
         float scale = getBB().getWidth() / ((width * 3) + 2);
         if (this.active) {
             int currentFrame = this.plasmaAnimation.getFrame();

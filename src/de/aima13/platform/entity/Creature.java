@@ -1,10 +1,6 @@
 package de.aima13.platform.entity;
 
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.SpriteSheet;
+import org.newdawn.slick.*;
 import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.gui.Points;
@@ -133,6 +129,8 @@ public class Creature extends Entity {
     @Override
     public void render(Graphics g) {
         super.render(g);
+        
+        drawBB(g, Color.red);
         
         Vector pos = getPosition();
         Vector v = getVelocity();
