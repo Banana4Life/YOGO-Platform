@@ -77,7 +77,7 @@ public class Creature extends Entity {
         if (isRising()) {
             if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > getLevel().getContainer().getScreenHeight() / 2f) {
                 turned = true;
-                accelerate(2 * (random.nextInt(2) == 1 ? 1 : -1), 0);
+                accelerate((2 + random.nextInt(3)) * (random.nextInt(2) == 1 ? 1 : -1), 0);
             }
         } else {
             this.turned = false;
