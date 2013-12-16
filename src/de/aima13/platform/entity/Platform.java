@@ -56,7 +56,7 @@ public class Platform extends Entity {
     public void onInit() throws SlickException {
         this.setGravityScale(0);
         GameLevel lvl = getLevel();
-        this.setBoundingBox(new Box(lvl.getWidth() / 4, lvl.getHeight() / 16));
+        this.setBB(new Box(lvl.getWidth() / 4, lvl.getHeight() / 16));
         move(lvl.getWidth() / 2 - getBB().getWidth() / 2, lvl.getHeight() - getBB().getHeight() - 100);
 
         // load Sprites and Animations //

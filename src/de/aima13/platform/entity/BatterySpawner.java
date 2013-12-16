@@ -10,7 +10,7 @@ import java.util.Random;
 
 public class BatterySpawner extends Entity
 {
-    private static final long DELAY = 1000 * 3;
+    private static final long DELAY = 1000 * 1;
 
     private long lastSpawned = 0;
     private Random random = new Random();
@@ -18,9 +18,9 @@ public class BatterySpawner extends Entity
     @Override
     public void onInit()
     {
-        move(1, 0);
+        move(1, -10);
         this.setGravityScale(0);
-        this.setBoundingBox(new Box(40, 1));
+        this.setBB(new Box(40, 1));
         this.setVelocity(new Vector(3, 0));
     }
 
