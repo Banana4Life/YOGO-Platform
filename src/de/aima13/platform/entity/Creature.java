@@ -31,7 +31,7 @@ public class Creature extends Entity {
 
 	@Override
 	public void onInit() throws SlickException {
-        setGravityScale(0);
+        //setGravityScale(0);
 
         move(100, 20);
 
@@ -132,9 +132,9 @@ public class Creature extends Entity {
 	}
 
 	@Override
-	public void onCollide(Entity current, Face collidedFace) {
-		if (current instanceof Platform && ((Platform) current).isActive()) {
-			move(getPosition().add(0, current.getPosition().y - this.getBB().getHeight() - 1));
+	public void onCollide(Entity target, Face collidedFace) {
+		if (target instanceof Platform && ((Platform) target).isActive()) {
+			move(getPosition().x, target.getPosition().y - this.getBB().getHeight() - 1);
 			setVelocity(Vector.ZERO);
 
 			this.inAir = false;

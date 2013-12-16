@@ -46,7 +46,7 @@ public class Game extends BasicGameState {
 	public void resetState() throws SlickException {
 		this.level = game.getLevel();
 		level.reset();
-		
+
 		PowerBar powerBar = level.spawn(new PowerBar());
 		CooldownBar cooldownBar = level.spawn(new CooldownBar());
 		platform = level.spawn(new Platform(powerBar, 10));
@@ -54,7 +54,6 @@ public class Game extends BasicGameState {
 		Creature creature = level.spawn(new Creature(platform));
 
 		BatterySpawner spawner = level.spawn(new BatterySpawner());
-		spawner.move(container.getWidth() / 2f, 20);
 	}
 
 	@Override

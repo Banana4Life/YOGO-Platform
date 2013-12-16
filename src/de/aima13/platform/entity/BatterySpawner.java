@@ -49,11 +49,12 @@ public class BatterySpawner extends Entity
         {
             case LEFT:
                 move(getPosition().scale(0, 1));
+                setVelocity(getVelocity().scale(-1));
                 break;
             case RIGHT:
                 move(getLevel().getWidth() - getBB().getWidth() - 1, getPosition().y);
+                setVelocity(getVelocity().scale(-1));
                 break;
         }
-        setVelocity(getVelocity().scale(-1));
     }
 }
