@@ -131,7 +131,7 @@ public class PlatformGame extends StateBasedGame {
             AppGameContainer appgc;
             appgc = new AppGameContainer(new PlatformGame());
             appgc.setDisplayMode(Math.round(640 * appgc.getAspectRatio()), Math.round(appgc.getScreenHeight() - (100 * appgc.getAspectRatio())), false);
-            appgc.setUpdateOnlyWhenVisible(false);
+            appgc.setAlwaysRender(true);
             appgc.setTargetFrameRate(60);
             appgc.setShowFPS(false);
             appgc.start();
