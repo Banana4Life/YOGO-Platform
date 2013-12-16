@@ -40,7 +40,7 @@ public class GameLevel {
         this.collisionsEnabled = true;
         
         this.input = input;
-        entities = new LinkedList<>();
+        entities = new LinkedList<Entity>();
     }
     
     public void toggleCollisionsEnabled() {
@@ -100,8 +100,8 @@ public class GameLevel {
     
     public final void update(int delta) {
         this.onUpdate(delta);
-        List<Entity> remove = new ArrayList<>();
-        for (Entity e : new ArrayList<>(this.entities)) {
+        List<Entity> remove = new ArrayList<Entity>();
+        for (Entity e : new ArrayList<Entity>(this.entities)) {
             if (!e.isAlive() || outOfRange(e)) {
                 remove.add(e);
                 e.onDeath();
@@ -175,7 +175,7 @@ public class GameLevel {
         if (!isCollisionsEnabled()) {
             return;
         }
-        Set<Long> checked = new HashSet<>();
+        Set<Long> checked = new HashSet<Long>();
         for (Entity a : this.entities) {
             for (Entity b : this.entities) {
                 if (a == b) {

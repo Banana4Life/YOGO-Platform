@@ -49,8 +49,7 @@ public class Highscores extends BasicGameState {
         System.out.println(hm.getHighscoreString());
         scores = hm.getScores();
     }
-    
-    @Override
+
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         this.background.render(g);
         g.setColor(Color.white);
@@ -71,8 +70,7 @@ public class Highscores extends BasicGameState {
         }
         
     }
-    
-    @Override
+
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         background.update(delta);
     }

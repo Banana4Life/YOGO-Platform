@@ -99,7 +99,6 @@ public class Menu extends BasicGameState {
     
     public void addHighlightEntry(Vector position) {
         addHighlightEntry(position, new OnHighlightSelectListener() {
-            @Override
             public void onSelect(StateBasedGame game) {
                 // Do nothing
             }
@@ -117,8 +116,7 @@ public class Menu extends BasicGameState {
         addHighlightEntry(position);
         setHighlightWidth(width);
     }
-    
-    @Override
+
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         background.render(g);
         if (selectedEntry >= 0) {
@@ -180,8 +178,7 @@ public class Menu extends BasicGameState {
             }
         }
     }
-    
-    @Override
+
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         background.update(delta);
         plasmaPlatform.update(delta);

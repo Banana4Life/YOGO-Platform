@@ -11,7 +11,6 @@ import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import de.aima13.platform.PlatformGame;
-import de.aima13.platform.highscore.HighscoreManager;
 import de.aima13.platform.highscore.Score;
 
 public class EnterHighscore extends BasicGameState {
@@ -64,8 +63,7 @@ public class EnterHighscore extends BasicGameState {
     public void enter(GameContainer container, StateBasedGame game) throws SlickException {
         resetState();
     }
-    
-    @Override
+
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         g.setColor(Color.white);
         background.render(g);
@@ -82,8 +80,7 @@ public class EnterHighscore extends BasicGameState {
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(6), "To abort, press ESC");
         
     }
-    
-    @Override
+
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         background.update(delta);
         if (framesDelay > 0) {
@@ -96,7 +93,7 @@ public class EnterHighscore extends BasicGameState {
     
     public void keyReleased(int key, char c) {
         super.keyReleased(key, c);
-        if ((Character.isAlphabetic(c) || Character.isDefined(c) || c == ' ') && enteredName.length() <= MAX_LENGTH) {
+        if ((Character.isLetter(c) || Character.isDefined(c) || c == ' ') && enteredName.length() <= MAX_LENGTH) {
             enteredName += c;
         }
         switch (key) {

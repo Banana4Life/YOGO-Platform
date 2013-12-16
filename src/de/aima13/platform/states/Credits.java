@@ -121,8 +121,7 @@ public class Credits extends BasicGameState {
         bikePaused = false;
         wheelAnim.start();
     }
-    
-    @Override
+
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         g.setColor(Color.white);
         
@@ -130,7 +129,7 @@ public class Credits extends BasicGameState {
         this.game.fontHeader.drawString(game.getContainer().getWidth() / 2 - textWidth / 2, 10, "Credits", Color.white);
         
         // g.setColor(Color.red);
-        this.game.fontDefault.drawString(getColPixel(), getRowPixel(0), "© Copyright 2013:");
+        this.game.fontDefault.drawString(getColPixel(), getRowPixel(0), "ï¿½ Copyright 2013:");
         this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(1), "Jonas Dann");
         this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(2), "Malte Heinzelmann");
         this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(3), "Phillip Schichtel");
@@ -149,8 +148,7 @@ public class Credits extends BasicGameState {
 		 */
         this.game.fontDefault.drawString(bikePosition.x - getHintX(hint) - 300 * bikeScale, bikePosition.y + getHintY(hint), hint);
     }
-    
-    @Override
+
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         /*
          * Easter EGG

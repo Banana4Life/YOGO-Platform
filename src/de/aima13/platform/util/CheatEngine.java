@@ -22,46 +22,35 @@ public class CheatEngine {
     
     public CheatEngine(PlatformGame game) {
         this.game = game;
-        cheatList = new HashMap<>();
-        activatedCheats = new ArrayList<>();
+        cheatList = new HashMap<String, Cheat>();
+        activatedCheats = new ArrayList<Cheat>();
         addCheat(new Cheat("a", new CheatAction() {
-            
-            @Override
             public void onCheat(PlatformGame game) {
                 System.exit(0);
             }
         }));
         addCheat(new Cheat("steffen", new CheatAction() {
-            
-            @Override
             public void onCheat(PlatformGame game) {
                 game.shaderColorActive = !game.shaderColorActive;
             }
         }));
         addCheat(new Cheat("malte", new CheatAction() {
-            
-            @Override
             public void onCheat(PlatformGame game) {
                 // Go bikes, go!!!
             }
         }));
         addCheat(new Cheat("jonas", new CheatAction() {
-            
-            @Override
             public void onCheat(PlatformGame game) {
                 game.globalTextColor = (game.globalTextColor == Color.black) ? Color.white : Color.black;
             }
         }));
         addCheat(new Cheat("phillip", new CheatAction() {
-            
-            @Override
             public void onCheat(PlatformGame game) {
                 // kollision deaktivieren
                 game.getLevel().toggleCollisionsEnabled();
             }
         }));
         addCheat(new Cheat("soundoff", new CheatAction() {
-            @Override
             public void onCheat(PlatformGame game) {
                 game.getContainer().setSoundOn(!game.getContainer().isSoundOn());
                 game.getContainer().setMusicOn(!game.getContainer().isMusicOn());
@@ -77,7 +66,7 @@ public class CheatEngine {
     public void onKeyPress(int key, char c) {
         // Log.info("end pressed: " + ((key == Input.KEY_END) ? "true" :
         // "false"));
-        if (Character.isAlphabetic(c)) {
+        if (Character.isLetter(c)) {
             currentCheat += c;
         }
         if (key == Input.KEY_END) {
@@ -98,7 +87,6 @@ public class CheatEngine {
     }
     
     public interface CheatListener extends KeyListener {
-        @Override
         public void keyReleased(KeyEvent e);
     }
 }

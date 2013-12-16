@@ -56,16 +56,14 @@ public class Game extends BasicGameState {
         
         spawner = level.spawn(new BatterySpawner());
     }
-    
-    @Override
+
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         this.level.render(g);
         if (this.game.shaderColorActive) {
             this.game.shaderColor.draw(0, 0, this.game.getContainer().getWidth(), this.game.getContainer().getHeight());
         }
     }
-    
-    @Override
+
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         if (!this.game.getContainer().hasFocus()) {
             this.game.enterState(Pause.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));

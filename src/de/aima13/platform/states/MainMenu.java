@@ -113,42 +113,30 @@ public class MainMenu extends Menu {
         setHighlightWidth(8);
         setHighlightScale(7);
         addHighlightEntry(new Vector(column, 200 - 2), new OnHighlightSelectListener() {
-            
-            @Override
             public void onSelect(StateBasedGame game) {
                 game.enterState(Game.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         });
         addHighlightEntry(new Vector(column, 225 - 2), new OnHighlightSelectListener() {
-            
-            @Override
             public void onSelect(StateBasedGame game) {
                 game.enterState(Highscores.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         });
         ;
         addHighlightEntry(new Vector(column, 250 - 2), new OnHighlightSelectListener() {
-            
-            @Override
             public void onSelect(StateBasedGame game) {
                 game.enterState(Help.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
         });
         addHighlightEntry(new Vector(column, 275 - 2), new OnHighlightSelectListener() {
-            
-            @Override
             public void onSelect(StateBasedGame game) {
                 game.enterState(Credits.ID, new FadeOutTransition(Color.black), new FadeInTransition(Color.black));
             }
-            
         });
         addHighlightEntry(new Vector(column, 300 - 2), new OnHighlightSelectListener() {
-            
-            @Override
             public void onSelect(StateBasedGame game) {
                 game.getContainer().exit();
             }
-            
         });
     }
     

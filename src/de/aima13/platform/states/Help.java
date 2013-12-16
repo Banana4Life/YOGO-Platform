@@ -41,8 +41,7 @@ public class Help extends BasicGameState {
     public int getColPixel() {
         return 50;
     }
-    
-    @Override
+
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         background.render(g);
         
@@ -69,8 +68,7 @@ public class Help extends BasicGameState {
         this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 5), "it needs energy and has a cooldown time!");
         
     }
-    
-    @Override
+
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
         background.update(delta);
     }
