@@ -48,18 +48,18 @@ public class Battery extends Entity
     }
 
     @Override
-    public void onCollide(Entity current, Face collidedFace)
+    public void onCollide(Entity target, Face collidedFace)
     {
-        if (current instanceof Platform && ((Platform)current).isActive())
+        if (target instanceof Platform && ((Platform)target).isActive())
         {
-            ((Platform)current).getPowerbar().increaseValue(this.getPower());
+            ((Platform)target).getPowerbar().increaseValue(this.getPower());
             die();
         }
-        else if (current instanceof Creature)
+        else if (target instanceof Creature)
         {
             die();
         }
-        super.onCollide(current, collidedFace);
+        super.onCollide(target, collidedFace);
     }
 
     public float getPower()

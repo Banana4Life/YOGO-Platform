@@ -167,7 +167,7 @@ public class Platform extends Entity {
 	}
 
     @Override
-    public void onCollide(Entity current, Face collidedFace)
+    public void onCollide(Entity target, Face collidedFace)
     {
         if (isActive())
         {

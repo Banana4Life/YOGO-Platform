@@ -17,7 +17,7 @@ public class GuiEntity extends Entity
     {}
 
     @Override
-    public final void onCollide(Entity current, Face collidedFace)
+    public final void onCollide(Entity target, Face collidedFace)
     {}
 
     @Override

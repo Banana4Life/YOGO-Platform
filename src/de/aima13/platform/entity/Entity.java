@@ -88,7 +88,7 @@ public abstract class Entity {
 	public void render(Graphics g) {
 	}
 
-	public void onCollide(Entity current, Face collidedFace) {
+	public void onCollide(Entity target, Face collidedFace) {
 	}
 
 	public void onCollideWithBorder(Face collidedFace) {
