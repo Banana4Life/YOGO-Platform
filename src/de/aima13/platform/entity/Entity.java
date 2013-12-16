@@ -6,6 +6,7 @@ import de.aima13.platform.GameLevel;
 import de.aima13.platform.PlatformGame;
 import de.aima13.platform.util.Vector;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 
@@ -134,5 +135,14 @@ public abstract class Entity {
     public void setBB(Box boundingBox)
     {
         this.boundingBox = boundingBox;
+    }
+
+    protected void drawBB(Graphics g, Color c)
+    {
+        g.setColor(c);
+
+        Box b = getAbsBB();
+        g.drawRect(b.getBase().x, b.getBase().y, b.getWidth(), b.getHeight());
+        g.fillRect(b.getBase().x, b.getBase().y, b.getWidth(), b.getHeight());
     }
 }

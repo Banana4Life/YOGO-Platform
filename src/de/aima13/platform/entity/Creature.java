@@ -5,6 +5,7 @@ import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
 import org.newdawn.slick.Animation;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
@@ -30,10 +31,14 @@ public class Creature extends Entity {
 
 	@Override
 	public void onInit() throws SlickException {
-        //setGravityScale(0);
+        setGravityScale(0);
 
         move(100, 20);
-        this.setBB(new Box(Vector.ZERO, new Vector(16 * IMAGE_SCALE, 32 * IMAGE_SCALE)));
+
+        float width = 16 * IMAGE_SCALE / 2;
+        float height = 32 * IMAGE_SCALE;
+
+        this.setBB(new Box(new Vector(width / 2, 0), new Vector(width, height)));
 
         this.characterSpriteSheet = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
         this.characterSpriteSheet.setFilter(Image.FILTER_NEAREST);
@@ -102,6 +107,7 @@ public class Creature extends Entity {
 
         Vector pos = getPosition();
         Vector v = getVelocity();
+        drawBB(g, Color.cyan);
 
 		if (v.y >= 0 && this.inAir) {
 			if (!this.prevFallingDown) {

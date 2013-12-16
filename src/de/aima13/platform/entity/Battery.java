@@ -65,10 +65,4 @@ public class Battery extends Entity
     {
         return power;
     }
-
-    @Override
-    public void onDeath()
-    {
-        System.out.println("Sad battery :(");
-    }
 }
