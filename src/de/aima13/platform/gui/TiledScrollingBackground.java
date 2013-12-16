@@ -1,9 +1,7 @@
 package de.aima13.platform.gui;
 
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.util.Vector;
 

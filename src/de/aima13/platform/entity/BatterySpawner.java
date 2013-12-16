@@ -1,12 +1,13 @@
 package de.aima13.platform.entity;
 
-import de.aima13.platform.util.Box;
-import de.aima13.platform.util.Face;
-import de.aima13.platform.util.Vector;
+import java.util.Random;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
-import java.util.Random;
+import de.aima13.platform.util.Box;
+import de.aima13.platform.util.Face;
+import de.aima13.platform.util.Vector;
 
 public class BatterySpawner extends Entity {
     private static final long DELAY       = (long)(1000 * .1);
@@ -47,6 +48,8 @@ public class BatterySpawner extends Entity {
             case RIGHT:
                 move(getLevel().getWidth() - getBB().getWidth() - 1, getPosition().y);
                 setVelocity(getVelocity().scale(-1));
+                break;
+            default:
                 break;
         }
     }

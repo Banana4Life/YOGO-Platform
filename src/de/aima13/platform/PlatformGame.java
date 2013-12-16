@@ -23,25 +23,25 @@ import de.aima13.platform.states.Pause;
 import de.aima13.platform.util.CheatEngine;
 
 public class PlatformGame extends StateBasedGame {
-
-    public CheatEngine       cheatEngine;
-
+    
+    public CheatEngine  cheatEngine;
+    
     /** The fonts to draw to the screen */
-    public TrueTypeFont      fontDefault;
-    public TrueTypeFont      fontHeader;
-
-    private GameLevel        level;
-
-    public Image             imageColorA, imageColorB;
-    public Animation         shaderColor;
-    public boolean           shaderColorActive;
-
-    public Color             globalTextColor = Color.white;
-
+    public TrueTypeFont fontDefault;
+    public TrueTypeFont fontHeader;
+    
+    private GameLevel   level;
+    
+    public Image        imageColorA, imageColorB;
+    public Animation    shaderColor;
+    public boolean      shaderColorActive;
+    
+    public Color        globalTextColor = Color.white;
+    
     public PlatformGame() {
         super("#YOGO Platform");
     }
-
+    
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
         level = new GameLevel(this, container.getInput());
@@ -53,7 +53,7 @@ public class PlatformGame extends StateBasedGame {
         addState(new Loose());
         init();
     }
-
+    
     public void init() throws SlickException {
         fontDefault = loadFont("res/font/minecraft.ttf");
         fontHeader = loadFont("res/font/minecraft.ttf", 54f);
@@ -63,27 +63,27 @@ public class PlatformGame extends StateBasedGame {
         cheatEngine = new CheatEngine(this);
         shaderColorActive = false;
     }
-
+    
     public TrueTypeFont loadFont(String res) {
         return loadFont(res, Font.PLAIN);
     }
-
+    
     public TrueTypeFont loadFont(String res, float size) {
         return loadFont(res, size, Font.PLAIN);
     }
-
+    
     public TrueTypeFont loadFont(String res, int style) {
         return loadFont(res, 18f, style);
     }
-
+    
     public TrueTypeFont loadFont(String res, float size, int style) {
         return loadFont(res, size, style, true);
     }
-
+    
     public TrueTypeFont loadFont(String res, float size, int style, boolean antiAlias) {
         try {
             InputStream inputStream = ResourceLoader.getResourceAsStream(res);
-
+            
             Font ttf = Font.createFont(Font.TRUETYPE_FONT, inputStream);
             ttf = ttf.deriveFont(style, size);
             return new TrueTypeFont(ttf, antiAlias);
@@ -92,12 +92,12 @@ public class PlatformGame extends StateBasedGame {
         }
         return null;
     }
-
-//    @Override
-//    public void keyPressed(int key, char c) {
-//        super.keyPressed(key, c);
-//    }
-
+    
+    // @Override
+    // public void keyPressed(int key, char c) {
+    // super.keyPressed(key, c);
+    // }
+    
     @Override
     public void keyReleased(int key, char c) {
         super.keyReleased(key, c);
@@ -105,11 +105,11 @@ public class PlatformGame extends StateBasedGame {
             cheatEngine.onKeyPress(key, c);
         }
     }
-
+    
     public GameLevel getLevel() {
         return level;
     }
-
+    
     public void lose() {
         enterState(Loose.ID, new EmptyTransition(), new FadeInTransition(Color.black));
         try {
@@ -118,11 +118,11 @@ public class PlatformGame extends StateBasedGame {
             e.printStackTrace(System.err);
         }
     }
-
-    public static void main(String[] args)
-    {
-        try
-        {
+    
+    public static void main(String[] args) {
+        try {
+            // System.setProperty("org.lwjgl.opengl.Window.undecorated",
+            // "true");
             AppGameContainer appgc;
             appgc = new AppGameContainer(new PlatformGame());
             appgc.setDisplayMode(Math.round(640 * appgc.getAspectRatio()), Math.round(appgc.getScreenHeight() - (150 * appgc.getAspectRatio())), false);
@@ -130,9 +130,7 @@ public class PlatformGame extends StateBasedGame {
             appgc.setTargetFrameRate(60);
             appgc.setShowFPS(false);
             appgc.start();
-        }
-        catch (SlickException ex)
-        {
+        } catch (SlickException ex) {
             ex.printStackTrace(System.err);
         }
     }

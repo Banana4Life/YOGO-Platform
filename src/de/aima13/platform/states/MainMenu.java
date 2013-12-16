@@ -8,15 +8,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
-import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
-import org.newdawn.slick.util.Log;
 
-import de.aima13.platform.entity.Motorcycle;
 import de.aima13.platform.gui.OnHighlightSelectListener;
-import de.aima13.platform.util.Cheat;
 import de.aima13.platform.util.Vector;
 
 public class MainMenu extends Menu {

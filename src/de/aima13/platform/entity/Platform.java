@@ -2,20 +2,18 @@ package de.aima13.platform.entity;
 
 import java.util.Random;
 
-import de.aima13.platform.GameLevel;
-import de.aima13.platform.gui.CooldownBar;
-import de.aima13.platform.gui.PowerBar;
-import de.aima13.platform.util.Box;
-import de.aima13.platform.util.Face;
-
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.util.Log;
 
+import de.aima13.platform.GameLevel;
+import de.aima13.platform.gui.CooldownBar;
+import de.aima13.platform.gui.PowerBar;
+import de.aima13.platform.util.Box;
+import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
 public class Platform extends Entity {

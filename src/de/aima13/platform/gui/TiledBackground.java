@@ -5,7 +5,6 @@ import java.util.Random;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.util.Log;
 
 import de.aima13.platform.entity.Tile;
 import de.aima13.platform.util.Vector;

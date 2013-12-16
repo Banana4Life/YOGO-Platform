@@ -1,17 +1,16 @@
 package de.aima13.platform.entity;
 
-import de.aima13.platform.gui.Points;
-import de.aima13.platform.util.Box;
-import de.aima13.platform.util.Face;
-import de.aima13.platform.util.Vector;
-
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.Log;
+
+import de.aima13.platform.gui.Points;
+import de.aima13.platform.util.Box;
+import de.aima13.platform.util.Face;
+import de.aima13.platform.util.Vector;
 
 public class Creature extends Entity {
     private static final float IMAGE_SCALE           = 4;
