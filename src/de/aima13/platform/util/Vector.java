@@ -58,4 +58,14 @@ public class Vector {
         }
         return this.scale(n, n);
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + "|" + y + ")";
+    }
+    
+    public boolean equals(Vector v)
+    {
+        return x == v.x && y == v.y;
+    }
 }

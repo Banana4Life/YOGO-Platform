@@ -12,9 +12,11 @@ import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
+import java.util.Random;
+
 public class Creature extends Entity {
     private static final float   IMAGE_SCALE           = 4;
-    private static final boolean smoothCamera          = true;
+    private static final boolean SMOOTH_CAMERA         = true;
     
     private final Platform       platform;
     private final Points         points;
@@ -29,6 +31,7 @@ public class Creature extends Entity {
     protected boolean            prevFallingDown;
     private boolean              lost;
     private boolean              turned;
+    private Random               random                = new Random();
     
     public Creature(Platform platform, Points points) {
         this.platform = platform;
@@ -57,7 +60,7 @@ public class Creature extends Entity {
         
         this.inAir = this.prevFallingDown = true;
     }
-    
+
     @Override
     public void preUpdate(int delta) {
         if (getPosition().y + getBB().getHeight() > platform.getPosition().y) {
@@ -72,24 +75,24 @@ public class Creature extends Entity {
         this.beltAnimation.update(delta);
         
         if (isRising()) {
-            if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > 0) {
+            if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > getLevel().getContainer().getScreenHeight() / 2f) {
                 turned = true;
-                // accelerate(50, 0);
+                accelerate(2 * (random.nextInt(2) == 1 ? 1 : -1), 0);
             }
         } else {
             this.turned = false;
         }
         
-        if (mayTurn()) {
-            setVelocity(getVelocity().scale(-1, 1));
-        }
+//        if (mayTurn()) {
+//            setVelocity(getVelocity().scale(-1, 1));
+//        }
         
         if (this.inAir) {
             this.prevFallingDown = (getVelocity().y > 0);
             this.platform.getLevel().setBackgroundVelocity(new Vector(0, getVelocity().y));
         }
         
-        if (!this.smoothCamera && this.jumpingAnimation.getFrame() == 0) {
+        if (!this.SMOOTH_CAMERA && this.jumpingAnimation.getFrame() == 0) {
             this.platform.getLevel().setBackgroundVelocity(new Vector(0, getVelocity().y));
         }
         
@@ -98,7 +101,7 @@ public class Creature extends Entity {
             this.jumpingAnimation.stop();
             this.jumpingAnimation.setCurrentFrame(0);
             this.currentJumpingYOffset = 0;
-            accelerate(10, -9.5f);
+            accelerate(0, -9.5f);
         }
     }
     
@@ -125,7 +128,6 @@ public class Creature extends Entity {
     public void onJump() {
         getLevel().getJumpSound().play();
         this.points.addPoints(500);
-        
     }
     
     @Override
@@ -164,37 +166,17 @@ public class Creature extends Entity {
     
     @Override
     public void onCollideWithBorder(Face collidedFace) {
-        if (collidedFace != Face.BOTTOM) {
-            return;
-        }
-        
-        float x = getPosition().x;
-        float y = getPosition().y;
-        
-        float vX = getVelocity().x;
-        float vY = getVelocity().y;
-        
         switch (collidedFace) {
-            case TOP:
-                y = 0;
-                vY *= -1;
-                break;
             case BOTTOM:
                 Log.error("Collided with the world border!");
                 die();
                 break;
             case LEFT:
-                x = 0;
-                vX *= -1;
-                break;
             case RIGHT:
-                x = getLevel().getWidth() - getBB().getWidth() - 1;
-                vX *= -1;
+                setVelocity(getVelocity().scale(-1, 1));
                 break;
         }
         
-        move(x, y);
-        setVelocity(new Vector(vX, vY));
     }
     
     @Override
