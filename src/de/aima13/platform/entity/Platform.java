@@ -15,8 +15,8 @@ import de.aima13.platform.util.Vector;
 public class Platform extends Entity {
     
     private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
-    private static final float    PLATFORM_COOLDOWN    = 500;
-    private static final float    ACTIVATION_COOLDOWN  = 500;
+    private static final float  PLATFORM_COOLDOWN    = 500;
+    private static final float  ACTIVATION_COOLDOWN  = 500;
     
     private final PowerBar      powerBar;
     private final CooldownBar   cooldownBar;
@@ -25,13 +25,13 @@ public class Platform extends Entity {
     private Animation           plasmaAnimation;
     private Animation           fireAnimation;
 
-    private final Points points;
+    private final Points        points;
     private int                 width;
     private Vector              offsetLeft, offsetRight;
     private int                 offsetCounter;
     private boolean             active;
-    private float                 activationCooldown;
-    private float                 stillActivatedFor;
+    private float               activationCooldown;
+    private float               stillActivatedFor;
     private Random              randomGenerator;
     
     public Platform(PowerBar powerBar, CooldownBar cooldownBar, Points points, int width) {

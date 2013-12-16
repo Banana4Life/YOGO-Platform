@@ -1,12 +1,11 @@
 package de.aima13.platform.states;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import de.aima13.platform.gui.TiledScrollingBackground;
+import de.aima13.platform.util.Vector;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -21,6 +20,7 @@ public class Highscores extends BasicGameState {
     public final static int  ID = 6;
     protected PlatformGame   game;  // stored for later use
     private ArrayList<Score> scores;
+    TiledScrollingBackground background;
     
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         if (game instanceof PlatformGame) {
@@ -28,7 +28,11 @@ public class Highscores extends BasicGameState {
         } else {
             throw new SlickException("StateBaseGame isn't a PlatformGame!");
         }
-        
+
+        SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
+        background = new TiledScrollingBackground(sheet, new Vector(0, 1));
+
+        background.init(this.game);
     }
     
     public int getRowPixel(int row) {
@@ -48,6 +52,7 @@ public class Highscores extends BasicGameState {
     
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+        this.background.render(g);
         g.setColor(Color.white);
         
         int textWidth = this.game.fontHeader.getWidth("Highscores");
@@ -69,7 +74,7 @@ public class Highscores extends BasicGameState {
     
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        
+        background.update(delta);
     }
     
     public void keyReleased(int key, char c) {
