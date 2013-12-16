@@ -16,7 +16,7 @@ public class Creature extends Entity {
 	private static final float IMAGE_SCALE = 4;
 	private final Platform platform;
 
-	protected SpriteSheet characterSpriteSheet;
+	protected SpriteSheet charSprite;
 	protected Animation jumpingAnimation;
 	protected int currentJumpingYOffset = 0;
 	protected int[] jumpingYOffset = { 3, 5, 6, 5, 3 };
@@ -38,12 +38,12 @@ public class Creature extends Entity {
         float width = 16 * IMAGE_SCALE / 2;
         float height = 32 * IMAGE_SCALE;
 
-        this.setBB(new Box(new Vector(width / 2, 0), new Vector(width, height)));
+        this.setBB(new Box(new Vector(width / 2, -1), new Vector(width, height)));
 
-        this.characterSpriteSheet = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
-        this.characterSpriteSheet.setFilter(Image.FILTER_NEAREST);
+        this.charSprite = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
+        this.charSprite.setFilter(Image.FILTER_NEAREST);
         this.beltAnimation = new Animation(new SpriteSheet("res/images/character/Belt.png", 4, 1), 100);
-        this.jumpingAnimation = new Animation(this.characterSpriteSheet, 0, 3, 5, 3, true, 30, false);
+        this.jumpingAnimation = new Animation(this.charSprite, 0, 3, 5, 3, true, 30, false);
         jumpingAnimation.stop();
 
 		this.inAir = this.prevFallingDown = true;
@@ -101,35 +101,37 @@ public class Creature extends Entity {
         setVelocity(new Vector(0, -10));
 	}
 
-	@Override
-	public void render(Graphics g) {
-		super.render(g);
+    @Override
+    public void render(Graphics g)
+    {
+        super.render(g);
 
         Vector pos = getPosition();
         Vector v = getVelocity();
         drawBB(g, Color.cyan);
 
-		if (v.y >= 0 && this.inAir) {
-			if (!this.prevFallingDown) {
-				this.characterSpriteSheet.getSprite(0, 2).draw(pos.x,
-						pos.y, Creature.IMAGE_SCALE);
-			} else {
-				this.characterSpriteSheet.getSprite(0, 1).draw(pos.x,
-						pos.y, Creature.IMAGE_SCALE);
-			}
-		} else if (this.inAir) {
-			this.characterSpriteSheet.getSprite(0, 0).draw(pos.x,
-					pos.y, Creature.IMAGE_SCALE);
-		} else {
-			this.jumpingAnimation.getCurrentFrame().draw(pos.x, pos.y + this.jumpingYOffset[this.jumpingAnimation.getFrame()] * Creature.IMAGE_SCALE, Creature.IMAGE_SCALE);
-			this.currentJumpingYOffset = this.jumpingYOffset[this.jumpingAnimation.getFrame()];
-		}
-		this.beltAnimation.getCurrentFrame().draw(
-				pos.x + 6 * Creature.IMAGE_SCALE,
-				pos.y + this.currentJumpingYOffset
-						* Creature.IMAGE_SCALE + 15 * Creature.IMAGE_SCALE,
-				Creature.IMAGE_SCALE);
-	}
+        if (v.y >= 0 && isInAir())
+        {
+            if (!prevFallingDown)
+            {
+                charSprite.getSprite(0, 2).draw(pos.x, pos.y, IMAGE_SCALE);
+            }
+            else
+            {
+                charSprite.getSprite(0, 1).draw(pos.x, pos.y, IMAGE_SCALE);
+            }
+        }
+        else if (this.inAir)
+        {
+            charSprite.getSprite(0, 0).draw(pos.x, pos.y, IMAGE_SCALE);
+        }
+        else
+        {
+            jumpingAnimation.getCurrentFrame().draw(pos.x, pos.y + jumpingYOffset[jumpingAnimation.getFrame()] * IMAGE_SCALE, IMAGE_SCALE);
+            currentJumpingYOffset = jumpingYOffset[jumpingAnimation.getFrame()];
+        }
+        this.beltAnimation.getCurrentFrame().draw(pos.x + 6 * IMAGE_SCALE, pos.y + this.currentJumpingYOffset * IMAGE_SCALE + 15 * IMAGE_SCALE, IMAGE_SCALE);
+    }
 
 	@Override
 	public void onCollide(Entity target, Face collidedFace) {
@@ -163,6 +165,7 @@ public class Creature extends Entity {
             break;
         case BOTTOM:
             Log.error("Collided with the world border!");
+            die();
             break;
         case LEFT:
             x = 0;
@@ -182,4 +185,9 @@ public class Creature extends Entity {
 	public void onDeath() {
         this.getLevel().getGame().lose();
 	}
+
+    public boolean isInAir()
+    {
+        return inAir;
+    }
 }

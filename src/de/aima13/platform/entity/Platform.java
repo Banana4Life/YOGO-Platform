@@ -18,7 +18,6 @@ import de.aima13.platform.util.Vector;
 public class Platform extends Entity {
 
 	private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
-	private static final float DECELERATE_FACTOR = 1.5f;
     private final PowerBar powerBar;
 
     private SpriteSheet engineSpriteSheet;
@@ -87,7 +86,7 @@ public class Platform extends Entity {
 
         GameLevel lvl = getLevel();
 		if (lvl.getInput().isKeyDown(Input.KEY_A)) {
-			this.activate();
+			this.setActivated(true);
             setVelocity(Vector.ZERO);
             setAcceleration(Vector.ZERO);
 		}
@@ -154,12 +153,20 @@ public class Platform extends Entity {
 		this.fireAnimation.getCurrentFrame().draw(p.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, p.y + this.offsetRight.y + 6 * scale, scale);
 	}
 
-	public void activate() {
-		if (this.stillActivatedFor < 0 && this.activationCooldown <= 0) {
-			this.active = true;
-			this.stillActivatedFor = 1000;
-			getLevel().getPlasmaSound().play();
-		}
+	public void setActivated(boolean state) {
+        if (state)
+        {
+            if (this.stillActivatedFor < 0 && this.activationCooldown <= 0 && powerBar.getValue() >= .05) {
+                this.active = true;
+                this.stillActivatedFor = 1000;
+                getLevel().getPlasmaSound().play();
+                this.powerBar.decreaseValue(.05f);
+            }
+        }
+        else
+        {
+            this.active = false;
+        }
 	}
 
 	public boolean isActive() {
@@ -169,10 +176,6 @@ public class Platform extends Entity {
     @Override
     public void onCollide(Entity target, Face collidedFace)
     {
-        if (isActive())
-        {
-            this.powerBar.decreaseValue(.1f);
-        }
     }
 
     @Override
