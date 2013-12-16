@@ -1,7 +1,12 @@
 package de.aima13.platform;
 
 import java.awt.Font;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.AppGameContainer;
@@ -15,6 +20,7 @@ import org.newdawn.slick.state.transition.EmptyTransition;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.util.ResourceLoader;
 
+import au.com.bytecode.opencsv.CSVReader;
 import de.aima13.platform.states.Credits;
 import de.aima13.platform.states.Game;
 import de.aima13.platform.states.Loose;
@@ -24,20 +30,21 @@ import de.aima13.platform.util.CheatEngine;
 
 public class PlatformGame extends StateBasedGame {
     
-    public CheatEngine  cheatEngine;
-//    public 
+    public CheatEngine       cheatEngine;
+    public CSVReader         reader;
+    public ArrayList<String> highscoreList;
     
     /** The fonts to draw to the screen */
-    public TrueTypeFont fontDefault;
-    public TrueTypeFont fontHeader;
+    public TrueTypeFont      fontDefault;
+    public TrueTypeFont      fontHeader;
     
-    private GameLevel   level;
+    private GameLevel        level;
     
-    public Image        imageColorA, imageColorB;
-    public Animation    shaderColor;
-    public boolean      shaderColorActive;
+    public Image             imageColorA, imageColorB;
+    public Animation         shaderColor;
+    public boolean           shaderColorActive;
     
-    public Color        globalTextColor = Color.white;
+    public Color             globalTextColor = Color.white;
     
     public PlatformGame() {
         super("#YOGO Platform");
@@ -63,6 +70,16 @@ public class PlatformGame extends StateBasedGame {
         shaderColor = new Animation(new Image[] { imageColorA, imageColorB }, 25);
         cheatEngine = new CheatEngine(this);
         shaderColorActive = false;
+        try {
+            reader = new CSVReader(new FileReader("yourfile.csv"));
+            highscoreList = new ArrayList(reader.readAll());
+        } catch (FileNotFoundException e) {
+            highscoreList = new ArrayList();
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     public TrueTypeFont loadFont(String res) {
