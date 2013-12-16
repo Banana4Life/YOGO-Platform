@@ -43,3 +43,10 @@ Jonas Dann
 
 Sounds:
 Malte Heinzelmann
+
+Cheat codes:
+Type the cheatcode and the press "end" on your keyboard
+- "phillip" : to turn off the collisions (insider joke)
+- "jonas"   : to make some of the fonts black (insider joke)
+- "steffen" : make the game a bit harder ;)
+- "soundoff": to turn off the sound
