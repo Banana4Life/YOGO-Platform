@@ -6,6 +6,7 @@ import org.newdawn.slick.SlickException;
 import java.io.File;
 
 public class Main {
+	protected static String[] iconList = {"res/images/Icon16.png", "res/images/Icon24.png", "res/images/Icon32.png"};
 
     public static void main(String[] args) {
         try {
@@ -16,6 +17,7 @@ public class Main {
             app.setShowFPS(false);
             app.setSoundVolume(.5f);
             app.setMusicVolume(.5f);
+            app.setIcons(iconList);
             app.start();
         } catch (SlickException ex) {
             ex.printStackTrace(System.err);
