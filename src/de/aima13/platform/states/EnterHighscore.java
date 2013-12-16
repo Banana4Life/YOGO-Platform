@@ -21,6 +21,8 @@ public class EnterHighscore extends BasicGameState {
     public final static int  ID         = 7;
     
     private static final int MAX_LENGTH = 20;
+
+    private static final int CURSOR_BLINK = 15;
     
     protected PlatformGame   game;
     private ArrayList<Score> scores;
@@ -52,7 +54,7 @@ public class EnterHighscore extends BasicGameState {
     }
     
     public void resetDelay() {
-        framesDelay = 60;
+        framesDelay = CURSOR_BLINK;
     }
     
     @Override

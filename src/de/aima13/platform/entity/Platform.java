@@ -20,7 +20,7 @@ import de.aima13.platform.util.Vector;
 public class Platform extends Entity {
     
     private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
-    private static final int    PLATFORM_COOLDOWN    = 1000;
+    private static final int    PLATFORM_COOLDOWN    = 500;
     private static final int    ACTIVATION_COOLDOWN  = 500;
     
     private final PowerBar      powerBar;
