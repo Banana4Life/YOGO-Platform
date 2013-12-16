@@ -3,7 +3,7 @@ package de.aima13.platform.entity;
 import java.util.Random;
 
 import de.aima13.platform.GameLevel;
-import de.aima13.platform.gui.Powerbar;
+import de.aima13.platform.gui.PowerBar;
 import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import org.newdawn.slick.Animation;
@@ -18,8 +18,7 @@ import de.aima13.platform.util.Vector;
 public class Platform extends Entity {
 
 	private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
-	private static final float DECELERATE_FACTOR = 1.5f;
-    private final Powerbar powerbar;
+    private final PowerBar powerBar;
 
     private SpriteSheet engineSpriteSheet;
 	private Animation plasmaAnimation;
@@ -33,9 +32,9 @@ public class Platform extends Entity {
 	private int stillActivatedFor;
 	private Random randomGenerator;
 
-	public Platform(Powerbar powerbar, int width) {
+	public Platform(PowerBar powerBar, int width) {
 		super();
-        this.powerbar = powerbar;
+        this.powerBar = powerBar;
 
 		this.width = width;
 		this.offsetLeft = new Vector(0, 0);
@@ -47,16 +46,16 @@ public class Platform extends Entity {
 		this.stillActivatedFor = -1;
 	}
 
-    public Powerbar getPowerbar()
+    public PowerBar getPowerbar()
     {
-        return powerbar;
+        return powerBar;
     }
 
     @Override
     public void onInit() throws SlickException {
         this.setGravityScale(0);
         GameLevel lvl = getLevel();
-        this.setBoundingBox(new Box(lvl.getWidth() / 4, lvl.getHeight() / 16));
+        this.setBB(new Box(lvl.getWidth() / 4, lvl.getHeight() / 16));
         move(lvl.getWidth() / 2 - getBB().getWidth() / 2, lvl.getHeight() - getBB().getHeight() - 100);
 
         // load Sprites and Animations //
@@ -87,7 +86,7 @@ public class Platform extends Entity {
 
         GameLevel lvl = getLevel();
 		if (lvl.getInput().isKeyDown(Input.KEY_A)) {
-			this.activate();
+			this.setActivated(true);
             setVelocity(Vector.ZERO);
             setAcceleration(Vector.ZERO);
 		}
@@ -154,12 +153,20 @@ public class Platform extends Entity {
 		this.fireAnimation.getCurrentFrame().draw(p.x + this.offsetRight.x + 3 * this.width * scale - 2 * scale, p.y + this.offsetRight.y + 6 * scale, scale);
 	}
 
-	public void activate() {
-		if (this.stillActivatedFor < 0 && this.activationCooldown <= 0) {
-			this.active = true;
-			this.stillActivatedFor = 1000;
-			getLevel().getPlasmaSound().play();
-		}
+	public void setActivated(boolean state) {
+        if (state)
+        {
+            if (this.stillActivatedFor < 0 && this.activationCooldown <= 0 && powerBar.getValue() >= .05) {
+                this.active = true;
+                this.stillActivatedFor = 1000;
+                getLevel().getPlasmaSound().play();
+                this.powerBar.decreaseValue(.05f);
+            }
+        }
+        else
+        {
+            this.active = false;
+        }
 	}
 
 	public boolean isActive() {
@@ -167,12 +174,8 @@ public class Platform extends Entity {
 	}
 
     @Override
-    public void onCollide(Entity current, Face collidedFace)
+    public void onCollide(Entity target, Face collidedFace)
     {
-        if (isActive())
-        {
-            this.powerbar.decreaseValue(.1f);
-        }
     }
 
     @Override

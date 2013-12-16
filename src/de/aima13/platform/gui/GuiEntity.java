@@ -1,6 +1,7 @@
 package de.aima13.platform.gui;
 
 import de.aima13.platform.entity.Entity;
+import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 
 public class GuiEntity extends Entity
@@ -12,7 +13,11 @@ public class GuiEntity extends Entity
     }
 
     @Override
-    public final void onCollide(Entity current, Face collidedFace)
+    public final void setBB(Box boundingBox)
+    {}
+
+    @Override
+    public final void onCollide(Entity target, Face collidedFace)
     {}
 
     @Override

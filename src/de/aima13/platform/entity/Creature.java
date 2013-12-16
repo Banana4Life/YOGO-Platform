@@ -1,7 +1,5 @@
 package de.aima13.platform.entity;
 
-import de.aima13.platform.states.Game;
-import de.aima13.platform.states.Loose;
 import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
@@ -12,16 +10,13 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.state.transition.EmptyTransition;
-import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.util.Log;
 
 public class Creature extends Entity {
 	private static final float IMAGE_SCALE = 4;
 	private final Platform platform;
-	private boolean failed = false;
 
-	protected SpriteSheet characterSpriteSheet;
+	protected SpriteSheet charSprite;
 	protected Animation jumpingAnimation;
 	protected int currentJumpingYOffset = 0;
 	protected int[] jumpingYOffset = { 3, 5, 6, 5, 3 };
@@ -29,32 +24,44 @@ public class Creature extends Entity {
 
 	protected boolean inAir;
 	protected boolean prevFallingDown;
+    private boolean lost;
 
-	public Creature(Platform platform) {
+    public Creature(Platform platform) {
 		this.platform = platform;
+        this.lost = false;
 	}
 
 	@Override
-	public void onInit() {
+	public void onInit() throws SlickException {
         //setGravityScale(0);
-        move(Vector.ZERO);
-		//setVelocity(new Vector(5, 5));
-        this.setBoundingBox(new Box(Vector.ZERO, new Vector(16 * IMAGE_SCALE, 32 * IMAGE_SCALE)));
 
-		try {
-			this.characterSpriteSheet = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
-			this.characterSpriteSheet.setFilter(Image.FILTER_NEAREST);
-			this.beltAnimation = new Animation(new SpriteSheet("res/images/character/Belt.png", 4, 1), 100);
-			this.jumpingAnimation = new Animation(this.characterSpriteSheet, 0, 3, 5, 3, true, 30, false);
-			jumpingAnimation.stop();
-		} catch (SlickException e) {
-			// do nothing
-		}
+        move(100, 20);
+
+        float width = 16 * IMAGE_SCALE / 2;
+        float height = 32 * IMAGE_SCALE;
+
+        this.setBB(new Box(new Vector(width / 2, -1), new Vector(width, height)));
+
+        this.charSprite = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
+        this.charSprite.setFilter(Image.FILTER_NEAREST);
+        this.beltAnimation = new Animation(new SpriteSheet("res/images/character/Belt.png", 4, 1), 100);
+        this.jumpingAnimation = new Animation(this.charSprite, 0, 3, 5, 3, true, 30, false);
+        jumpingAnimation.stop();
 
 		this.inAir = this.prevFallingDown = true;
 	}
 
-	@Override
+    @Override
+    public void preUpdate(int delta)
+    {
+        if (getPosition().y + getBB().getHeight() > platform.getPosition().y)
+        {
+            setVelocity(getVelocity().scale(0, 1));
+            this.lost = true;
+        }
+    }
+
+    @Override
 	public void update(int delta) {
 		this.jumpingAnimation.update(delta);
 		this.beltAnimation.update(delta);
@@ -74,11 +81,6 @@ public class Creature extends Entity {
 			this.currentJumpingYOffset = 0;
 
             setVelocity(new Vector(0, -5f));
-		}
-
-		if (!failed && getPosition().y + getBB().getHeight() > platform.getPosition().y) {
-			setVelocity(getVelocity().scale(0, 1));
-			//failed = true;
 		}
 	}
 
@@ -104,42 +106,44 @@ public class Creature extends Entity {
 
 	public void onJump() {
 		getLevel().getJumpSound().play();
-        setVelocity(new Vector(0, 50));
+        setVelocity(new Vector(0, -10));
 	}
 
-	@Override
-	public void render(Graphics g) {
-		super.render(g);
+    @Override
+    public void render(Graphics g)
+    {
+        super.render(g);
 
         Vector pos = getPosition();
         Vector v = getVelocity();
 
-		if (v.y >= 0 && this.inAir) {
-			if (!this.prevFallingDown) {
-				this.characterSpriteSheet.getSprite(0, 2).draw(pos.x,
-						pos.y, Creature.IMAGE_SCALE);
-			} else {
-				this.characterSpriteSheet.getSprite(0, 1).draw(pos.x,
-						pos.y, Creature.IMAGE_SCALE);
-			}
-		} else if (this.inAir) {
-			this.characterSpriteSheet.getSprite(0, 0).draw(pos.x,
-					pos.y, Creature.IMAGE_SCALE);
-		} else {
-			this.jumpingAnimation.getCurrentFrame().draw(pos.x, pos.y + this.jumpingYOffset[this.jumpingAnimation.getFrame()] * Creature.IMAGE_SCALE, Creature.IMAGE_SCALE);
-			this.currentJumpingYOffset = this.jumpingYOffset[this.jumpingAnimation.getFrame()];
-		}
-		this.beltAnimation.getCurrentFrame().draw(
-				pos.x + 6 * Creature.IMAGE_SCALE,
-				pos.y + this.currentJumpingYOffset
-						* Creature.IMAGE_SCALE + 15 * Creature.IMAGE_SCALE,
-				Creature.IMAGE_SCALE);
-	}
+        if (v.y >= 0 && isInAir())
+        {
+            if (!prevFallingDown)
+            {
+                charSprite.getSprite(0, 2).draw(pos.x, pos.y, IMAGE_SCALE);
+            }
+            else
+            {
+                charSprite.getSprite(0, 1).draw(pos.x, pos.y, IMAGE_SCALE);
+            }
+        }
+        else if (this.inAir)
+        {
+            charSprite.getSprite(0, 0).draw(pos.x, pos.y, IMAGE_SCALE);
+        }
+        else
+        {
+            jumpingAnimation.getCurrentFrame().draw(pos.x, pos.y + jumpingYOffset[jumpingAnimation.getFrame()] * IMAGE_SCALE, IMAGE_SCALE);
+            currentJumpingYOffset = jumpingYOffset[jumpingAnimation.getFrame()];
+        }
+        this.beltAnimation.getCurrentFrame().draw(pos.x + 6 * IMAGE_SCALE, pos.y + this.currentJumpingYOffset * IMAGE_SCALE + 15 * IMAGE_SCALE, IMAGE_SCALE);
+    }
 
 	@Override
-	public void onCollide(Entity current, Face collidedFace) {
-		if (!failed && current instanceof Platform && ((Platform) current).isActive()) {
-			move(getPosition().add(0, current.getPosition().y - this.getBB().getHeight() - 1));
+	public void onCollide(Entity target, Face collidedFace) {
+		if (target instanceof Platform && ((Platform) target).isActive() && !this.lost) {
+			move(getPosition().x, target.getPosition().y - this.getBB().getHeight() - 1);
 			setVelocity(Vector.ZERO);
 
 			this.inAir = false;
@@ -154,41 +158,43 @@ public class Creature extends Entity {
         {
             return;
         }
-		if (failed) {
-			//die();
-		} else {
-			float x = getPosition().x;
-			float y = getPosition().y;
 
-			float vX = getVelocity().x;
-			float vY = getVelocity().y;
+        float x = getPosition().x;
+        float y = getPosition().y;
 
-			switch (collidedFace) {
-			case TOP:
-				y = 0;
-				vY *= -1;
-				break;
-			case BOTTOM:
-                //failed = true;
-				Log.error("Collided with the world border!");
-				break;
-			case LEFT:
-				x = 0;
-				vX *= -1;
-				break;
-			case RIGHT:
-				x = getLevel().getWidth() - getBB().getWidth() - 1;
-				vX *= -1;
-				break;
-			}
+        float vX = getVelocity().x;
+        float vY = getVelocity().y;
 
-            move(x, y);
-			setVelocity(new Vector(vX, vY));
-		}
+        switch (collidedFace) {
+        case TOP:
+            y = 0;
+            vY *= -1;
+            break;
+        case BOTTOM:
+            Log.error("Collided with the world border!");
+            die();
+            break;
+        case LEFT:
+            x = 0;
+            vX *= -1;
+            break;
+        case RIGHT:
+            x = getLevel().getWidth() - getBB().getWidth() - 1;
+            vX *= -1;
+            break;
+        }
+
+        move(x, y);
+        setVelocity(new Vector(vX, vY));
 	}
 
 	@Override
 	public void onDeath() {
         this.getLevel().getGame().lose();
 	}
+
+    public boolean isInAir()
+    {
+        return inAir;
+    }
 }

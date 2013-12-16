@@ -6,21 +6,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.newdawn.slick.Animation;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
 import org.newdawn.slick.SpriteSheet;
 
 import de.aima13.platform.entity.Entity;
-import de.aima13.platform.entity.TiledBackground;
-import de.aima13.platform.entity.TiledScrollingBackground;
+import de.aima13.platform.gui.TiledBackground;
+import de.aima13.platform.gui.TiledScrollingBackground;
 import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
+
 
 public class GameLevel {
 	private static final Vector G = new Vector(0, 9.81f).scale(.01f);
@@ -29,7 +28,9 @@ public class GameLevel {
 	private final GameContainer container;
 	private final LinkedList<Entity> entities;
 	private final Input input;
-	private Vector gravity;
+
+    private Vector gravity;
+    private boolean collisionsEnabled;
 
 	private TiledBackground background;
 	private Sound plasmaSound, jumpSound;
@@ -37,6 +38,7 @@ public class GameLevel {
 	public GameLevel(PlatformGame game, Input input) throws SlickException {
 		this.game = game;
 		this.container = game.getContainer();
+        this.collisionsEnabled = true;
 
 		this.input = input;
 		entities = new LinkedList<>();
@@ -44,15 +46,20 @@ public class GameLevel {
 		plasmaSound = new Sound("res/sound/plasma.wav");
 		jumpSound = new Sound("res/sound/plasma.wav");
 	}
+	public void setCollisionsEnabled(boolean state)
+    {
+        this.collisionsEnabled = state;
+    }
+
+    public boolean isCollisionsEnabled()
+    {
+        return collisionsEnabled;
+    }
 
 	public void init() throws SlickException {
 		SpriteSheet sheet = new SpriteSheet(
 				"res/images/background/BackgroundTileset.png", 32, 32);
-		Image img = new Image("res/images/background/BackgroundTileset.png")
-				.getSubImage(0, 0, 32, 32).getScaledCopy(2f);
-		img.setFilter(Image.FILTER_NEAREST);
-		Image[] set = new Image[] { img };
-		// backImg1.setFilter(Image.FILTER_NEAREST);
+
 		background = new TiledScrollingBackground(sheet, new Vector(0, 1));
 		background.init(game);
 
@@ -96,10 +103,11 @@ public class GameLevel {
 				e.onDeath();
 				continue;
 			}
-			e.relativeMove(e.getVelocity());
-			e.setVelocity(e.getVelocity().add(
-					e.getAcceleration().add(
-							this.gravity.scale(e.getGravityScale()))));
+
+            e.preUpdate(delta);
+            e.relativeMove(e.getVelocity());
+            e.setVelocity(e.getVelocity().add(e.getAcceleration().add(this.gravity.scale(e.getGravityScale()))));
+
 			e.update(delta);
 		}
 
@@ -173,6 +181,10 @@ public class GameLevel {
 	}
 
 	private void detectCollisions() {
+        if (!isCollisionsEnabled())
+        {
+            return;
+        }
 		Set<Long> checked = new HashSet<>();
 		for (Entity a : this.entities) {
 			for (Entity b : this.entities) {

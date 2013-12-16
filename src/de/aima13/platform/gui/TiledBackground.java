@@ -1,4 +1,4 @@
-package de.aima13.platform.entity;
+package de.aima13.platform.gui;
 
 import java.util.Random;
 
@@ -7,8 +7,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.Log;
 
-import de.aima13.platform.gui.GuiEntity;
-import de.aima13.platform.gui.Tile;
+import de.aima13.platform.entity.Tile;
 import de.aima13.platform.util.Vector;
 
 public class TiledBackground extends GuiEntity {
@@ -16,7 +15,6 @@ public class TiledBackground extends GuiEntity {
 	protected Tile[][] tiles;
 	protected Random generator;
 	protected SpriteSheet imageSpriteSheet;
-	protected Image[] imageSet;
 	protected Vector imageSize;
 
 	public TiledBackground(SpriteSheet sheet) {
@@ -26,32 +24,17 @@ public class TiledBackground extends GuiEntity {
 		generator = new Random();
 	}
 
-	public TiledBackground(Image[] set, Vector size) {
-		super();
-		imageSet = set;
-		imageSize = size;
-		generator = new Random();
-	}
-
 	public void onInit() {
-		if (imageSet != null || imageSpriteSheet != null) {
+		if (imageSpriteSheet != null) {
 			int width = getLevel().getWidth();
-			int notpr = (int) (width / imageSize.x) + 1; // number
-															// of
-															// tiles
-															// per
-															// row
-			Log.info("" + imageSize.x + " " + imageSize.y);
-			int nor = (int) (getLevel().getHeight() / imageSize.y) + 1; // number
-																		// of
-																		// rows
-			tiles = new Tile[nor + 1][notpr];
-			// add one row in top
-			for (int i = -1; i < nor; i++) {
-				for (int h = 0; h < notpr; h++) {
-					Tile tile = new Tile(this, null,
-							new Vector(h * imageSize.x, i * imageSize.y),
-							i + 1, h);
+			int cols = (int) (width / imageSize.x) + 1;
+			int rows = (int) (getLevel().getHeight() / imageSize.y) + 1;
+			
+			tiles = new Tile[rows + 1][cols];
+			// add one row on top
+			for (int i = -1; i < rows; i++) {
+				for (int h = 0; h < cols; h++) {
+					Tile tile = new Tile(this, null, new Vector(h * imageSize.x, i * imageSize.y), i + 1, h);
 					tiles[i + 1][h] = tile;
 					if (i == -1) {
 						tile.setImage(true);
@@ -76,7 +59,8 @@ public class TiledBackground extends GuiEntity {
 	}
 
 	public void onLeaveWorld(Tile tile) {
-//		 Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
+
+		// Log.info("onLeaveWorld: row:" + tile.row + " col:" + tile.col);
 		tile.moveTo(new Vector(tile.getPosition().x, -imageSize.y));
 		tile.setImage(false);
 	}

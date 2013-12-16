@@ -14,10 +14,10 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 import de.aima13.platform.PlatformGame;
-import de.aima13.platform.entity.TiledScrollingBackground;
 import de.aima13.platform.gui.HighlightList;
 import de.aima13.platform.gui.HiglightListEntry;
 import de.aima13.platform.gui.OnHighlightSelectListener;
+import de.aima13.platform.gui.TiledScrollingBackground;
 import de.aima13.platform.util.Vector;
 
 public class Menu extends BasicGameState {
@@ -78,15 +78,8 @@ public class Menu extends BasicGameState {
 
 		SpriteSheet sheet = new SpriteSheet(
 				"res/images/background/BackgroundTileset.png", 32, 32);
-		Image img = new Image("res/images/background/BackgroundTileset.png")
-				.getSubImage(0, 0, 32, 32).getScaledCopy(2f);
-		img.setFilter(Image.FILTER_NEAREST);
-		Image[] set = new Image[] { img };
-		// backImg1.setFilter(Image.FILTER_NEAREST);
 		background = new TiledScrollingBackground(sheet, new Vector(0, 1));
-		// background = new TiledScrollingBackground(set, new
-		// Vector(set[0].getWidth(),
-		// set[0].getHeight()), new Vector(0, 2));
+
 		background.init(this.game);
 	}
 

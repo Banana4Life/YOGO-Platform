@@ -1,11 +1,11 @@
-package de.aima13.platform.gui;
+package de.aima13.platform.entity;
 
 import java.util.Random;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 
-import de.aima13.platform.entity.TiledBackground;
+import de.aima13.platform.gui.TiledBackground;
 import de.aima13.platform.util.Vector;
 import org.newdawn.slick.Image;
 
@@ -17,8 +17,7 @@ public class Tile {
 	protected Random randomGenerator;
 	public final int row, col;
 
-	public Tile(TiledBackground background, Image image, Vector position,
-			int row, int col) {
+	public Tile(TiledBackground background, Image image, Vector position, int row, int col) {
 		this.background = background;
 		this.tileImage = image;
 		this.position = position;

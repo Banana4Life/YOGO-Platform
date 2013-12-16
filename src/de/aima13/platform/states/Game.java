@@ -1,7 +1,10 @@
 package de.aima13.platform.states;
 
 import de.aima13.platform.entity.BatterySpawner;
-import de.aima13.platform.gui.Powerbar;
+import de.aima13.platform.gui.CooldownBar;
+import de.aima13.platform.gui.PowerBar;
+import de.aima13.platform.gui.TiledBackground;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -18,7 +21,6 @@ import de.aima13.platform.GameLevel;
 import de.aima13.platform.PlatformGame;
 import de.aima13.platform.entity.Creature;
 import de.aima13.platform.entity.Platform;
-import de.aima13.platform.entity.TiledBackground;
 import de.aima13.platform.util.Vector;
 
 public class Game extends BasicGameState {
@@ -45,13 +47,14 @@ public class Game extends BasicGameState {
 		this.level = game.getLevel();
 		level.reset();
 
-		Powerbar powerbar = level.spawn(new Powerbar());
-		platform = level.spawn(new Platform(powerbar, 10));
+
+		PowerBar powerBar = level.spawn(new PowerBar());
+		CooldownBar cooldownBar = level.spawn(new CooldownBar());
+		platform = level.spawn(new Platform(powerBar, 10));
 
 		Creature creature = level.spawn(new Creature(platform));
 
 		BatterySpawner spawner = level.spawn(new BatterySpawner());
-		spawner.move(container.getWidth() / 2f, 20);
 	}
 
 	@Override

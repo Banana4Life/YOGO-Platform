@@ -1,11 +1,10 @@
-package de.aima13.platform.entity;
+package de.aima13.platform.gui;
 
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.util.Log;
 
-import de.aima13.platform.gui.Tile;
 import de.aima13.platform.util.Vector;
 
 public class TiledScrollingBackground extends TiledBackground {
@@ -15,11 +14,6 @@ public class TiledScrollingBackground extends TiledBackground {
 	public TiledScrollingBackground(SpriteSheet sheet,
 			Vector velocity) {
 		super(sheet);
-		this.velocity = velocity;
-	}
-
-	public TiledScrollingBackground(Image[] images, Vector size, Vector velocity) {
-		super(images, size);
 		this.velocity = velocity;
 	}
 
