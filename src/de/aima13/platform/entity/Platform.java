@@ -15,8 +15,8 @@ import de.aima13.platform.util.Vector;
 public class Platform extends Entity {
     
     private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
-    private static final int    PLATFORM_COOLDOWN    = 500;
-    private static final int    ACTIVATION_COOLDOWN  = 500;
+    private static final float    PLATFORM_COOLDOWN    = 500;
+    private static final float    ACTIVATION_COOLDOWN  = 500;
     
     private final PowerBar      powerBar;
     private final CooldownBar   cooldownBar;
@@ -30,8 +30,8 @@ public class Platform extends Entity {
     private Vector              offsetLeft, offsetRight;
     private int                 offsetCounter;
     private boolean             active;
-    private int                 activationCooldown;
-    private int                 stillActivatedFor;
+    private float                 activationCooldown;
+    private float                 stillActivatedFor;
     private Random              randomGenerator;
     
     public Platform(PowerBar powerBar, CooldownBar cooldownBar, Points points, int width) {
@@ -74,18 +74,19 @@ public class Platform extends Entity {
             if (this.stillActivatedFor < 0) {
                 this.stillActivatedFor = 0;
             }
-            this.cooldownBar.setValue((float) (this.stillActivatedFor + ACTIVATION_COOLDOWN) / (PLATFORM_COOLDOWN + ACTIVATION_COOLDOWN));
         } else if (this.stillActivatedFor == 0) {
             this.active = false;
             this.activationCooldown = ACTIVATION_COOLDOWN;
             this.stillActivatedFor = -1;
+            this.cooldownBar.setVisible(false);
         }
+        
         if (this.activationCooldown > 0) {
             this.activationCooldown -= delta;
-            this.cooldownBar.setValue((float) (this.activationCooldown) / (PLATFORM_COOLDOWN + ACTIVATION_COOLDOWN));
-        } else if (this.stillActivatedFor == -1) {
-            // reset the cooldownbar
-            this.cooldownBar.setValue(1f);
+            this.cooldownBar.setValue((float) (this.activationCooldown / ACTIVATION_COOLDOWN));
+            this.cooldownBar.setVisible(true);
+        } else {
+        	this.cooldownBar.setVisible(false);
         }
         
         GameLevel lvl = getLevel();

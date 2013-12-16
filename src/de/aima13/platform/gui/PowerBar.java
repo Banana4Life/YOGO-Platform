@@ -6,7 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
 public class PowerBar extends Bar {
-    
+	
     public PowerBar() {
         this(6);
     }
@@ -20,6 +20,7 @@ public class PowerBar extends Bar {
             // do nothing
         }
         value = 1f;
+        
     }
     
     @Override
