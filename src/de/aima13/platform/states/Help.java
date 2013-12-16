@@ -2,11 +2,8 @@ package de.aima13.platform.states;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import de.aima13.platform.gui.TiledScrollingBackground;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -22,14 +19,19 @@ public class Help extends BasicGameState {
     public final static int ID = 8;
     
     protected PlatformGame  game;
-    
+    private TiledScrollingBackground background;
+
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         if (game instanceof PlatformGame) {
             this.game = (PlatformGame) game;
         } else {
             throw new SlickException("StateBaseGame isn't a PlatformGame!");
         }
-        
+
+        SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
+        background = new TiledScrollingBackground(sheet, new Vector(0, 1));
+
+        background.init(this.game);
     }
     
     public int getRowPixel(int row) {
@@ -42,6 +44,7 @@ public class Help extends BasicGameState {
     
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
+        background.render(g);
         
         g.setColor(Color.white);
         
@@ -52,24 +55,24 @@ public class Help extends BasicGameState {
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(2), "your platform you have to activate it!");
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(3), "Activating your platform costs you energy.");
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(4), "To get more energy, collect yellow batteries.");
-        this.game.fontDefault.drawString(getColPixel(), getRowPixel(5), "Attention: Grey batteries a broken. Don't collect!");
+        this.game.fontDefault.drawString(getColPixel(), getRowPixel(5), "Attention: Grey batteries are broken. Don't collect!");
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(6), "If the player hits a battery he destroys it!");
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(8), "For every jump and battery you'll get points!");
         
         int keyboardRow = 10;
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(keyboardRow), "Arrow keys:");
-        this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 1), "Move you platform left and right");
+        this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 1), "Move the platform left and right");
         
         
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(keyboardRow +3), "\"SPACE\":");
-        this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 4), "Activate your platform. But remember:");
+        this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 4), "Activates your platform. But remember:");
         this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 5), "it needs energy and has a cooldown time!");
         
     }
     
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
-        
+        background.update(delta);
     }
     
     public void keyReleased(int key, char c) {
