@@ -148,7 +148,7 @@ public class Credits extends BasicGameState {
 
 		// g.setColor(Color.red);
 		this.game.fontDefault.drawString(getColPixel(), getRowPixel(0),
-				"Â© Copyright 2013:");
+				"© Copyright 2013:");
 		this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(1),
 				"Jonas Dann");
 		this.game.fontDefault.drawString(getColPixel() + 20, getRowPixel(2),
