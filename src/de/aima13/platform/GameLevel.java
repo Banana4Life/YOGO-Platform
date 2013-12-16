@@ -42,8 +42,6 @@ public class GameLevel {
         this.input = input;
         entities = new LinkedList<>();
         
-        plasmaSound = new Sound("res/sound/plasma.wav");
-        jumpSound = new Sound("res/sound/plasma.wav");
     }
     
     public void setCollisionsEnabled(boolean state) {
@@ -61,7 +59,7 @@ public class GameLevel {
         background.init(game);
         
         plasmaSound = new Sound("res/sound/plasma.wav");
-        jumpSound = new Sound("res/sound/plasma.wav");
+        jumpSound = new Sound("res/sound/jump.wav");
         this.gravity = G;
     }
     
