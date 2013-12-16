@@ -25,6 +25,7 @@ import de.aima13.platform.util.CheatEngine;
 public class PlatformGame extends StateBasedGame {
     
     public CheatEngine  cheatEngine;
+//    public 
     
     /** The fonts to draw to the screen */
     public TrueTypeFont fontDefault;
