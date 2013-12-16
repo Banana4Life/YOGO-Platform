@@ -96,7 +96,7 @@ public class EnterHighscore extends BasicGameState {
     
     public void keyReleased(int key, char c) {
         super.keyReleased(key, c);
-        if (Character.isAlphabetic(c) && enteredName.length() <= MAX_LENGTH) {
+        if ((Character.isAlphabetic(c) || Character.isDefined(c) || c == ' ') && enteredName.length() <= MAX_LENGTH) {
             enteredName += c;
         }
         switch (key) {
