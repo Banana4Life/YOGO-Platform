@@ -162,6 +162,17 @@ public class Creature extends Entity {
             this.jumpingAnimation.start();
             this.onJump();
         }
+        // speed up / slow down on battery collision
+        if (target instanceof Battery) {
+            if (collidedFace == Face.TOP)
+            {
+                accelerate(0, 1);
+            }
+            else if (collidedFace == Face.BOTTOM)
+            {
+                accelerate(0, -1);
+            }
+        }
     }
     
     @Override

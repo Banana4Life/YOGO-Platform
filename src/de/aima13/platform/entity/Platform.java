@@ -2,6 +2,7 @@ package de.aima13.platform.entity;
 
 import java.util.Random;
 
+import de.aima13.platform.gui.Points;
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -28,7 +29,8 @@ public class Platform extends Entity {
     private SpriteSheet         engineSpriteSheet;
     private Animation           plasmaAnimation;
     private Animation           fireAnimation;
-    
+
+    private final Points points;
     private int                 width;
     private Vector              offsetLeft, offsetRight;
     private int                 offsetCounter;
@@ -37,11 +39,12 @@ public class Platform extends Entity {
     private int                 stillActivatedFor;
     private Random              randomGenerator;
     
-    public Platform(PowerBar powerBar, CooldownBar cooldownBar, int width) {
+    public Platform(PowerBar powerBar, CooldownBar cooldownBar, Points points, int width) {
         super();
         this.powerBar = powerBar;
         this.cooldownBar = cooldownBar;
-        
+        this.points = points;
+
         this.width = width;
         this.offsetLeft = new Vector(0, 0);
         this.offsetRight = new Vector(0, 0);
@@ -50,10 +53,6 @@ public class Platform extends Entity {
         this.randomGenerator = new Random();
         this.activationCooldown = 0;
         this.stillActivatedFor = -1;
-    }
-    
-    public PowerBar getPowerbar() {
-        return powerBar;
     }
     
     @Override
@@ -179,6 +178,12 @@ public class Platform extends Entity {
     
     @Override
     public void onCollide(Entity target, Face collidedFace) {
+        if (target instanceof Battery)
+        {
+            final Battery battery = (Battery)target;
+            this.powerBar.increaseValue(battery.getPower());
+            this.points.addPoints(battery.getPoints());
+        }
     }
     
     @Override

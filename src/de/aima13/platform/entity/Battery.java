@@ -47,7 +47,6 @@ public class Battery extends Entity {
     @Override
     public void onCollide(Entity target, Face collidedFace) {
         if (target instanceof Platform && ((Platform) target).isActive()) {
-            ((Platform) target).getPowerbar().increaseValue(this.getPower());
             die();
         } else if (target instanceof Creature) {
             die();
@@ -57,5 +56,9 @@ public class Battery extends Entity {
     
     public float getPower() {
         return power;
+    }
+    
+    public int getPoints() {
+        return power > 0 ? 50 : -100;
     }
 }
