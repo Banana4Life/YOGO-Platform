@@ -62,7 +62,7 @@ public class Creature extends Entity {
     public void preUpdate(int delta) {
         if (getPosition().y + getBB().getHeight() > platform.getPosition().y) {
             setVelocity(getVelocity().scale(0, 1));
-            //this.lost = true;
+            this.lost = true;
         }
     }
     
@@ -72,7 +72,7 @@ public class Creature extends Entity {
         this.beltAnimation.update(delta);
         
         if (isRising()) {
-            if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > getLevel().getContainer().getScreenHeight() / 2f) {
+            if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > getLevel().getContainer().getScreenHeight() / 3f) {
                 turned = true;
                 accelerate((2 + random.nextInt(3)) * (random.nextInt(2) == 1 ? 1 : -1), 0);
             }
@@ -98,7 +98,7 @@ public class Creature extends Entity {
             this.jumpingAnimation.stop();
             this.jumpingAnimation.setCurrentFrame(0);
             this.currentJumpingYOffset = 0;
-            accelerate(0, -9.5f);
+            accelerate(0, -12f);
             setGravityScale(GRAVITY_SCALE);
         }
     }
