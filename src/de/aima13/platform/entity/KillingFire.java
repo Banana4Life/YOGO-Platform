@@ -17,6 +17,7 @@ public class KillingFire extends Entity {
     private int       height;
     private int       scale;
     private Vector    fireDimensions;
+    private Vector    fireOffset;
     
     public KillingFire() {
         this(1);
@@ -54,6 +55,7 @@ public class KillingFire extends Entity {
         int fireWidth = this.fireAnimation.getImage(0).getWidth();
         int fireHeight = this.fireAnimation.getImage(0).getHeight();
         fireDimensions = new Vector(fireWidth, fireHeight);
+        fireOffset = new Vector(0, 0);
     }
     
     @Override
@@ -66,7 +68,7 @@ public class KillingFire extends Entity {
     public void render(Graphics g) {
         int columns = (int) ((this.getLevel().getWidth() / fireDimensions.x) + 1);
         for (int col = 0; col < columns; col++) {
-            this.fireAnimation.getCurrentFrame().draw(0 + col * fireDimensions.x * scale, this.getLevel().getHeight() - fireDimensions.y * scale, scale);
+            this.fireAnimation.getCurrentFrame().getFlippedCopy(true, true).draw(0 + col * fireDimensions.x * scale + col * fireOffset.x * scale, this.getLevel().getHeight() - fireDimensions.y * scale, scale);
         }
     }
     

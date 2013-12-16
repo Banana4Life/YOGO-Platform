@@ -10,7 +10,7 @@ import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
 public class BatterySpawner extends Entity {
-    private static final long DELAY       = (long)(1000 * .1);
+    private static final long DELAY       = (long)(1000 * 1);
 
     private long              lastSpawned = 0;
     private Random            random      = new Random();
