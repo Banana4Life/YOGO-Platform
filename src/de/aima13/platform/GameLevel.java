@@ -12,7 +12,6 @@ import de.aima13.platform.util.Vector;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.Sound;
@@ -30,6 +29,7 @@ public class GameLevel {
 	private final LinkedList<Entity> entities;
 	private final Input input;
     private Vector gravity;
+    private boolean collisionsEnabled;
 
 	private TiledBackground background;
 	private Sound plasmaSound, jumpSound;
@@ -37,6 +37,7 @@ public class GameLevel {
 	public GameLevel(PlatformGame game, Input input) throws SlickException {
 		this.game = game;
 		this.container = game.getContainer();
+        this.collisionsEnabled = true;
 
 		this.input = input;
 		entities = new LinkedList<>();
@@ -45,7 +46,17 @@ public class GameLevel {
 		jumpSound = new Sound("res/sound/plasma.wav");
 	}
 
-	public void init() throws SlickException {
+    public void setCollisionsEnabled(boolean state)
+    {
+        this.collisionsEnabled = state;
+    }
+
+    public boolean isCollisionsEnabled()
+    {
+        return collisionsEnabled;
+    }
+
+    public void init() throws SlickException {
 		SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
 		background = new TiledScrollingBackground(sheet, new Vector(0, 1));
 		background.init(game);
@@ -172,6 +183,10 @@ public class GameLevel {
 	}
 
 	private void detectCollisions() {
+        if (!isCollisionsEnabled())
+        {
+            return;
+        }
 		Set<Long> checked = new HashSet<>();
 		for (Entity a : this.entities) {
 			for (Entity b : this.entities) {
