@@ -53,9 +53,10 @@ public class Help extends BasicGameState {
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(3), "Activating your platform costs you energy.");
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(4), "To get more energy, collect yellow batteries.");
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(5), "Attention: Grey batteries a broken. Don't collect!");
-        this.game.fontDefault.drawString(getColPixel(), getRowPixel(6), "For every jump and battery you'll get points!");
+        this.game.fontDefault.drawString(getColPixel(), getRowPixel(6), "If the player hits a battery he destroys it!");
+        this.game.fontDefault.drawString(getColPixel(), getRowPixel(8), "For every jump and battery you'll get points!");
         
-        int keyboardRow = 8;
+        int keyboardRow = 10;
         this.game.fontDefault.drawString(getColPixel(), getRowPixel(keyboardRow), "Arrow keys:");
         this.game.fontDefault.drawString(getColPixel() + 50, getRowPixel(keyboardRow + 1), "Move you platform left and right");
         
