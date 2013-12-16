@@ -13,21 +13,23 @@ import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
 
 public class Creature extends Entity {
-    private static final float IMAGE_SCALE           = 4;
-    private final Platform     platform;
-    private final Points       points;
+    private static final float   IMAGE_SCALE           = 4;
+    private static final boolean smoothCamera          = true;
     
-    protected SpriteSheet      charSprite;
-    protected Animation        jumpingAnimation;
-    protected int              currentJumpingYOffset = 0;
-    protected int[]            jumpingYOffset        = { 3, 5, 6, 5, 3 };
-    protected Animation        beltAnimation;
+    private final Platform       platform;
+    private final Points         points;
     
-    protected boolean          inAir;
-    protected boolean          prevFallingDown;
-    private boolean            lost;
-    private boolean            turned;
-
+    protected SpriteSheet        charSprite;
+    protected Animation          jumpingAnimation;
+    protected int                currentJumpingYOffset = 0;
+    protected int[]              jumpingYOffset        = { 3, 5, 6, 5, 3 };
+    protected Animation          beltAnimation;
+    
+    protected boolean            inAir;
+    protected boolean            prevFallingDown;
+    private boolean              lost;
+    private boolean              turned;
+    
     public Creature(Platform platform, Points points) {
         this.platform = platform;
         this.points = points;
@@ -68,25 +70,25 @@ public class Creature extends Entity {
         this.jumpingAnimation.update(delta);
         this.beltAnimation.update(delta);
         
-        if (isRising())
-        {
-            if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > 0)
-            {
+        if (isRising()) {
+            if (!turned && Math.abs(getPosition().y - platform.getPosition().y) > 0) {
                 turned = true;
-                //accelerate(50, 0);
+                // accelerate(50, 0);
             }
-        }
-        else
-        {
+        } else {
             this.turned = false;
         }
-
+        
         if (mayTurn()) {
             setVelocity(getVelocity().scale(-1, 1));
         }
         
         if (this.inAir) {
             this.prevFallingDown = (getVelocity().y > 0);
+            this.platform.getLevel().setBackgroundVelocity(getVelocity());
+        }
+        
+        if (!this.smoothCamera && this.jumpingAnimation.getFrame() == 0) {
             this.platform.getLevel().setBackgroundVelocity(getVelocity());
         }
         
