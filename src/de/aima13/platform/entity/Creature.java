@@ -95,7 +95,6 @@ public class Creature extends Entity {
             this.jumpingAnimation.stop();
             this.jumpingAnimation.setCurrentFrame(0);
             this.currentJumpingYOffset = 0;
-
             accelerate(0, -9.5f);
         }
     }
