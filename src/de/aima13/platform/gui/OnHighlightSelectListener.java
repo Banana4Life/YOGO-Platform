@@ -4,6 +4,6 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 public interface OnHighlightSelectListener {
-
-	void onSelect(StateBasedGame game) throws SlickException;
+    
+    void onSelect(StateBasedGame game) throws SlickException;
 }

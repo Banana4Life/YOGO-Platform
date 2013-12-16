@@ -8,62 +8,54 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
-public class Battery extends Entity
-{
-	private static final int IMAGE_SCALE = 3;
-
-    private float power;
-    private Image batteryImage;
-    private Image batteryNegativeImage;
-
+public class Battery extends Entity {
+    private static final int IMAGE_SCALE = 3;
+    
+    private float            power;
+    private Image            batteryImage;
+    private Image            batteryNegativeImage;
+    
     public Battery(float power) {
         this.power = power;
-
+        
         try {
-        	batteryImage = new Image("res/images/otherEntitys/Battery.png");
-        	batteryImage.setFilter(Image.FILTER_NEAREST);
-        	batteryNegativeImage = new Image("res/images/otherEntitys/BatteryNegative.png");
-        	batteryNegativeImage.setFilter(Image.FILTER_NEAREST);
+            batteryImage = new Image("res/images/otherEntitys/Battery.png");
+            batteryImage.setFilter(Image.FILTER_NEAREST);
+            batteryNegativeImage = new Image("res/images/otherEntitys/BatteryNegative.png");
+            batteryNegativeImage.setFilter(Image.FILTER_NEAREST);
         } catch (SlickException e) {
-        	// do nothing
+            // do nothing
         }
     }
-
+    
     @Override
-    public void onInit()
-    {
+    public void onInit() {
         setBB(new Box(batteryImage.getWidth() * IMAGE_SCALE, batteryImage.getHeight() * IMAGE_SCALE));
         setVelocity(new Vector(0, 2));
         setAcceleration(Vector.ZERO);
     }
-
+    
     @Override
-    public void render(Graphics g)
-    {
-    	if (power >= 0) {
-    		batteryImage.draw(getPosition().x, getPosition().y, IMAGE_SCALE);
-    	} else {
-    		batteryNegativeImage.draw(getPosition().x, getPosition().y, IMAGE_SCALE);
-    	}
-    }
-
-    @Override
-    public void onCollide(Entity target, Face collidedFace)
-    {
-        if (target instanceof Platform && ((Platform)target).isActive())
-        {
-            ((Platform)target).getPowerbar().increaseValue(this.getPower());
-            die();
+    public void render(Graphics g) {
+        if (power >= 0) {
+            batteryImage.draw(getPosition().x, getPosition().y, IMAGE_SCALE);
+        } else {
+            batteryNegativeImage.draw(getPosition().x, getPosition().y, IMAGE_SCALE);
         }
-        else if (target instanceof Creature)
-        {
+    }
+    
+    @Override
+    public void onCollide(Entity target, Face collidedFace) {
+        if (target instanceof Platform && ((Platform) target).isActive()) {
+            ((Platform) target).getPowerbar().increaseValue(this.getPower());
+            die();
+        } else if (target instanceof Creature) {
             die();
         }
         super.onCollide(target, collidedFace);
     }
-
-    public float getPower()
-    {
+    
+    public float getPower() {
         return power;
     }
 }
