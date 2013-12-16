@@ -42,7 +42,7 @@ public class Creature extends Entity {
         float width = 16 * IMAGE_SCALE / 2;
         float height = 32 * IMAGE_SCALE;
 
-        this.setBB(new Box(new Vector(width / 2, -1), new Vector(width, height)));
+        this.setBB(new Box(new Vector(width / 2, 0), new Vector(width, height)));
 
         this.charSprite = new SpriteSheet("res/images/character/CharacterSpriteSheet.png", 16, 32);
         this.charSprite.setFilter(Image.FILTER_NEAREST);
@@ -134,7 +134,8 @@ public class Creature extends Entity {
 
     @Override
     public void onCollide(Entity target, Face collidedFace) {
-        if (target instanceof Platform && ((Platform) target).isActive() && !this.lost) {
+        if (target instanceof Platform && ((Platform)target).isActive() && !isLost())
+        {
             move(getPosition().x, target.getPosition().y - this.getBB().getHeight() - 1);
             setVelocity(Vector.ZERO);
 
@@ -186,5 +187,10 @@ public class Creature extends Entity {
 
     public boolean isInAir() {
         return inAir;
+    }
+
+    public boolean isLost()
+    {
+        return lost;
     }
 }
