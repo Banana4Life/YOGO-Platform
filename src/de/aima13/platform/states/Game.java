@@ -1,7 +1,7 @@
 package de.aima13.platform.states;
 
 import de.aima13.platform.entity.BatterySpawner;
-import de.aima13.platform.gui.Powerbar;
+import de.aima13.platform.gui.PowerBar;
 import de.aima13.platform.gui.TiledBackground;
 
 import org.newdawn.slick.Color;
@@ -46,8 +46,8 @@ public class Game extends BasicGameState {
 		this.level = game.getLevel();
 		level.reset();
 		
-		Powerbar powerbar = level.spawn(new Powerbar());
-		platform = level.spawn(new Platform(powerbar, 10));
+		PowerBar powerBar = level.spawn(new PowerBar());
+		platform = level.spawn(new Platform(powerBar, 10));
 
 		Creature creature = level.spawn(new Creature(platform));
 

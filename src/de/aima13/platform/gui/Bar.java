@@ -2,10 +2,13 @@ package de.aima13.platform.gui;
 
 import de.aima13.platform.util.Vector;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 
 public class Bar extends GuiEntity {
 	protected static final Vector PADDING = new Vector(10, 10);
 	protected static final float HEIGHT = PADDING.y;
+	
+	protected Image image;
 
 	protected float value = 1.0f;
 

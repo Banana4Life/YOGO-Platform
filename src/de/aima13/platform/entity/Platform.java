@@ -3,7 +3,7 @@ package de.aima13.platform.entity;
 import java.util.Random;
 
 import de.aima13.platform.GameLevel;
-import de.aima13.platform.gui.Powerbar;
+import de.aima13.platform.gui.PowerBar;
 import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import org.newdawn.slick.Animation;
@@ -19,7 +19,7 @@ public class Platform extends Entity {
 
 	private static final Vector DEFAULT_ACCELERATION = new Vector(1.0f, 0f);
 	private static final float DECELERATE_FACTOR = 1.5f;
-    private final Powerbar powerbar;
+    private final PowerBar powerBar;
 
     private SpriteSheet engineSpriteSheet;
 	private Animation plasmaAnimation;
@@ -33,9 +33,9 @@ public class Platform extends Entity {
 	private int stillActivatedFor;
 	private Random randomGenerator;
 
-	public Platform(Powerbar powerbar, int width) {
+	public Platform(PowerBar powerBar, int width) {
 		super();
-        this.powerbar = powerbar;
+        this.powerBar = powerBar;
 
 		this.width = width;
 		this.offsetLeft = new Vector(0, 0);
@@ -47,9 +47,9 @@ public class Platform extends Entity {
 		this.stillActivatedFor = -1;
 	}
 
-    public Powerbar getPowerbar()
+    public PowerBar getPowerbar()
     {
-        return powerbar;
+        return powerBar;
     }
 
     @Override
@@ -171,7 +171,7 @@ public class Platform extends Entity {
     {
         if (isActive())
         {
-            this.powerbar.decreaseValue(.1f);
+            this.powerBar.decreaseValue(.1f);
         }
     }
 
