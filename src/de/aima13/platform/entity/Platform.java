@@ -129,7 +129,7 @@ public class Platform extends Entity {
     @Override
     public void render(Graphics g) {
 
-        drawBB(g, Color.green);
+        //drawBB(g, Color.green);
         float scale = getBB().getWidth() / ((width * 3) + 2);
         if (this.active) {
             int currentFrame = this.plasmaAnimation.getFrame();

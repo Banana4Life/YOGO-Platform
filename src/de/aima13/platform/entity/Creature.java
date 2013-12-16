@@ -13,6 +13,7 @@ import java.util.Random;
 public class Creature extends Entity {
     private static final float   IMAGE_SCALE           = 4;
     private static final boolean SMOOTH_CAMERA         = true;
+    private static final float   GRAVITY_SCALE         = 1.2f;
     
     private final Platform       platform;
     private final Points         points;
@@ -38,7 +39,7 @@ public class Creature extends Entity {
     
     @Override
     public void onInit() throws SlickException {
-        setGravityScale(1.2f);
+        setGravityScale(GRAVITY_SCALE);
         
         move(100, 20);
         accelerate(2.5f, 0);
@@ -61,7 +62,7 @@ public class Creature extends Entity {
     public void preUpdate(int delta) {
         if (getPosition().y + getBB().getHeight() > platform.getPosition().y) {
             setVelocity(getVelocity().scale(0, 1));
-            this.lost = true;
+            //this.lost = true;
         }
     }
     
@@ -98,6 +99,7 @@ public class Creature extends Entity {
             this.jumpingAnimation.setCurrentFrame(0);
             this.currentJumpingYOffset = 0;
             accelerate(0, -9.5f);
+            setGravityScale(GRAVITY_SCALE);
         }
     }
     
@@ -130,7 +132,7 @@ public class Creature extends Entity {
     public void render(Graphics g) {
         super.render(g);
         
-        drawBB(g, Color.red);
+        //drawBB(g, Color.red);
         
         Vector pos = getPosition();
         Vector v = getVelocity();
@@ -152,9 +154,10 @@ public class Creature extends Entity {
     
     @Override
     public void onCollide(Entity target, Face collidedFace) {
-        if (target instanceof Platform && ((Platform) target).isActive() && !isLost()) {
+        if (target instanceof Platform && ((Platform) target).isActive() && !isLost() && !isRising()) {
             move(getPosition().x, target.getPosition().y - this.getBB().getHeight() - 1);
             setVelocity(Vector.ZERO);
+            setGravityScale(0);
             
             this.inAir = false;
             this.jumpingAnimation.start();
