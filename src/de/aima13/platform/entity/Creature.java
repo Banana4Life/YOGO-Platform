@@ -42,7 +42,7 @@ public class Creature extends Entity {
     
     @Override
     public void onInit() throws SlickException {
-        // setGravityScale(0);
+        setGravityScale(1.2f);
         
         move(100, 20);
         accelerate(2.5f, 0);
