@@ -63,11 +63,11 @@ public class TiledBackground extends GuiEntity {
         switch (face) {
             case BOTTOM:
                 // left window bottom
-                tile.moveTo(new Vector(tile.getPosition().x, -imageSize.y));
+                tile.moveTo(new Vector(tile.getPosition().x, -(getLevel().getHeight() - tile.getPosition().y) - imageSize.y));
                 break;
             case TOP:
                 // left winodow top
-                tile.moveTo(new Vector(tile.getPosition().x, getLevel().getHeight()));
+                tile.moveTo(new Vector(tile.getPosition().x, getLevel().getHeight() + tile.getPosition().y + imageSize.y));
                 break;
         }
         tile.setImage(false);
