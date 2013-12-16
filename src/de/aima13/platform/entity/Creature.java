@@ -1,5 +1,6 @@
 package de.aima13.platform.entity;
 
+import de.aima13.platform.gui.Points;
 import de.aima13.platform.util.Box;
 import de.aima13.platform.util.Face;
 import de.aima13.platform.util.Vector;
@@ -15,8 +16,9 @@ import org.newdawn.slick.util.Log;
 public class Creature extends Entity {
 	private static final float IMAGE_SCALE = 4;
 	private final Platform platform;
+    private final Points points;
 
-	protected SpriteSheet charSprite;
+    protected SpriteSheet charSprite;
 	protected Animation jumpingAnimation;
 	protected int currentJumpingYOffset = 0;
 	protected int[] jumpingYOffset = { 3, 5, 6, 5, 3 };
@@ -26,8 +28,9 @@ public class Creature extends Entity {
 	protected boolean prevFallingDown;
     private boolean lost;
 
-    public Creature(Platform platform) {
+    public Creature(Platform platform, Points points) {
 		this.platform = platform;
+        this.points = points;
         this.lost = false;
 	}
 
@@ -107,6 +110,7 @@ public class Creature extends Entity {
 	public void onJump() {
 		getLevel().getJumpSound().play();
         setVelocity(new Vector(0, -10));
+        this.points.addPoints(500);
 	}
 
     @Override

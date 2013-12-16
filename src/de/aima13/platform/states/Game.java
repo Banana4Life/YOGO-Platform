@@ -2,6 +2,7 @@ package de.aima13.platform.states;
 
 import de.aima13.platform.entity.BatterySpawner;
 import de.aima13.platform.gui.CooldownBar;
+import de.aima13.platform.gui.Points;
 import de.aima13.platform.gui.PowerBar;
 import de.aima13.platform.gui.TiledBackground;
 
@@ -49,10 +50,11 @@ public class Game extends BasicGameState {
 
 
 		PowerBar powerBar = level.spawn(new PowerBar());
+        Points points = level.spawn(new Points());
 		CooldownBar cooldownBar = level.spawn(new CooldownBar());
 		platform = level.spawn(new Platform(powerBar, 10));
 
-		Creature creature = level.spawn(new Creature(platform));
+		Creature creature = level.spawn(new Creature(platform, points));
 
 		BatterySpawner spawner = level.spawn(new BatterySpawner());
 	}
