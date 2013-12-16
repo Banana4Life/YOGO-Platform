@@ -135,20 +135,4 @@ public class PlatformGame extends StateBasedGame {
             e.printStackTrace(System.err);
         }
     }
-    
-    public static void main(String[] args) {
-        try {
-            // System.setProperty("org.lwjgl.opengl.Window.undecorated",
-            // "true");
-            AppGameContainer appgc;
-            appgc = new AppGameContainer(new PlatformGame());
-            appgc.setDisplayMode(Math.round(640 * appgc.getAspectRatio()), Math.round(appgc.getScreenHeight() - (150 * appgc.getAspectRatio())), false);
-            appgc.setAlwaysRender(true);
-            appgc.setTargetFrameRate(60);
-            appgc.setShowFPS(false);
-            appgc.start();
-        } catch (SlickException ex) {
-            ex.printStackTrace(System.err);
-        }
-    }
 }
