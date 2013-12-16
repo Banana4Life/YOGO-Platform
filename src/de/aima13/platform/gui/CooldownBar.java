@@ -21,7 +21,6 @@ public class CooldownBar extends Bar {
             // do nothing
         }
         value = 1f;
-        Log.info("padding x:" + PADDING.x + " y:" + PADDING.y);
     }
     
     @Override
