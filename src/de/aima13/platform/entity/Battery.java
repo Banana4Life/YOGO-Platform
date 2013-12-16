@@ -31,7 +31,7 @@ public class Battery extends Entity
     @Override
     public void onInit()
     {
-        setBoundingBox(new Box(30, 30));
+        setBB(new Box(30, 30));
         setVelocity(new Vector(0, 2));
         setAcceleration(Vector.ZERO);
     }

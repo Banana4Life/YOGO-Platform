@@ -131,7 +131,7 @@ public abstract class Entity {
         this.gravityScale = gravityScale;
     }
 
-    public void setBoundingBox(Box boundingBox)
+    public void setBB(Box boundingBox)
     {
         this.boundingBox = boundingBox;
     }
