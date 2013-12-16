@@ -89,7 +89,7 @@ public class Creature extends Entity {
         }
         
         if (!this.smoothCamera && this.jumpingAnimation.getFrame() == 0) {
-            this.platform.getLevel().setBackgroundVelocity(getVelocity());
+            this.platform.getLevel().setBackgroundVelocity(new Vector(0, getVelocity().y));
         }
         
         if (this.jumpingAnimation.getFrame() == this.jumpingAnimation.getFrameCount() - 1) {
