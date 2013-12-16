@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.io.InputStream;
 
 import org.newdawn.slick.Animation;
-import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Image;
@@ -21,7 +20,6 @@ import de.aima13.platform.states.Credits;
 import de.aima13.platform.states.EnterHighscore;
 import de.aima13.platform.states.Game;
 import de.aima13.platform.states.Highscores;
-import de.aima13.platform.states.Loose;
 import de.aima13.platform.states.MainMenu;
 import de.aima13.platform.states.Pause;
 import de.aima13.platform.util.CheatEngine;
@@ -58,7 +56,6 @@ public class PlatformGame extends StateBasedGame {
         addState(new Pause());
         addState(new Game());
         addState(new Credits());
-        addState(new Loose());
         addState(new Highscores());
         addState(new EnterHighscore());
         init();

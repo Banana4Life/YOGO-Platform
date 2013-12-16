@@ -2,11 +2,9 @@ package de.aima13.platform.states;
 
 import java.util.ArrayList;
 
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import de.aima13.platform.gui.TiledScrollingBackground;
+import de.aima13.platform.util.Vector;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
@@ -29,14 +27,19 @@ public class EnterHighscore extends BasicGameState {
     private String           enteredName;
     private boolean          underscoreVisible;
     private int              framesDelay;
-    
+    private TiledScrollingBackground background;
+
     public void init(GameContainer container, StateBasedGame game) throws SlickException {
         if (game instanceof PlatformGame) {
             this.game = (PlatformGame) game;
         } else {
             throw new SlickException("StateBaseGame isn't a PlatformGame!");
         }
-        
+
+        SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
+        background = new TiledScrollingBackground(sheet, new Vector(0, 1));
+
+        background.init(this.game);
     }
     
     public int getRowPixel(int row) {
@@ -65,6 +68,7 @@ public class EnterHighscore extends BasicGameState {
     @Override
     public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {
         g.setColor(Color.white);
+        background.render(g);
         
         this.game.fontHeader.drawString(game.getContainer().getWidth() / 2 - this.game.fontHeader.getWidth("You lost your!") / 2, 10, "You lost your", Color.white);
         this.game.fontHeader.drawString(game.getContainer().getWidth() / 2 - this.game.fontHeader.getWidth("ONLY") / 2, 70, "ONLY", Color.white);
@@ -79,6 +83,7 @@ public class EnterHighscore extends BasicGameState {
     
     @Override
     public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {
+        background.update(delta);
         if (framesDelay > 0) {
             framesDelay--;
         } else if (framesDelay == 0) {

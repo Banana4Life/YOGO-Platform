@@ -180,7 +180,6 @@ public class Creature extends Entity {
     public void onCollideWithBorder(Face collidedFace) {
         switch (collidedFace) {
             case BOTTOM:
-                Log.error("Collided with the world border!");
                 die();
                 break;
             case LEFT:
