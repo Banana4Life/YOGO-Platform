@@ -58,7 +58,7 @@ public class GameLevel {
     public void init() throws SlickException {
         SpriteSheet sheet = new SpriteSheet("res/images/background/BackgroundTileset.png", 32, 32);
         
-        background = new TiledScrollingBackground(sheet, new Vector(0, 0));
+        background = new TiledScrollingBackground(sheet, new Vector(0, 2));
         background.init(game);
         
         plasmaSound = new Sound("res/sound/plasma.wav");

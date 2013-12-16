@@ -86,7 +86,7 @@ public class Creature extends Entity {
         
         if (this.inAir) {
             this.prevFallingDown = (getVelocity().y > 0);
-            this.platform.getLevel().setBackgroundVelocity(new Vector(0, getVelocity().y));
+            // this.platform.getLevel().setBackgroundVelocity(new Vector(0, getVelocity().y));
         }
         
         if (!this.SMOOTH_CAMERA && this.jumpingAnimation.getFrame() == 0) {
