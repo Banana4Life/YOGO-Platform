@@ -1,9 +1,10 @@
 {
+  "name": "YOGO - Platform",
   "description": "You only got one platform, keep the robot jumping!",
   "ludumdare": {
     "number": 28,
-    "theme": "You Only Got One!"
+    "theme": "You Only Got One!",
+    "comments": []
   },
-  "authors": ["Jonas Dann", "Phillip Schichtel", "Malte Heinzelmann"],
-  "comments": []
+  "authors": ["Jonas Dann", "Phillip Schichtel", "Malte Heinzelmann"]
 }
