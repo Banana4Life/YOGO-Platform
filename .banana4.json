@@ -1,7 +1,8 @@
 {
   "name": "YOGO - Platform",
   "description": "You only got one platform, keep the robot jumping!",
-  "ludumdare": {
+  "jam": {
+    "name": "Ludum Dare",
     "number": 28,
     "theme": "You Only Got One!",
     "site": "http://ludumdare.com/compo/ludum-dare-28/?action=preview&uid=30929",
